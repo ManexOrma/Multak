@@ -17,5 +17,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/equipos/equipos').then((m) => m.Equipos),
   },
+  {
+    path: 'privacidad',
+    title: 'Privacidad · Multas',
+    loadComponent: () => import('./features/privacidad/privacidad').then((m) => m.Privacidad),
+  },
   { path: '**', redirectTo: RUTA_INICIO },
 ];

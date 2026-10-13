@@ -16,7 +16,7 @@ import {
   pattern,
   required,
 } from '@angular/forms/signals';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
 import { mensajeErrorAuth } from '../../core/auth/mensaje-error-auth';
@@ -26,7 +26,7 @@ const SEGUNDOS_ENTRE_ENVIOS = 60;
 
 @Component({
   selector: 'app-login',
-  imports: [FormRoot, FormField],
+  imports: [FormRoot, FormField, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

@@ -117,3 +117,14 @@ input {
   font-weight: 600;
   color: light-dark(#b00020, #ff8a80);
 }
+
+.pie {
+  margin-top: 3rem;
+  text-align: center;
+
+  a {
+    display: inline-block;
+    padding: 0.5rem;
+    color: inherit;
+  }
+}
