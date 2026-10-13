@@ -47,6 +47,10 @@ Correos de prueba (Mailpit, aquí llegan los códigos de login): http://127.0.0.
 | `rival@multas.test`    | Admin de «Atlético Banquillo» (para probar el aislamiento)   |
 | `libre@multas.test`    | Sin equipo: para crear uno o unirse con el código `VESTUAR2` |
 
+Cualquier otro email también vale: se crea la cuenta al entrar. El login con Google está desactivado en local; para activarlo, mira el comentario de `[auth.external.google]` en `supabase/config.toml`.
+
+Si cambias `supabase/config.toml` (por ejemplo, la plantilla del correo en `supabase/templates/`), reinicia con `npm run db:stop` y `npm run db:start`.
+
 ## Comandos
 
 | Comando                   | Qué hace                                                        |

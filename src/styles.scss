@@ -19,3 +19,19 @@ body {
     sans-serif;
   line-height: 1.5;
 }
+
+// Foco siempre visible al navegar con teclado.
+:focus-visible {
+  outline: 3px solid Highlight;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

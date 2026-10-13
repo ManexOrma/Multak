@@ -1,0 +1,88 @@
+<main class="login">
+  <h1>Multas</h1>
+
+  @switch (paso()) {
+    @case ('email') {
+      <p class="intro">Entra con tu email: te mandamos un código y listo, sin contraseñas.</p>
+
+      <form [formRoot]="emailForm" class="pila">
+        <label for="login-email">Tu email</label>
+        <input
+          id="login-email"
+          type="email"
+          inputmode="email"
+          autocomplete="email"
+          autocapitalize="off"
+          spellcheck="false"
+          [formField]="emailForm.email"
+          [attr.aria-invalid]="emailForm.email().touched() && emailForm.email().invalid()"
+          aria-describedby="login-email-error"
+        />
+        <p id="login-email-error" class="error-campo">
+          @if (emailForm.email().touched() && emailForm.email().invalid()) {
+            {{ emailForm.email().errors()[0].message }}
+          }
+        </p>
+        <button type="submit" class="boton boton-principal" [disabled]="emailForm().submitting()">
+          {{ emailForm().submitting() ? 'Enviando…' : 'Enviarme un código' }}
+        </button>
+      </form>
+
+      @if (googleActivo) {
+        <p class="separador" aria-hidden="true">o</p>
+        <button type="button" class="boton boton-secundario" (click)="entrarConGoogle()">
+          Entrar con Google
+        </button>
+      }
+    }
+    @case ('codigo') {
+      <p class="intro">
+        Te hemos enviado un código de 6 cifras a <strong>{{ email() }}</strong
+        >. Si no lo ves, mira en spam.
+      </p>
+
+      <form [formRoot]="codigoForm" class="pila">
+        <label for="login-codigo">Código</label>
+        <input
+          id="login-codigo"
+          class="codigo"
+          type="text"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          [formField]="codigoForm.codigo"
+          [attr.aria-invalid]="codigoForm.codigo().touched() && codigoForm.codigo().invalid()"
+          aria-describedby="login-codigo-error"
+        />
+        <p id="login-codigo-error" class="error-campo">
+          @if (codigoForm.codigo().touched() && codigoForm.codigo().invalid()) {
+            {{ codigoForm.codigo().errors()[0].message }}
+          }
+        </p>
+        <button type="submit" class="boton boton-principal" [disabled]="codigoForm().submitting()">
+          {{ codigoForm().submitting() ? 'Comprobando…' : 'Entrar' }}
+        </button>
+      </form>
+
+      <div class="acciones">
+        <button
+          type="button"
+          class="boton-enlace"
+          [disabled]="segundosParaReenviar() > 0 || reenviando()"
+          (click)="reenviarCodigo()"
+        >
+          @if (segundosParaReenviar() > 0) {
+            Reenviar código ({{ segundosParaReenviar() }} s)
+          } @else {
+            Reenviar código
+          }
+        </button>
+        <button type="button" class="boton-enlace" (click)="usarOtroEmail()">
+          Usar otro email
+        </button>
+      </div>
+    }
+  }
+
+  <p class="aviso" role="status">{{ aviso() }}</p>
+  <p class="error" role="alert">{{ error() }}</p>
+</main>
