@@ -10,13 +10,13 @@
     "lint": "ng lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "db:start": "supabase start",
+    "db:start": "supabase start -x studio,logflare,vector,imgproxy,edge-runtime,realtime,storage-api,supavisor",
     "db:stop": "supabase stop",
     "db:status": "supabase status",
     "db:reset": "supabase db reset",
     "db:test": "supabase test db",
     "db:new": "supabase migration new",
-    "db:types": "supabase gen types --lang=typescript --local --schema public > src/app/core/models/database.types.ts"
+    "db:types": "supabase gen types --lang=typescript --local --schema public > src/app/core/models/database.types.ts && prettier --write src/app/core/models/database.types.ts"
   },
   "private": true,
   "packageManager": "npm@11.0.0",

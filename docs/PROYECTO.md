@@ -174,3 +174,12 @@ Invariantes:
 ---
 
 **Empieza ahora por la fase 0.** Primero comprueba lo que tengo instalado y dime qué datos de Supabase vas a necesitar.
+
+## Decisiones tomadas durante el desarrollo
+
+- **Fichas sin cuenta = jugador.** Una ficha sin cuenta solo puede tener rol jugador (restricción en BD). Así, quien reclame una ficha con el enlace no hereda permisos. Los roles se dan cuando la persona ya se ha unido. Al desvincular una cuenta, la ficha vuelve a jugador.
+- **Admins:** el creador del equipo es admin y puede hacer admin (o tesorero) a cualquier miembro con cuenta. Puede haber varios admins y nunca menos de uno.
+- **Fichas desactivadas:** no se les pueden poner multas, pero sí registrar pagos (para saldar deudas).
+- **Pendiente de cobro:** suma solo los saldos positivos. Un saldo a favor no resta la deuda de los demás.
+- **Entrar como nuevo requiere aprobación.** Con el enlace se reclama al momento una ficha libre creada por el admin. Quien entra como «Soy nuevo» queda como solicitud (`pendiente = true`, inactiva) y no ve nada del equipo hasta que un admin la acepta (`aceptar_solicitud`). Rechazarla (`rechazar_solicitud`) la borra y la persona puede volver a pedirlo. Las fichas propias en cualquier estado se consultan con `mis_equipos()`.
+- **Orden de entrada por enlace:** enlace en el navegador → login → reclamar ficha o pedir entrar → pantalla de instalar → abrir la app instalada y volver a entrar (en iPhone la app instalada no comparte sesión con Safari).

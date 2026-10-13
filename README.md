@@ -30,7 +30,22 @@ Copia la clave publishable local en `src/environments/environment.development.ts
 npm start             # http://localhost:4200
 ```
 
-Panel local de Supabase (Studio): http://127.0.0.1:54323 · Correos de prueba (Mailpit): http://127.0.0.1:54324
+Correos de prueba (Mailpit, aquí llegan los códigos de login): http://127.0.0.1:54324
+
+`db:start` arranca solo los servicios que usa la app (BD, Auth, API y Mailpit) para ahorrar disco. Si quieres el panel web (Studio, http://127.0.0.1:54323), usa `npx supabase start` a secas.
+
+### Usuarios de prueba (seed, solo local)
+
+`npm run db:reset` carga `supabase/seed.sql`. Entra con cualquiera de estos emails; el código llega a Mailpit.
+
+| Email                  | Qué es                                                       |
+| ---------------------- | ------------------------------------------------------------ |
+| `admin@multas.test`    | Admin del «CD Vestuario»                                     |
+| `tesorero@multas.test` | Tesorero del «CD Vestuario»                                  |
+| `jugador@multas.test`  | Jugador del «CD Vestuario»                                   |
+| `nuevo@multas.test`    | Solicitud pendiente en el «CD Vestuario»                     |
+| `rival@multas.test`    | Admin de «Atlético Banquillo» (para probar el aislamiento)   |
+| `libre@multas.test`    | Sin equipo: para crear uno o unirse con el código `VESTUAR2` |
 
 ## Comandos
 
