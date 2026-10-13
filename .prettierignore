@@ -1,0 +1,8 @@
+dist
+coverage
+node_modules
+.angular
+supabase/.temp
+supabase/.branches
+src/app/core/models/database.types.ts
+package-lock.json
