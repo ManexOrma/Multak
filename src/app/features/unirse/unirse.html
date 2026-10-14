@@ -1,0 +1,142 @@
+<main class="pagina">
+  @switch (estado().tipo) {
+    @case ('cargando') {
+      <h1>Unirme a un equipo</h1>
+      <p role="status">Buscando el equipo…</p>
+    }
+
+    @case ('error') {
+      <h1>Unirme a un equipo</h1>
+      @if (estado(); as e) {
+        @if (e.tipo === 'error') {
+          <p class="error" role="alert">{{ e.mensaje }}</p>
+        }
+      }
+      <button type="button" class="boton boton-secundario" (click)="cargar()">Reintentar</button>
+    }
+
+    @case ('no-existe') {
+      <h1>Ese código no existe</h1>
+      <p>
+        Revisa que el enlace o el código (<strong>{{ codigo() }}</strong
+        >) estén bien, o pide uno nuevo a quien te invitó: puede que lo hayan cambiado.
+      </p>
+      <a class="boton boton-secundario" routerLink="/equipos">Ir a mis equipos</a>
+    }
+
+    @case ('ya-dentro') {
+      @if (estado(); as e) {
+        @if (e.tipo === 'ya-dentro') {
+          <h1>{{ e.ficha.equipo_nombre }}</h1>
+          @if (e.ficha.activo) {
+            <p>
+              Ya estás en este equipo como <strong>{{ e.ficha.mi_nombre }}</strong
+              >.
+            </p>
+            <a class="boton boton-principal" [routerLink]="['/e', e.ficha.equipo_id]">
+              Ir al equipo
+            </a>
+          } @else if (e.ficha.pendiente) {
+            <p>Tu solicitud para entrar ya está enviada. Falta que un admin la acepte.</p>
+            <a class="boton boton-secundario" routerLink="/equipos">Ir a mis equipos</a>
+          } @else {
+            <p>Tu ficha en este equipo está desactivada. Pide a un admin que la reactive.</p>
+            <a class="boton boton-secundario" routerLink="/equipos">Ir a mis equipos</a>
+          }
+        }
+      }
+    }
+
+    @case ('elegir') {
+      @if (estado(); as e) {
+        @if (e.tipo === 'elegir') {
+          <p class="texto-suave antetitulo">Te unes a</p>
+          <h1>{{ e.info.equipo_nombre }}</h1>
+
+          <form [formRoot]="formulario" class="pila">
+            <fieldset aria-describedby="unirse-eleccion-error">
+              <legend>
+                @if (e.fichas.length > 0) {
+                  ¿Eres alguno de estos?
+                } @else {
+                  Aún no hay fichas libres: entra como nuevo.
+                }
+              </legend>
+
+              <ul class="lista opciones">
+                @for (ficha of e.fichas; track ficha.id) {
+                  <li>
+                    <label class="opcion">
+                      <input type="radio" [value]="ficha.id" [formField]="formulario.eleccion" />
+                      {{ ficha.nombre }}
+                    </label>
+                  </li>
+                }
+                <li>
+                  <label class="opcion">
+                    <input type="radio" [value]="nuevo" [formField]="formulario.eleccion" />
+                    Soy nuevo, no estoy en la lista
+                  </label>
+                </li>
+              </ul>
+            </fieldset>
+            <p id="unirse-eleccion-error" class="error-campo">
+              @if (formulario.eleccion().touched() && formulario.eleccion().invalid()) {
+                {{ formulario.eleccion().errors()[0].message }}
+              }
+            </p>
+
+            @if (modelo().eleccion === nuevo) {
+              <label for="unirse-nombre">Tu nombre en el equipo</label>
+              <input
+                id="unirse-nombre"
+                autocomplete="given-name"
+                [formField]="formulario.nombre"
+                [attr.aria-invalid]="formulario.nombre().touched() && formulario.nombre().invalid()"
+                aria-describedby="unirse-nombre-ayuda unirse-nombre-error"
+              />
+              <p id="unirse-nombre-ayuda" class="texto-suave ayuda">
+                Un admin del equipo tendrá que aceptarte antes de que veas nada.
+              </p>
+              <p id="unirse-nombre-error" class="error-campo">
+                @if (formulario.nombre().touched() && formulario.nombre().invalid()) {
+                  {{ formulario.nombre().errors()[0].message }}
+                }
+              </p>
+            }
+
+            <button
+              type="submit"
+              class="boton boton-principal"
+              [disabled]="formulario().submitting()"
+            >
+              {{ formulario().submitting() ? 'Un momento…' : textoBoton() }}
+            </button>
+            <p class="error" role="alert">{{ error() }}</p>
+          </form>
+        }
+      }
+    }
+
+    @case ('hecho') {
+      @if (estado(); as e) {
+        @if (e.tipo === 'hecho') {
+          @if (e.pendiente) {
+            <h1>Solicitud enviada</h1>
+            <p>
+              Cuando un admin de <strong>{{ e.info.equipo_nombre }}</strong> te acepte, verás el
+              equipo en «Mis equipos».
+            </p>
+            <a class="boton boton-secundario" routerLink="/equipos">Ir a mis equipos</a>
+          } @else {
+            <h1>¡Ya estás en {{ e.info.equipo_nombre }}!</h1>
+            <a class="boton boton-principal" [routerLink]="['/e', e.info.equipo_id]">
+              Ir al equipo
+            </a>
+          }
+          <app-instalar-nota />
+        }
+      }
+    }
+  }
+</main>

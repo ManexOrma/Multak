@@ -1,6 +1,14 @@
-// Estilos globales. Los design tokens (variables CSS) llegan con el plan visual de la fase 4.
+// Estilos globales. Base provisional y sobria: los design tokens y el estilo
+// definitivo llegan con el plan visual de la fase 4.
+@use '@angular/cdk/overlay-prebuilt.css';
+
 :root {
   color-scheme: light dark;
+  --color-error: light-dark(#b00020, #ff8a80);
+  --color-peligro: light-dark(#b00020, #ff8a80);
+  --color-suave: light-dark(#555, #b5b5b5);
+  --borde: light-dark(#c4c4c4, #555);
+  --radio: 0.5rem;
 }
 
 *,
@@ -18,6 +26,8 @@ body {
     Roboto,
     sans-serif;
   line-height: 1.5;
+  background: Canvas;
+  color: CanvasText;
 }
 
 // Foco siempre visible al navegar con teclado.
@@ -34,4 +44,212 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+// --- Maquetación ----------------------------------------------------------
+
+.pagina {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+.pila {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.seccion {
+  margin-top: 2.5rem;
+
+  > h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+  }
+}
+
+.texto-suave {
+  color: var(--color-suave);
+}
+
+.estado-vacio {
+  margin: 0;
+  padding: 1rem;
+  border: 2px dashed var(--borde);
+  border-radius: var(--radio);
+}
+
+// --- Formularios ----------------------------------------------------------
+
+label {
+  font-weight: 600;
+}
+
+input:not([type='checkbox'], [type='radio']),
+select {
+  min-height: 3rem;
+  padding: 0 0.75rem;
+  font: inherit;
+  font-size: 1.125rem; // ≥16px: iOS no hace zoom al enfocar
+  border: 2px solid var(--borde);
+  border-radius: var(--radio);
+  background: Canvas;
+  color: CanvasText;
+}
+
+input[aria-invalid='true'] {
+  border-color: var(--color-error);
+}
+
+.casilla {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  font-weight: 400;
+
+  input {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0;
+  }
+}
+
+.error-campo {
+  min-height: 1.5rem;
+  margin: 0;
+  color: var(--color-error);
+}
+
+.error {
+  margin: 1rem 0 0;
+  font-weight: 600;
+  color: var(--color-error);
+
+  &:empty {
+    margin: 0;
+  }
+}
+
+// --- Botones ----------------------------------------------------------------
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 1rem;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: var(--radio);
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
+.boton-principal {
+  background: CanvasText;
+  color: Canvas;
+}
+
+.boton-secundario {
+  border-color: currentColor;
+  background: transparent;
+  color: inherit;
+}
+
+.boton-peligro {
+  background: var(--color-peligro);
+  color: Canvas;
+}
+
+.boton-enlace {
+  min-height: 2.75rem;
+  padding: 0;
+  font: inherit;
+  text-decoration: underline;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:disabled {
+    text-decoration: none;
+    opacity: 0.7;
+    cursor: default;
+  }
+}
+
+// --- Listas -----------------------------------------------------------------
+
+.lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--borde);
+
+  > li {
+    border-bottom: 1px solid var(--borde);
+  }
+}
+
+// Fila pulsable de una lista (enlace o botón a ancho completo).
+.fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.5rem 0.25rem;
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+button.fila,
+a.fila {
+  cursor: pointer;
+}
+
+.etiqueta {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+// --- Diálogos (CDK) ---------------------------------------------------------
+
+.dialogo .cdk-dialog-container {
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  background: Canvas;
+  color: CanvasText;
+  box-shadow: 0 0.5rem 2rem rgb(0 0 0 / 0.35);
+
+  h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+  }
+}
+
+.dialogo-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
 }

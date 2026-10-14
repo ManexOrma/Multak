@@ -183,3 +183,5 @@ Invariantes:
 - **Pendiente de cobro:** suma solo los saldos positivos. Un saldo a favor no resta la deuda de los demás.
 - **Entrar como nuevo requiere aprobación.** Con el enlace se reclama al momento una ficha libre creada por el admin. Quien entra como «Soy nuevo» queda como solicitud (`pendiente = true`, inactiva) y no ve nada del equipo hasta que un admin la acepta (`aceptar_solicitud`). Rechazarla (`rechazar_solicitud`) la borra y la persona puede volver a pedirlo. Las fichas propias en cualquier estado se consultan con `mis_equipos()`.
 - **Orden de entrada por enlace:** enlace en el navegador → login → reclamar ficha o pedir entrar → pantalla de instalar → abrir la app instalada y volver a entrar (en iPhone la app instalada no comparte sesión con Safari).
+- **`info_invitacion(codigo)`:** RPC extra (solo usuarios con sesión) que devuelve id y nombre del equipo de un código, para que `/unirse` muestre «Te unes a X» y distinga un código inexistente.
+- **Ajustes:** el admin ve todo; el tesorero entra en ajustes pero solo ve el catálogo.

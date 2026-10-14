@@ -14,6 +14,12 @@ export class AuthService {
   readonly sesion = this.sesionActual.asReadonly();
   readonly usuario = computed(() => this.sesionActual()?.user ?? null);
   readonly haySesion = computed(() => this.sesionActual() !== null);
+  /** Nombre que da Google (si entró con Google), para proponerlo en los formularios. */
+  readonly nombreSugerido = computed(() => {
+    const datos = this.usuario()?.user_metadata ?? {};
+    const nombre = datos['full_name'] ?? datos['name'];
+    return typeof nombre === 'string' ? nombre : '';
+  });
 
   constructor() {
     this.sesionInicial = new Promise((resolve) => {

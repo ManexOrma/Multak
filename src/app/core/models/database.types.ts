@@ -404,6 +404,13 @@ export type Database = {
       };
       desactivar_miembro: { Args: { miembro_id: string }; Returns: undefined };
       desvincular_miembro: { Args: { miembro_id: string }; Returns: undefined };
+      info_invitacion: {
+        Args: { codigo: string };
+        Returns: {
+          equipo_id: string;
+          equipo_nombre: string;
+        }[];
+      };
       miembros_reclamables: {
         Args: { codigo: string };
         Returns: {

@@ -4,7 +4,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(52);
+select plan(55);
 
 -- -----------------------------------------------------------------------------
 -- Datos de prueba (como postgres, sin RLS)
@@ -198,6 +198,10 @@ set local request.jwt.claims = '{"sub":"a0000000-0000-4000-a000-000000000006","r
 select results_eq($$ select nombre from miembros_reclamables('test-aaaa') $$,
   $$ values ('Libre'::text), ('Nueva ficha'::text) $$,
   'reclamables: solo fichas libres, con el código normalizado');
+select results_eq($$ select equipo_nombre from info_invitacion(' testaaaa ') $$,
+  $$ values ('Equipo uno'::text) $$, 'info_invitacion: nombre del equipo del código');
+select is((select count(*)::int from info_invitacion('NOEXISTE')), 0,
+  'info_invitacion: código inexistente, vacío');
 select is(unirse_con_codigo('TESTAAAA', 'b0000000-0000-4000-a000-000000000004'),
   'e0000000-0000-4000-a000-000000000001'::uuid, 'unirse: reclama una ficha libre');
 select is((select count(*)::int from multas), 2, 'unirse: tras reclamar, ve las multas del equipo');
@@ -226,6 +230,7 @@ set local request.jwt.claims = '{"role":"anon"}';
 
 select throws_ok($$ select count(*) from multas $$, '42501', null, 'anon: no lee tablas');
 select throws_ok($$ select * from miembros_reclamables('TESTAAAA') $$, '42501', null, 'anon: no llama a RPCs');
+select throws_ok($$ select * from info_invitacion('TESTAAAA') $$, '42501', null, 'anon: no consulta invitaciones');
 
 reset role;
 select * from finish();
