@@ -1,23 +1,31 @@
 <main class="pagina">
   @if (saldo(); as s) {
-    <app-cabecera [titulo]="s.nombre ?? ''" [atras]="['/e', equipoId()]" atrasTexto="Inicio">
+    <app-cabecera
+      [titulo]="s.nombre ?? ''"
+      [atras]="['/e', equipoId()]"
+      [atrasTexto]="t('nav.inicio')"
+    >
       <div class="perfil">
-        <app-avatar [nombre]="s.nombre ?? ''" [semilla]="s.miembro_id" [tamano]="56" />
+        <app-avatar [nombre]="s.nombre ?? ''" [tamano]="56" />
         <div>
           @if ((s.saldo_centimos ?? 0) > 0) {
-            <p class="cifra-grande cifra debe">{{ s.saldo_centimos | euros }}</p>
-            <p class="nota">{{ esYo() ? 'Lo que debes' : 'Lo que debe' }}</p>
+            <app-cifra class="cifra-grande debe" [centimos]="s.saldo_centimos ?? 0" />
+            <p class="nota">{{ esYo() ? t('jugador.lo-que-debes') : t('jugador.lo-que-debe') }}</p>
           } @else {
-            <p class="cifra-grande al-dia">Al día</p>
+            <p class="cifra-grande al-dia">{{ t('comun.al-dia') }}</p>
             <p class="nota">
-              Multas {{ s.total_multas_centimos | euros }} · Pagado
-              {{ s.total_pagado_centimos | euros }}
+              {{
+                t('jugador.balance', {
+                  multas: i18n.euros(s.total_multas_centimos ?? 0),
+                  pagado: i18n.euros(s.total_pagado_centimos ?? 0),
+                })
+              }}
             </p>
           }
         </div>
       </div>
       @if (!s.activo) {
-        <p class="aviso-estado">Desactivado: no se le pueden poner multas.</p>
+        <p class="aviso-estado">{{ t('jugador.desactivado') }}</p>
       }
     </app-cabecera>
 
@@ -25,13 +33,13 @@
       <div class="acciones">
         <button type="button" class="boton boton-principal boton-ancho" (click)="registrarPago()">
           <app-icono nombre="euro" />
-          Registrar pago
+          {{ t('jugador.registrar-pago') }}
         </button>
       </div>
     }
 
     <fieldset class="segmentado selector">
-      <legend>Qué ver</legend>
+      <legend>{{ t('jugador.que-ver') }}</legend>
       <label>
         <input
           type="radio"
@@ -40,7 +48,7 @@
           [checked]="vista() === 'multas'"
           (change)="vista.set('multas')"
         />
-        Multas ({{ multas().length }})
+        {{ t('jugador.multas-n', { n: multas().length }) }}
       </label>
       <label>
         <input
@@ -50,13 +58,13 @@
           [checked]="vista() === 'pagos'"
           (change)="vista.set('pagos')"
         />
-        Pagos
+        {{ t('jugador.pagos') }}
       </label>
     </fieldset>
 
     @if (vista() === 'multas') {
       @if (multas().length === 0) {
-        <p class="estado-vacio">Sin multas. Expediente limpio.</p>
+        <p class="estado-vacio">{{ fraseSinMultas }}</p>
       } @else {
         <ul class="lista">
           @for (multa of multas(); track multa.id) {
@@ -67,7 +75,7 @@
     } @else {
       @if (pagos(); as lista) {
         @if (lista.length === 0) {
-          <p class="estado-vacio">Aún no hay pagos registrados.</p>
+          <p class="estado-vacio">{{ t('jugador.sin-pagos') }}</p>
         } @else {
           <ul class="lista">
             @for (pago of lista; track pago.id) {
@@ -85,16 +93,20 @@
             }
           </ul>
           @if (equipo.puedeGestionar()) {
-            <p class="pie-grupo">Toca un pago para anularlo si se apuntó por error.</p>
+            <p class="pie-grupo">{{ t('jugador.anular-pago-pista') }}</p>
           }
         }
       } @else {
-        <p class="nota" role="status">Cargando pagos…</p>
+        <p class="nota" role="status">{{ t('jugador.cargando-pagos') }}</p>
       }
     }
   } @else if (equipo.cargado()) {
-    <app-cabecera titulo="Jugador" [atras]="['/e', equipoId()]" atrasTexto="Inicio" />
-    <p class="estado-vacio">Este jugador no está en el equipo.</p>
+    <app-cabecera
+      [titulo]="t('jugador.titulo')"
+      [atras]="['/e', equipoId()]"
+      [atrasTexto]="t('nav.inicio')"
+    />
+    <p class="estado-vacio">{{ t('jugador.no-esta') }}</p>
   }
 </main>
 
@@ -109,9 +121,9 @@
     </span>
   </span>
   @if (pago.anulado) {
-    <span class="etiqueta">Anulado</span>
+    <span class="etiqueta">{{ t('comun.anulado') }}</span>
   }
   <span class="fila-valor al-dia" [class.anulado]="pago.anulado"
-    >+{{ pago.importe_centimos | euros }}</span
+    >+{{ i18n.euros(pago.importe_centimos) }}</span
   >
 </ng-template>

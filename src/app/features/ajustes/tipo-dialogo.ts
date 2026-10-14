@@ -2,7 +2,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, signal } from '@angular/core';
 import { form, FormField, FormRoot, maxLength, required, validate } from '@angular/forms/signals';
 import { TipoMulta } from '../../core/models/modelos';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { cerrarHoja } from '../../shared/dialogos/dialogos.service';
 import { centimosATexto, eurosACentimos } from '../../shared/importe';
@@ -14,17 +14,19 @@ import { AjustesService } from './ajustes.service';
   imports: [FormRoot, FormField],
   template: `
     <div class="hoja-cabecera">
-      <button type="button" class="boton-enlace" (click)="cancelar()">Cancelar</button>
-      <h2 id="tipo-dialogo-titulo">{{ tipo ? 'Editar tipo de multa' : 'Nuevo tipo de multa' }}</h2>
+      <button type="button" class="boton-enlace" (click)="cancelar()">
+        {{ t('comun.cancelar') }}
+      </button>
+      <h2 id="tipo-dialogo-titulo">{{ tipo ? t('tipo.editar') : t('tipo.nuevo') }}</h2>
       <span></span>
     </div>
 
     <form [formRoot]="formulario" class="pila">
-      <label for="tipo-nombre">Nombre</label>
+      <label for="tipo-nombre">{{ t('miembro.nombre') }}</label>
       <input
         id="tipo-nombre"
         autocomplete="off"
-        placeholder="p. ej. Llegar tarde"
+        [placeholder]="t('tipo.nombre-ejemplo')"
         [formField]="formulario.nombre"
         [attr.aria-invalid]="formulario.nombre().touched() && formulario.nombre().invalid()"
         aria-describedby="tipo-nombre-error"
@@ -35,7 +37,7 @@ import { AjustesService } from './ajustes.service';
         }
       </p>
 
-      <label for="tipo-importe">Importe (€)</label>
+      <label for="tipo-importe">{{ t('comun.importe') }}</label>
       <input
         id="tipo-importe"
         inputmode="decimal"
@@ -47,7 +49,7 @@ import { AjustesService } from './ajustes.service';
       />
       @if (tipo) {
         <p id="tipo-importe-ayuda" class="texto-suave ayuda">
-          Cambiarlo no afecta a las multas ya puestas.
+          {{ t('tipo.importe-ayuda') }}
         </p>
       }
       <p id="tipo-importe-error" class="error-campo">
@@ -59,14 +61,14 @@ import { AjustesService } from './ajustes.service';
       @if (tipo) {
         <label class="casilla">
           <input type="checkbox" [formField]="formulario.activo" />
-          Activo (si no, no aparece al poner multas)
+          {{ t('tipo.activo') }}
         </label>
       }
 
       <p class="error" role="alert">{{ error() }}</p>
 
       <button type="submit" class="boton boton-principal" [disabled]="formulario().submitting()">
-        {{ tipo ? 'Guardar' : 'Añadir al catálogo' }}
+        {{ tipo ? t('comun.guardar') : t('tipo.anadir') }}
       </button>
     </form>
   `,
@@ -77,6 +79,8 @@ import { AjustesService } from './ajustes.service';
   `,
 })
 export class TipoDialogo {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   protected readonly tipo = inject<TipoMulta | null>(DIALOG_DATA);
   private readonly ref = inject<DialogRef<void>>(DialogRef);
   private readonly ajustes = inject(AjustesService);
@@ -91,12 +95,12 @@ export class TipoDialogo {
   protected readonly formulario = form(
     this.modelo,
     (campo) => {
-      required(campo.nombre, { message: 'Ponle un nombre.' });
-      maxLength(campo.nombre, 60, { message: 'Como mucho 60 caracteres.' });
-      required(campo.importe, { message: 'Pon el importe.' });
+      required(campo.nombre, { message: this.t('tipo.nombre-requerido') });
+      maxLength(campo.nombre, 60, { message: this.t('comun.max-caracteres', { n: 60 }) });
+      required(campo.importe, { message: this.t('comun.importe-requerido') });
       validate(campo.importe, ({ value }) =>
         value() && eurosACentimos(value()) === null
-          ? { kind: 'importe', message: 'Pon un importe entre 0,01 y 1.000 €, p. ej. 2,50.' }
+          ? { kind: 'importe', message: this.t('comun.importe-invalido') }
           : undefined,
       );
     },
@@ -118,14 +122,14 @@ export class TipoDialogo {
           importe_centimos: importeCentimos,
           activo,
         });
-        this.avisos.mostrar('Tipo de multa guardado.');
+        this.avisos.mostrar(this.t('tipo.guardado'));
       } else {
         await this.ajustes.crearTipo(nombre.trim(), importeCentimos);
-        this.avisos.mostrar('Tipo de multa añadido.');
+        this.avisos.mostrar(this.t('tipo.anadido'));
       }
       await cerrarHoja(this.ref);
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
     }
   }
 }

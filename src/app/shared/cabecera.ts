@@ -9,12 +9,14 @@ import {
   viewChild,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { I18n } from '../core/i18n/i18n.service';
 import { Icono } from './icono';
 
 /**
  * Cabecera de iOS: título grande en la página y barra de navegación translúcida
  * arriba. Al hacer scroll, el título grande se esconde bajo la barra y su versión
- * pequeña aparece en ella. Lo que se proyecta con [acciones] va a la derecha de la barra.
+ * pequeña aparece en ella. Lo que se proyecta con [acciones] va a la derecha de la barra;
+ * con [inicio], a la izquierda; con [junto-titulo], delante del título grande.
  */
 @Component({
   selector: 'app-cabecera',
@@ -22,17 +24,21 @@ import { Icono } from './icono';
   template: `
     <div class="barra" [class.plegada]="plegada()">
       <div class="lado">
+        <ng-content select="[inicio]" />
         @if (atras(); as destino) {
           <a class="atras" [class.solo-movil]="atrasSoloMovil()" [routerLink]="destino">
             <app-icono nombre="chevron-izquierda" [grosor]="2.5" />
-            <span>{{ atrasTexto() }}</span>
+            <span>{{ atrasTexto() ?? t('comun.atras') }}</span>
           </a>
         }
       </div>
       <span class="titulo-barra" [attr.aria-hidden]="!plegada()">{{ titulo() }}</span>
       <div class="lado lado--fin"><ng-content select="[acciones]" /></div>
     </div>
-    <h1 #grande class="titulo-grande">{{ titulo() }}</h1>
+    <div class="titulo-fila">
+      <ng-content select="[junto-titulo]" />
+      <h1 #grande class="titulo-grande">{{ titulo() }}</h1>
+    </div>
     <ng-content />
   `,
   styles: `
@@ -125,8 +131,15 @@ import { Icono } from './icono';
       transform: none;
     }
 
+    .titulo-fila {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
     h1 {
-      margin: 4px 0 0;
+      min-width: 0;
       overflow-wrap: anywhere;
     }
   `,
@@ -135,7 +148,8 @@ export class Cabecera {
   readonly titulo = input.required<string>();
   /** Destino del botón «atrás» (routerLink) y su texto, como en iOS. */
   readonly atras = input<string | unknown[] | null>(null);
-  readonly atrasTexto = input('Atrás');
+  readonly atrasTexto = input<string | null>(null);
+  protected readonly t = inject(I18n).t;
   /** Oculta «atrás» en pantallas anchas, donde ya lo da la barra lateral. */
   readonly atrasSoloMovil = input(false);
 

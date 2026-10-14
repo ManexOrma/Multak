@@ -248,11 +248,11 @@ otp_expiry = 3600
 # reciben las cuentas nuevas; la de «magic_link», las existentes. En producción hay que poner lo
 # mismo en el panel (Authentication → Email Templates).
 [auth.email.template.magic_link]
-subject = "Tu código para entrar en Multak"
+subject = "Multak: zure kodea / tu código"
 content_path = "./supabase/templates/codigo.html"
 
 [auth.email.template.confirmation]
-subject = "Tu código para entrar en Multak"
+subject = "Multak: zure kodea / tu código"
 content_path = "./supabase/templates/codigo.html"
 
 # Uncomment to customize email template

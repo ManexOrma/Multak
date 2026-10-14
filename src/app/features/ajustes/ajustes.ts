@@ -1,7 +1,8 @@
 import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { I18n } from '../../core/i18n/i18n.service';
 import { Cabecera } from '../../shared/cabecera';
+import { BotonMenu } from '../menu/boton-menu';
 import { EquiposService } from '../equipos/equipos.service';
 import { AjustesService } from './ajustes.service';
 import { Catalogo } from './catalogo';
@@ -13,15 +14,19 @@ import { Solicitudes } from './solicitudes';
 /** /e/:equipoId/ajustes — admin: todo; tesorero: solo el catálogo. */
 @Component({
   selector: 'app-ajustes',
-  imports: [Cabecera, Invitacion, Solicitudes, Miembros, Catalogo, DatosEquipo],
+  imports: [Cabecera, BotonMenu, Invitacion, Solicitudes, Miembros, Catalogo, DatosEquipo],
   providers: [AjustesService],
   template: `
     <main class="pagina">
-      <app-cabecera titulo="Ajustes" />
+      <app-cabecera [titulo]="t('ajustes.titulo')">
+        <app-boton-menu inicio class="solo-movil" />
+      </app-cabecera>
 
       @if (error()) {
         <p class="error" role="alert">{{ error() }}</p>
-        <button type="button" class="boton boton-secundario" (click)="cargar()">Reintentar</button>
+        <button type="button" class="boton boton-secundario" (click)="cargar()">
+          {{ t('comun.reintentar') }}
+        </button>
       } @else if (ajustes.equipo()) {
         @if (esAdmin()) {
           <app-invitacion />
@@ -33,12 +38,14 @@ import { Solicitudes } from './solicitudes';
           <app-datos-equipo />
         }
       } @else {
-        <p class="nota" role="status">Cargando…</p>
+        <p class="nota" role="status">{{ t('comun.cargando') }}</p>
       }
     </main>
   `,
 })
 export class Ajustes implements OnInit {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   protected readonly ajustes = inject(AjustesService);
   private readonly equipos = inject(EquiposService);
   private readonly router = inject(Router);
@@ -70,7 +77,7 @@ export class Ajustes implements OnInit {
     try {
       await this.ajustes.cargar(this.equipoId());
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
     }
   }
 }

@@ -1,14 +1,16 @@
+import { DOCUMENT } from '@angular/common';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, signal } from '@angular/core';
 import { form, FormField, FormRoot, maxLength, required, validate } from '@angular/forms/signals';
-import { MetodoPago, NOMBRE_METODO } from '../../core/models/modelos';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { I18n } from '../../core/i18n/i18n.service';
+import { MetodoPago } from '../../core/models/modelos';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { Avatar } from '../../shared/avatar';
 import { cerrarHoja } from '../../shared/dialogos/dialogos.service';
 import { hoyISO } from '../../shared/fechas';
+import { lanzarConfeti } from '../../shared/confeti';
+import { vibrar } from '../../shared/vibrar';
 import { centimosATexto, eurosACentimos } from '../../shared/importe';
-import { EurosPipe } from '../../shared/pipes/euros.pipe';
 import { EquipoService } from './equipo.service';
 
 const METODOS: MetodoPago[] = ['bizum', 'efectivo', 'otro'];
@@ -16,32 +18,34 @@ const METODOS: MetodoPago[] = ['bizum', 'efectivo', 'otro'];
 /** Registrar un pago hecho fuera de la app (Bizum o efectivo). */
 @Component({
   selector: 'app-registrar-pago',
-  imports: [FormRoot, FormField, Avatar, EurosPipe],
+  imports: [FormRoot, FormField, Avatar],
   template: `
     <div class="hoja-cabecera">
       <span></span>
-      <h2 id="registrar-pago-titulo">Registrar pago</h2>
-      <button type="button" class="boton-enlace" (click)="cancelar()">Cancelar</button>
+      <h2 id="registrar-pago-titulo">{{ t('pago.titulo') }}</h2>
+      <button type="button" class="boton-enlace" (click)="cancelar()">
+        {{ t('comun.cancelar') }}
+      </button>
     </div>
 
     @if (jugador; as j) {
       <div class="quien">
-        <app-avatar [nombre]="j.nombre ?? ''" [semilla]="j.miembro_id" [tamano]="44" />
+        <app-avatar [nombre]="j.nombre ?? ''" [tamano]="44" />
         <div>
           <p class="titular">{{ j.nombre }}</p>
           <p class="nota">
-            @if ((j.saldo_centimos ?? 0) > 0) {
-              Debe {{ j.saldo_centimos | euros }}
-            } @else {
-              Está al día
-            }
+            {{
+              (j.saldo_centimos ?? 0) > 0
+                ? t('pago.debe', { importe: i18n.euros(j.saldo_centimos ?? 0) })
+                : t('pago.al-dia')
+            }}
           </p>
         </div>
       </div>
     }
 
     <form [formRoot]="formulario" class="pila">
-      <label for="pago-importe">Importe (€)</label>
+      <label for="pago-importe">{{ t('comun.importe') }}</label>
       <input
         id="pago-importe"
         class="cifra"
@@ -58,26 +62,26 @@ const METODOS: MetodoPago[] = ['bizum', 'efectivo', 'otro'];
         }
       </p>
 
-      <p id="pago-metodo-etiqueta" class="etiqueta-campo">Cómo ha pagado</p>
+      <p id="pago-metodo-etiqueta" class="etiqueta-campo">{{ t('pago.como') }}</p>
       <fieldset class="segmentado" aria-labelledby="pago-metodo-etiqueta">
-        <legend>Cómo ha pagado</legend>
+        <legend>{{ t('pago.como') }}</legend>
         @for (metodo of metodos; track metodo) {
           <label>
             <input type="radio" [value]="metodo" [formField]="formulario.metodo" />
-            {{ nombreMetodo[metodo] }}
+            {{ textoMetodo(metodo) }}
           </label>
         }
       </fieldset>
 
-      <label for="pago-fecha" class="separado">Fecha</label>
+      <label for="pago-fecha" class="separado">{{ t('comun.fecha') }}</label>
       <input id="pago-fecha" type="date" [formField]="formulario.fecha" />
 
-      <label for="pago-nota">Nota (opcional)</label>
+      <label for="pago-nota">{{ t('comun.nota-opcional') }}</label>
       <input id="pago-nota" autocomplete="off" [formField]="formulario.nota" />
 
       <p class="error" role="alert">{{ error() }}</p>
       <button type="submit" class="boton boton-principal" [disabled]="formulario().submitting()">
-        {{ formulario().submitting() ? 'Registrando…' : 'Registrar pago' }}
+        {{ formulario().submitting() ? t('pago.registrando') : t('pago.boton') }}
       </button>
     </form>
   `,
@@ -95,14 +99,16 @@ const METODOS: MetodoPago[] = ['bizum', 'efectivo', 'otro'];
   `,
 })
 export class RegistrarPago {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   private readonly datos = inject<{ miembroId: string }>(DIALOG_DATA);
   private readonly ref = inject<DialogRef<boolean>>(DialogRef);
   private readonly equipo = inject(EquipoService);
   private readonly avisos = inject(AvisosService);
+  private readonly documento = inject(DOCUMENT);
 
   protected readonly jugador = this.equipo.saldoDe(this.datos.miembroId);
   protected readonly metodos = METODOS;
-  protected readonly nombreMetodo = NOMBRE_METODO;
   protected readonly error = signal<string | null>(null);
 
   protected readonly modelo = signal({
@@ -118,17 +124,21 @@ export class RegistrarPago {
   protected readonly formulario = form(
     this.modelo,
     (campo) => {
-      required(campo.importe, { message: 'Pon el importe pagado.' });
+      required(campo.importe, { message: this.t('pago.requerido') });
       validate(campo.importe, ({ value }) =>
         value() && eurosACentimos(value()) === null
-          ? { kind: 'importe', message: 'Pon un importe entre 0,01 y 1.000 €, p. ej. 5.' }
+          ? { kind: 'importe', message: this.t('comun.importe-invalido') }
           : undefined,
       );
-      required(campo.fecha, { message: 'Elige la fecha.' });
-      maxLength(campo.nota, 500, { message: 'Como mucho 500 caracteres.' });
+      required(campo.fecha, { message: this.t('comun.fecha-requerida') });
+      maxLength(campo.nota, 500, { message: this.t('comun.max-caracteres', { n: 500 }) });
     },
     { submission: { action: () => this.registrar() } },
   );
+
+  protected textoMetodo(metodo: MetodoPago): string {
+    return this.t(`metodo.${metodo}`);
+  }
 
   protected cancelar(): void {
     void cerrarHoja(this.ref, false);
@@ -137,6 +147,8 @@ export class RegistrarPago {
   private async registrar(): Promise<void> {
     this.error.set(null);
     const { importe, metodo, fecha, nota } = this.modelo();
+    const deuda = this.jugador?.saldo_centimos ?? 0;
+    const pagado = eurosACentimos(importe) ?? 0;
     try {
       await this.equipo.registrarPago({
         miembroId: this.datos.miembroId,
@@ -145,10 +157,13 @@ export class RegistrarPago {
         fecha,
         nota: nota.trim() || null,
       });
-      this.avisos.mostrar('Pago registrado.');
+      this.avisos.mostrar(this.i18n.frase('gracia.pago-registrado'));
+      vibrar();
       await cerrarHoja(this.ref, true);
+      // Ha saldado su deuda: ¡confeti!
+      if (deuda > 0 && pagado >= deuda) lanzarConfeti(this.documento);
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
     }
   }
 }

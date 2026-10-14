@@ -1,23 +1,34 @@
 <main class="pagina">
-  <app-cabecera [titulo]="titulo()" atras="/equipos" atrasTexto="Equipos" [atrasSoloMovil]="true" />
+  <app-cabecera [titulo]="titulo()">
+    <app-boton-menu junto-titulo class="solo-movil" [tamano]="44" />
+  </app-cabecera>
 
   @if (equipo.cargado()) {
     <div class="columnas">
       <div class="columna">
-        <section class="lo-mio" aria-labelledby="lo-mio-titulo">
-          <h2 id="lo-mio-titulo" class="solo-lector">Lo tuyo</h2>
-          @if ((yo()?.saldo_centimos ?? 0) > 0) {
-            <p class="cifra-grande cifra debe">{{ yo()?.saldo_centimos | euros }}</p>
+        <!-- El «pase de temporada»: lo tuyo, en el color del club. -->
+        <section class="pase" appInclinar aria-labelledby="lo-mio-titulo">
+          <span class="pase-brillo" aria-hidden="true"></span>
+          <h2 id="lo-mio-titulo" class="solo-lector">{{ t('inicio.lo-tuyo') }}</h2>
+          @if (debo()) {
+            <div class="pastilla">
+              <span class="estado debe">{{ t('inicio.etiqueta-debes') }}</span>
+              <app-cifra class="cifra-grande debe" [centimos]="yo()?.saldo_centimos ?? 0" />
+            </div>
             <p class="explicacion">
-              {{ equipo.miFicha()?.mi_nombre }}, debes
-              {{ multasPendientes() === 1 ? 'una multa' : multasPendientes() + ' multas' }}. Paga
-              por Bizum o en efectivo y que el tesorero lo apunte.
+              {{
+                t('inicio.debes', {
+                  nombre: equipo.miFicha()?.mi_nombre ?? '',
+                  n: multasPendientes(),
+                })
+              }}
             </p>
           } @else {
-            <p class="cifra-grande al-dia">Al día</p>
-            <p class="explicacion">
-              {{ equipo.miFicha()?.mi_nombre }}, no debes nada. Así da gusto.
-            </p>
+            <div class="pastilla">
+              <span class="estado al-dia">{{ t('inicio.etiqueta-al-dia') }}</span>
+              <p class="cifra-grande al-dia aparece">{{ t('comun.al-dia') }}</p>
+            </div>
+            <p class="explicacion">{{ fraseAlDia }}</p>
           }
         </section>
 
@@ -26,47 +37,61 @@
             <a class="fila" routerLink="gastos">
               <span class="icono-fila"><app-icono nombre="euro" /></span>
               <span class="fila-texto">
-                <span>Bote</span>
+                <span>{{ t('inicio.bote') }}</span>
                 <span class="fila-detalle">
-                  Faltan por cobrar {{ equipo.resumen()?.pendiente_cobro_centimos ?? 0 | euros }}
+                  {{
+                    t('inicio.por-cobrar', {
+                      importe: i18n.euros(equipo.resumen()?.pendiente_cobro_centimos ?? 0),
+                    })
+                  }}
                 </span>
               </span>
-              <span class="fila-valor bote">{{
-                equipo.resumen()?.bote_centimos ?? 0 | euros
-              }}</span>
+              <app-cifra
+                class="fila-valor bote"
+                [centimos]="equipo.resumen()?.bote_centimos ?? 0"
+              />
               <app-icono class="chevron" nombre="chevron-derecha" [grosor]="2.5" />
             </a>
           </li>
         </ul>
 
         <section class="seccion" aria-labelledby="saldos-titulo">
-          <h2 id="saldos-titulo">Saldos</h2>
+          <h2 id="saldos-titulo">{{ t('inicio.saldos') }}</h2>
+          @if (todosAlDia()) {
+            <p #celebracion class="todos-al-dia">
+              <app-icono nombre="check" [grosor]="2.6" />
+              {{ fraseTodos }}
+            </p>
+          }
           <ul class="lista lista--avatares">
-            @for (saldo of equipo.saldos(); track saldo.miembro_id) {
-              <li>
+            @for (saldo of equipo.saldos(); track saldo.miembro_id; let i = $index) {
+              <li [style.--i]="i">
                 <a
                   class="fila"
                   [class.recien-multado]="saldo.miembro_id === equipo.ultimoMultado()"
                   [routerLink]="['jugador', saldo.miembro_id]"
                 >
-                  <app-avatar [nombre]="saldo.nombre ?? ''" [semilla]="saldo.miembro_id" />
+                  <app-avatar
+                    [nombre]="saldo.nombre ?? ''"
+                    [destacado]="saldo.miembro_id === equipo.miFicha()?.miembro_id"
+                  />
                   <span class="fila-texto">
                     <span>
                       {{ saldo.nombre }}
                       @if (saldo.miembro_id === equipo.miFicha()?.miembro_id) {
-                        <span class="texto-suave">(tú)</span>
+                        <span class="texto-suave">{{ t('comun.tu') }}</span>
                       }
                     </span>
                     @if (!saldo.activo) {
-                      <span class="fila-detalle">Desactivado</span>
+                      <span class="fila-detalle">{{ t('inicio.desactivado') }}</span>
                     } @else if (!saldo.usuario_id) {
-                      <span class="fila-detalle">Sin cuenta</span>
+                      <span class="fila-detalle">{{ t('inicio.sin-cuenta') }}</span>
                     }
                   </span>
                   @if ((saldo.saldo_centimos ?? 0) > 0) {
-                    <span class="fila-valor debe">{{ saldo.saldo_centimos | euros }}</span>
+                    <app-cifra class="fila-valor debe" [centimos]="saldo.saldo_centimos ?? 0" />
                   } @else {
-                    <span class="fila-valor al-dia">Al día</span>
+                    <span class="fila-valor al-dia">{{ t('comun.al-dia') }}</span>
                   }
                   <app-icono class="chevron" nombre="chevron-derecha" [grosor]="2.5" />
                 </a>
@@ -77,29 +102,22 @@
       </div>
 
       <section class="columna seccion ultimas" aria-labelledby="ultimas-titulo">
-        <h2 id="ultimas-titulo">Últimas multas</h2>
+        <h2 id="ultimas-titulo">{{ t('inicio.ultimas') }}</h2>
         @if (ultimas().length === 0) {
-          <p class="estado-vacio">
-            Aún no hay multas.
-            @if (equipo.puedeGestionar()) {
-              Pon la primera con el botón amarillo.
-            } @else {
-              Ni una. Qué equipo más formal.
-            }
-          </p>
+          <p class="estado-vacio">{{ fraseSinMultas }}</p>
         } @else {
           <ul class="lista lista--avatares">
-            @for (multa of ultimas(); track multa.id) {
-              <li><app-fila-multa [multa]="multa" /></li>
+            @for (multa of ultimas(); track multa.id; let i = $index) {
+              <li [style.--i]="i"><app-fila-multa [multa]="multa" /></li>
             }
           </ul>
           @if (hayMas()) {
-            <a class="ver-todas boton-enlace" routerLink="multas">Ver todas las multas</a>
+            <a class="ver-todas boton-enlace" routerLink="multas">{{ t('inicio.ver-todas') }}</a>
           }
         }
       </section>
     </div>
   } @else {
-    <p class="nota" role="status">Cargando el equipo…</p>
+    <p class="nota" role="status">{{ t('inicio.cargando') }}</p>
   }
 </main>

@@ -1,15 +1,20 @@
 <div class="shell" [class.con-accion]="conAccion()">
-  <nav class="lateral" aria-label="Secciones del equipo">
-    <a class="volver" routerLink="/equipos">
-      <app-icono nombre="chevron-izquierda" [grosor]="2.5" />
-      Mis equipos
-    </a>
-    <p class="nombre-equipo">{{ equipo.miFicha()?.equipo_nombre }}</p>
+  <nav class="lateral" [attr.aria-label]="t('nav.secciones')">
+    <button
+      type="button"
+      class="equipo-actual"
+      [attr.aria-label]="t('menu.abrir')"
+      (click)="abrirMenu()"
+    >
+      <app-escudo [color]="equipo.miFicha()?.color" [foto]="foto()" [tamano]="40" />
+      <span class="nombre-equipo">{{ equipo.miFicha()?.equipo_nombre }}</span>
+      <app-icono class="abrir" nombre="menu" [grosor]="2.2" />
+    </button>
 
     @if (equipo.puedeGestionar()) {
       <button type="button" class="boton boton-tarjeta poner" (click)="ponerMulta()">
         <app-icono nombre="tarjeta" />
-        Poner multa
+        {{ t('nav.poner-multa') }}
       </button>
     }
 
@@ -24,7 +29,7 @@
               [routerLinkActiveOptions]="{ exact: seccion.ruta === '.' }"
             >
               <app-icono [nombre]="seccion.icono" />
-              {{ seccion.texto }}
+              {{ t(seccion.clave) }}
             </a>
           </li>
         }
@@ -39,11 +44,11 @@
   @if (conAccion()) {
     <button type="button" class="boton boton-tarjeta flotante" (click)="ponerMulta()">
       <app-icono nombre="tarjeta" />
-      Poner multa
+      {{ t('nav.poner-multa') }}
     </button>
   }
 
-  <nav class="pestanas" aria-label="Secciones del equipo">
+  <nav class="pestanas" [attr.aria-label]="t('nav.secciones')">
     @for (seccion of secciones; track seccion.ruta) {
       @if (visible(seccion)) {
         <a
@@ -53,7 +58,7 @@
           [routerLinkActiveOptions]="{ exact: seccion.ruta === '.' }"
         >
           <app-icono [nombre]="seccion.icono" />
-          <span>{{ seccion.texto }}</span>
+          <span>{{ t(seccion.clave) }}</span>
         </a>
       }
     }

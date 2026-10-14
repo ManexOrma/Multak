@@ -8,11 +8,16 @@ export function iniciales(nombre: string): string {
   return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
 }
 
+/**
+ * Monograma de iniciales en tono cálido; el tuyo, en el color del club. Decorativo.
+ * (Los equipos usan `app-escudo`.)
+ */
 @Component({
   selector: 'app-avatar',
   host: {
     class: 'avatar',
     'aria-hidden': 'true',
+    '[class.avatar--klub]': 'destacado()',
     '[style.width.px]': 'tamano()',
     '[style.height.px]': 'tamano()',
     '[style.font-size.px]': 'tamano() * 0.4',
@@ -24,6 +29,8 @@ export class Avatar {
   /** Id estable del miembro (se mantiene por compatibilidad de las plantillas). */
   readonly semilla = input<string | null | undefined>();
   readonly tamano = input(36);
+  /** Destacado en el color del club (tú en las listas, el multado en la tarjeta). */
+  readonly destacado = input(false);
 
   protected readonly letras = computed(() => iniciales(this.nombre()));
 }

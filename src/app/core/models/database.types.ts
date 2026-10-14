@@ -6,23 +6,29 @@ export type Database = {
       equipos: {
         Row: {
           codigo_invitacion: string;
+          color: string;
           creado_en: string;
           creado_por: string | null;
+          foto_version: number | null;
           id: string;
           nombre: string;
         };
         ComputedFields: never;
         Insert: {
           codigo_invitacion: string;
+          color?: string;
           creado_en?: string;
           creado_por?: string | null;
+          foto_version?: number | null;
           id?: string;
           nombre: string;
         };
         Update: {
           codigo_invitacion?: string;
+          color?: string;
           creado_en?: string;
           creado_por?: string | null;
+          foto_version?: number | null;
           id?: string;
           nombre?: string;
         };
@@ -399,7 +405,13 @@ export type Database = {
         Returns: undefined;
       };
       crear_equipo: {
-        Args: { con_catalogo_ejemplo?: boolean; mi_nombre: string; nombre_equipo: string };
+        Args: {
+          color?: string;
+          con_catalogo_ejemplo?: boolean;
+          idioma?: string;
+          mi_nombre: string;
+          nombre_equipo: string;
+        };
         Returns: string;
       };
       desactivar_miembro: { Args: { miembro_id: string }; Returns: undefined };
@@ -422,8 +434,10 @@ export type Database = {
         Args: Record<PropertyKey, never>;
         Returns: {
           activo: boolean;
+          color: string;
           equipo_id: string;
           equipo_nombre: string;
+          foto_version: number;
           mi_nombre: string;
           miembro_id: string;
           pendiente: boolean;

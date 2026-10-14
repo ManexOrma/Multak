@@ -12,15 +12,3 @@ export type TipoMulta = Tables<'tipos_multa'>;
 export type MiEquipo = Funciones['mis_equipos']['Returns'][number];
 export type FichaReclamable = Funciones['miembros_reclamables']['Returns'][number];
 export type InfoInvitacion = Funciones['info_invitacion']['Returns'][number];
-
-export const NOMBRE_ROL: Record<Rol, string> = {
-  admin: 'Admin',
-  tesorero: 'Tesorero',
-  jugador: 'Jugador',
-};
-
-export const NOMBRE_METODO: Record<MetodoPago, string> = {
-  bizum: 'Bizum',
-  efectivo: 'Efectivo',
-  otro: 'Otro',
-};

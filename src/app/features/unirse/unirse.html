@@ -1,27 +1,26 @@
 <main class="pagina">
   @switch (estado().tipo) {
     @case ('cargando') {
-      <h1>Unirme a un equipo</h1>
-      <p role="status">Buscando el equipo…</p>
+      <h1>{{ t('unirse.titulo') }}</h1>
+      <p role="status">{{ t('unirse.buscando') }}</p>
     }
 
     @case ('error') {
-      <h1>Unirme a un equipo</h1>
+      <h1>{{ t('unirse.titulo') }}</h1>
       @if (estado(); as e) {
         @if (e.tipo === 'error') {
           <p class="error" role="alert">{{ e.mensaje }}</p>
         }
       }
-      <button type="button" class="boton boton-secundario" (click)="cargar()">Reintentar</button>
+      <button type="button" class="boton boton-secundario" (click)="cargar()">
+        {{ t('comun.reintentar') }}
+      </button>
     }
 
     @case ('no-existe') {
-      <h1>Ese código no existe</h1>
-      <p>
-        Revisa que el enlace o el código (<strong>{{ codigo() }}</strong
-        >) estén bien, o pide uno nuevo a quien te invitó: puede que lo hayan cambiado.
-      </p>
-      <a class="boton boton-secundario" routerLink="/equipos">Ir a mis equipos</a>
+      <h1>{{ t('unirse.no-existe') }}</h1>
+      <p>{{ t('unirse.no-existe-texto', { codigo: codigo() }) }}</p>
+      <a class="boton boton-secundario" routerLink="/equipos">{{ t('unirse.ir-equipos') }}</a>
     }
 
     @case ('ya-dentro') {
@@ -29,19 +28,16 @@
         @if (e.tipo === 'ya-dentro') {
           <h1>{{ e.ficha.equipo_nombre }}</h1>
           @if (e.ficha.activo) {
-            <p>
-              Ya estás en este equipo como <strong>{{ e.ficha.mi_nombre }}</strong
-              >.
-            </p>
+            <p>{{ t('unirse.ya-dentro', { nombre: e.ficha.mi_nombre }) }}</p>
             <a class="boton boton-principal" [routerLink]="['/e', e.ficha.equipo_id]">
-              Ir al equipo
+              {{ t('unirse.ir-equipo') }}
             </a>
           } @else if (e.ficha.pendiente) {
-            <p>Tu solicitud para entrar ya está enviada. Falta que un admin la acepte.</p>
-            <a class="boton boton-secundario" routerLink="/equipos">Ir a mis equipos</a>
+            <p>{{ t('unirse.ya-pendiente') }}</p>
+            <a class="boton boton-secundario" routerLink="/equipos">{{ t('unirse.ir-equipos') }}</a>
           } @else {
-            <p>Tu ficha en este equipo está desactivada. Pide a un admin que la reactive.</p>
-            <a class="boton boton-secundario" routerLink="/equipos">Ir a mis equipos</a>
+            <p>{{ t('unirse.ya-desactivado') }}</p>
+            <a class="boton boton-secundario" routerLink="/equipos">{{ t('unirse.ir-equipos') }}</a>
           }
         }
       }
@@ -50,16 +46,12 @@
     @case ('elegir') {
       @if (estado(); as e) {
         @if (e.tipo === 'elegir') {
-          <h1>Únete a {{ e.info.equipo_nombre }}</h1>
+          <h1>{{ t('unirse.unete', { equipo: e.info.equipo_nombre }) }}</h1>
 
           <form [formRoot]="formulario" class="pila">
             <fieldset aria-describedby="unirse-eleccion-error">
               <legend>
-                @if (e.fichas.length > 0) {
-                  ¿Eres alguno de estos?
-                } @else {
-                  Aún no hay fichas libres: entra como nuevo.
-                }
+                {{ e.fichas.length > 0 ? t('unirse.eres') : t('unirse.sin-fichas') }}
               </legend>
 
               <ul class="lista opciones lista--avatares">
@@ -67,7 +59,7 @@
                   <li>
                     <label class="opcion">
                       <input type="radio" [value]="ficha.id" [formField]="formulario.eleccion" />
-                      <app-avatar [nombre]="ficha.nombre" [semilla]="ficha.id" [tamano]="32" />
+                      <app-avatar [nombre]="ficha.nombre" [tamano]="32" />
                       {{ ficha.nombre }}
                     </label>
                   </li>
@@ -75,7 +67,7 @@
                 <li>
                   <label class="opcion">
                     <input type="radio" [value]="nuevo" [formField]="formulario.eleccion" />
-                    Soy nuevo, no estoy en la lista
+                    {{ t('unirse.nuevo') }}
                   </label>
                 </li>
               </ul>
@@ -87,7 +79,7 @@
             </p>
 
             @if (modelo().eleccion === nuevo) {
-              <label for="unirse-nombre">Tu nombre en el equipo</label>
+              <label for="unirse-nombre">{{ t('unirse.mi-nombre') }}</label>
               <input
                 id="unirse-nombre"
                 autocomplete="given-name"
@@ -95,8 +87,8 @@
                 [attr.aria-invalid]="formulario.nombre().touched() && formulario.nombre().invalid()"
                 aria-describedby="unirse-nombre-ayuda unirse-nombre-error"
               />
-              <p id="unirse-nombre-ayuda" class="texto-suave ayuda">
-                Un admin del equipo tendrá que aceptarte antes de que veas nada.
+              <p id="unirse-nombre-ayuda" class="pie-grupo ayuda">
+                {{ t('unirse.mi-nombre-ayuda') }}
               </p>
               <p id="unirse-nombre-error" class="error-campo">
                 @if (formulario.nombre().touched() && formulario.nombre().invalid()) {
@@ -110,7 +102,7 @@
               class="boton boton-principal"
               [disabled]="formulario().submitting()"
             >
-              {{ formulario().submitting() ? 'Un momento…' : textoBoton() }}
+              {{ formulario().submitting() ? t('unirse.momento') : textoBoton() }}
             </button>
             <p class="error" role="alert">{{ error() }}</p>
           </form>
@@ -122,16 +114,13 @@
       @if (estado(); as e) {
         @if (e.tipo === 'hecho') {
           @if (e.pendiente) {
-            <h1>Solicitud enviada</h1>
-            <p>
-              Cuando un admin de <strong>{{ e.info.equipo_nombre }}</strong> te acepte, verás el
-              equipo en «Mis equipos».
-            </p>
-            <a class="boton boton-secundario" routerLink="/equipos">Ir a mis equipos</a>
+            <h1>{{ t('unirse.enviada') }}</h1>
+            <p>{{ t('unirse.enviada-texto', { equipo: e.info.equipo_nombre }) }}</p>
+            <a class="boton boton-secundario" routerLink="/equipos">{{ t('unirse.ir-equipos') }}</a>
           } @else {
-            <h1>¡Ya estás en {{ e.info.equipo_nombre }}!</h1>
+            <h1 class="celebra">{{ t('unirse.dentro', { equipo: e.info.equipo_nombre }) }}</h1>
             <a class="boton boton-principal" [routerLink]="['/e', e.info.equipo_id]">
-              Ir al equipo
+              {{ t('unirse.ir-equipo') }}
             </a>
           }
           <app-instalar-nota />

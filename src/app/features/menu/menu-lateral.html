@@ -1,0 +1,112 @@
+<div class="menu">
+  <header class="cabeza">
+    <h2 id="menu-titulo" class="solo-lector">{{ t('menu.titulo') }}</h2>
+    <app-marca />
+    <button type="button" class="cerrar" [attr.aria-label]="t('comun.cerrar')" (click)="cerrar()">
+      <app-icono nombre="cerrar" [grosor]="2.4" />
+    </button>
+  </header>
+  <p class="nota sesion">{{ t('menu.como', { email }) }}</p>
+
+  <section class="bloque" style="--i: 1">
+    <h3>{{ t('menu.equipos') }}</h3>
+    <ul class="lista lista--equipos">
+      @for (equipo of equipos.misEquipos() ?? []; track equipo.miembro_id) {
+        <li>
+          @if (equipo.activo) {
+            <button
+              type="button"
+              class="fila"
+              [attr.aria-current]="equipo.equipo_id === equipoActual ? 'page' : null"
+              (click)="ir(['/e', equipo.equipo_id])"
+            >
+              <app-escudo
+                [color]="equipo.color"
+                [foto]="fotos.url(equipo.equipo_id, equipo.foto_version)"
+                [tamano]="40"
+              />
+              <span class="fila-texto">
+                <span class="titular">{{ equipo.equipo_nombre }}</span>
+                <span class="fila-detalle">{{ equipo.mi_nombre }} · {{ rol(equipo) }}</span>
+              </span>
+              @if (equipo.equipo_id === equipoActual) {
+                <app-icono class="actual" nombre="check" [grosor]="2.6" />
+              }
+            </button>
+          } @else {
+            <div class="fila inactivo">
+              <app-escudo [color]="equipo.color" [tamano]="40" />
+              <span class="fila-texto">
+                <span class="titular">{{ equipo.equipo_nombre }}</span>
+              </span>
+              <span class="etiqueta">{{
+                equipo.pendiente ? t('menu.pendiente') : t('equipos.desactivado')
+              }}</span>
+            </div>
+          }
+        </li>
+      }
+      <li>
+        <button type="button" class="fila nuevo" (click)="ir('/equipos')">
+          <span class="icono-mas"><app-icono nombre="mas" /></span>
+          <span class="fila-texto">{{ t('menu.unirse-crear') }}</span>
+        </button>
+      </li>
+    </ul>
+  </section>
+
+  <section class="bloque" style="--i: 2">
+    <h3 id="menu-tema">{{ t('menu.apariencia') }}</h3>
+    <fieldset class="segmentado" aria-labelledby="menu-tema">
+      <legend>{{ t('menu.apariencia') }}</legend>
+      @for (tema of temas; track tema.valor) {
+        <label>
+          <input
+            type="radio"
+            name="tema"
+            [value]="tema.valor"
+            [checked]="temaService.tema() === tema.valor"
+            (change)="temaService.cambiar(tema.valor)"
+          />
+          {{ t(tema.clave) }}
+        </label>
+      }
+    </fieldset>
+  </section>
+
+  <section class="bloque" style="--i: 3">
+    <h3 id="menu-idioma">{{ t('menu.idioma') }}</h3>
+    <fieldset class="segmentado" aria-labelledby="menu-idioma">
+      <legend>{{ t('menu.idioma') }}</legend>
+      @for (idioma of idiomas; track idioma.valor) {
+        <label [attr.lang]="idioma.valor">
+          <input
+            type="radio"
+            name="idioma"
+            [value]="idioma.valor"
+            [checked]="i18n.idioma() === idioma.valor"
+            (change)="i18n.cambiar(idioma.valor)"
+          />
+          {{ idioma.nombre }}
+        </label>
+      }
+    </fieldset>
+  </section>
+
+  <section class="bloque pie" style="--i: 4">
+    <ul class="lista">
+      <li>
+        <a class="fila" routerLink="/privacidad" (click)="cerrar()">
+          <span class="fila-texto">{{ t('menu.privacidad') }}</span>
+          <app-icono class="chevron" nombre="chevron-derecha" [grosor]="2.5" />
+        </a>
+      </li>
+      <li>
+        <button type="button" class="fila salir" (click)="cerrarSesion()">
+          <app-icono nombre="salir" />
+          <span class="fila-texto">{{ t('menu.cerrar-sesion') }}</span>
+        </button>
+      </li>
+    </ul>
+  </section>
+</div>

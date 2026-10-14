@@ -4,7 +4,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(55);
+select plan(63);
 
 -- -----------------------------------------------------------------------------
 -- Datos de prueba (como postgres, sin RLS)
@@ -221,6 +221,32 @@ select results_eq(
   $$ values ('admin', 7) $$,
   'crear_equipo: el creador es admin y tiene el catálogo de ejemplo');
 
+
+-- -----------------------------------------------------------------------------
+-- Foto del equipo (Storage): sube el admin, la ven solo los miembros
+-- -----------------------------------------------------------------------------
+-- En este punto, a0..07 (un2) es admin de «Equipo nuevo»; ua es jugador de E1 y uj, admin.
+set local role authenticated;
+set local request.jwt.claims = '{"sub":"a0000000-0000-4000-a000-000000000003","role":"authenticated"}';
+select lives_ok($$ insert into storage.objects (bucket_id, name) values ('equipos', 'e0000000-0000-4000-a000-000000000001/foto.jpg') $$,
+  'foto: un admin sube la foto de su equipo');
+select lives_ok($$ update equipos set foto_version = 1 where id = 'e0000000-0000-4000-a000-000000000001' $$,
+  'foto: el admin marca la versión de la foto');
+select lives_ok($$ update equipos set color = 'gorri' where id = 'e0000000-0000-4000-a000-000000000001' $$,
+  'color: el admin cambia el color del equipo');
+select throws_ok($$ update equipos set color = 'arrosa' where id = 'e0000000-0000-4000-a000-000000000001' $$,
+  '23514', null, 'color: solo colores de la paleta');
+
+set local request.jwt.claims = '{"sub":"a0000000-0000-4000-a000-000000000002","role":"authenticated"}';
+select throws_ok($$ insert into storage.objects (bucket_id, name) values ('equipos', 'e0000000-0000-4000-a000-000000000001/otra.jpg') $$,
+  '42501', null, 'foto: un tesorero no sube fotos');
+update equipos set color = 'berde' where id = 'e0000000-0000-4000-a000-000000000001';
+select is((select color from equipos where id = 'e0000000-0000-4000-a000-000000000001'), 'gorri',
+  'color: un tesorero no cambia el color');
+select is((select count(*)::int from storage.objects where bucket_id = 'equipos'), 1, 'foto: un miembro ve la foto');
+
+set local request.jwt.claims = '{"sub":"a0000000-0000-4000-a000-000000000004","role":"authenticated"}';
+select is((select count(*)::int from storage.objects where bucket_id = 'equipos'), 0, 'foto: otro equipo no la ve');
 
 -- -----------------------------------------------------------------------------
 -- Anónimo: nada

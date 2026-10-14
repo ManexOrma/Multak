@@ -12,7 +12,10 @@ export class AjustesService {
   private readonly supabase = inject(SupabaseService).client;
   private equipoId = '';
 
-  readonly equipo = signal<Pick<Equipo, 'id' | 'nombre' | 'codigo_invitacion'> | null>(null);
+  readonly equipo = signal<Pick<
+    Equipo,
+    'id' | 'nombre' | 'codigo_invitacion' | 'foto_version' | 'color'
+  > | null>(null);
   readonly miembros = signal<Miembro[]>([]);
   readonly tipos = signal<TipoMulta[]>([]);
 
@@ -34,6 +37,13 @@ export class AjustesService {
   async renombrarEquipo(nombre: string): Promise<void> {
     exigirFila(
       await this.supabase.from('equipos').update({ nombre }).eq('id', this.equipoId).select('id'),
+    );
+    await this.cargarEquipo();
+  }
+
+  async cambiarColor(color: string): Promise<void> {
+    exigirFila(
+      await this.supabase.from('equipos').update({ color }).eq('id', this.equipoId).select('id'),
     );
     await this.cargarEquipo();
   }
@@ -111,12 +121,17 @@ export class AjustesService {
 
   // --- Carga ----------------------------------------------------------------------
 
+  /** Tras cambiar la foto o el nombre fuera de este servicio. */
+  recargarEquipo(): Promise<void> {
+    return this.cargarEquipo();
+  }
+
   private async cargarEquipo(): Promise<void> {
     this.equipo.set(
       exigir(
         await this.supabase
           .from('equipos')
-          .select('id, nombre, codigo_invitacion')
+          .select('id, nombre, codigo_invitacion, foto_version, color')
           .eq('id', this.equipoId)
           .single(),
       ),

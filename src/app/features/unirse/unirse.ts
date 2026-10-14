@@ -1,9 +1,9 @@
 import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { form, FormField, FormRoot, maxLength, required } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { FichaReclamable, InfoInvitacion, MiEquipo } from '../../core/models/modelos';
-import { mensajeError } from '../../core/supabase/mensaje-error';
 import { Avatar } from '../../shared/avatar';
 import { InstalarNota } from '../../shared/instalar-nota';
 import { EquiposService } from '../equipos/equipos.service';
@@ -26,6 +26,8 @@ type Estado =
   styleUrl: './unirse.scss',
 })
 export class Unirse implements OnInit {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   private readonly equipos = inject(EquiposService);
 
   readonly codigo = input.required<string>();
@@ -41,12 +43,12 @@ export class Unirse implements OnInit {
   protected readonly formulario = form(
     this.modelo,
     (campo) => {
-      required(campo.eleccion, { message: 'Elige tu nombre o «Soy nuevo».' });
+      required(campo.eleccion, { message: this.t('unirse.eleccion-requerida') });
       required(campo.nombre, {
-        message: 'Escribe cómo te llaman en el equipo.',
+        message: this.t('equipos.mi-nombre-requerido'),
         when: ({ valueOf }) => valueOf(campo.eleccion) === NUEVO,
       });
-      maxLength(campo.nombre, 40, { message: 'Como mucho 40 caracteres.' });
+      maxLength(campo.nombre, 40, { message: this.t('comun.max-caracteres', { n: 40 }) });
     },
     { submission: { action: () => this.unirse() } },
   );
@@ -55,9 +57,9 @@ export class Unirse implements OnInit {
   protected readonly textoBoton = computed(() => {
     const estado = this.estado();
     const eleccion = this.modelo().eleccion;
-    if (eleccion === NUEVO || estado.tipo !== 'elegir') return 'Pedir entrar';
+    if (eleccion === NUEVO || estado.tipo !== 'elegir') return this.t('unirse.pedir');
     const ficha = estado.fichas.find((f) => f.id === eleccion);
-    return ficha ? `Soy ${ficha.nombre}` : 'Continuar';
+    return ficha ? this.t('unirse.soy', { nombre: ficha.nombre }) : this.t('comun.continuar');
   });
 
   ngOnInit(): void {
@@ -85,7 +87,7 @@ export class Unirse implements OnInit {
       if (fichas.length === 0) this.modelo.update((m) => ({ ...m, eleccion: NUEVO }));
       this.estado.set({ tipo: 'elegir', info, fichas });
     } catch (e) {
-      this.estado.set({ tipo: 'error', mensaje: mensajeError(e) });
+      this.estado.set({ tipo: 'error', mensaje: this.i18n.error(e) });
     }
   }
 
@@ -102,7 +104,7 @@ export class Unirse implements OnInit {
       );
       this.estado.set({ tipo: 'hecho', info: estado.info, pendiente: esNuevo });
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
     }
   }
 }

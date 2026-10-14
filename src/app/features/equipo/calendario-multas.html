@@ -1,0 +1,131 @@
+<main class="pagina">
+  <app-cabecera [titulo]="t('multas.titulo')">
+    <app-boton-menu inicio class="solo-movil" />
+  </app-cabecera>
+
+  <div class="filtros" role="group" [attr.aria-label]="t('multas.filtrar')">
+    <button
+      type="button"
+      class="chip"
+      [attr.aria-pressed]="filtro() === null"
+      (click)="filtro.set(null)"
+    >
+      {{ t('multas.todos') }}
+    </button>
+    @for (saldo of equipo.saldos(); track saldo.miembro_id) {
+      <button
+        type="button"
+        class="chip"
+        [attr.aria-pressed]="filtro() === saldo.miembro_id"
+        (click)="filtro.set(saldo.miembro_id)"
+      >
+        {{ saldo.nombre }}
+      </button>
+    }
+  </div>
+
+  <section class="calendario" [attr.aria-label]="tituloMes()">
+    <header class="mes">
+      <button
+        type="button"
+        class="flecha"
+        [attr.aria-label]="t('multas.mes-anterior')"
+        (click)="cambiarMes(-1)"
+      >
+        <app-icono nombre="chevron-izquierda" [grosor]="2.6" />
+      </button>
+      <h2 aria-live="polite">{{ tituloMes() }}</h2>
+      <button
+        type="button"
+        class="flecha"
+        [attr.aria-label]="t('multas.mes-siguiente')"
+        (click)="cambiarMes(1)"
+      >
+        <app-icono nombre="chevron-derecha" [grosor]="2.6" />
+      </button>
+    </header>
+
+    <div class="semana" aria-hidden="true">
+      @for (dia of diasSemana; track $index) {
+        <span>{{ dia }}</span>
+      }
+    </div>
+
+    @for (clave of [tituloMes()]; track clave) {
+      <div
+        #rejilla
+        class="rejilla"
+        tabindex="-1"
+        [class.desde-derecha]="direccion() === 'adelante'"
+        [class.desde-izquierda]="direccion() === 'atras'"
+        (pointerdown)="empezarArrastre($event)"
+        (pointerup)="terminarArrastre($event)"
+        (pointercancel)="terminarArrastre($event)"
+      >
+        @for (dia of dias(); track dia.iso) {
+          <button
+            type="button"
+            class="dia"
+            [class.fuera]="!dia.delMes"
+            [attr.data-intensidad]="intensidad(dia)"
+            [attr.aria-pressed]="dia.iso === seleccionado()"
+            [attr.aria-label]="etiqueta(dia)"
+            (click)="elegir(dia)"
+          >
+            <span class="numero" [class.es-hoy]="dia.iso === hoyIso">{{ dia.numero }}</span>
+            <span class="marcas" aria-hidden="true">
+              @for (p of puntos(dia); track p) {
+                <i class="punto"></i>
+              }
+              @if (dia.pagos.length) {
+                <i class="punto pago"></i>
+              }
+            </span>
+          </button>
+        }
+      </div>
+    }
+
+    <footer class="pie-mes">
+      <p class="nota">{{ resumenMes() }}</p>
+      @if (!esMesActual()) {
+        <button type="button" class="boton-enlace" (click)="irAHoy()">{{ t('multas.hoy') }}</button>
+      }
+    </footer>
+  </section>
+
+  @if (diaSeleccionado(); as dia) {
+    @for (clave of [dia.iso]; track clave) {
+      <section class="detalle" aria-live="polite" [attr.aria-label]="tituloDia()">
+        <h2>{{ tituloDia() }}</h2>
+        @if (dia.multas.length === 0 && dia.pagos.length === 0) {
+          <p class="estado-vacio">{{ fraseVacia() }}</p>
+        }
+        @if (dia.multas.length) {
+          <ul class="lista lista--avatares">
+            @for (multa of dia.multas; track multa.id; let i = $index) {
+              <li [style.--i]="i"><app-fila-multa [multa]="multa" [conFecha]="false" /></li>
+            }
+          </ul>
+          @if (equipo.puedeGestionar()) {
+            <p class="pie-grupo">{{ t('multas.anular-pista') }}</p>
+          }
+        }
+        @if (dia.pagos.length) {
+          <h3 class="subtitulo">{{ t('multas.pagos-dia') }}</h3>
+          <ul class="lista">
+            @for (pago of dia.pagos; track pago.id) {
+              <li class="fila">
+                <span class="fila-texto">
+                  <span>{{ equipo.nombres().get(pago.miembro_id) }}</span>
+                  <span class="fila-detalle">{{ textoMetodo(pago) }}</span>
+                </span>
+                <span class="fila-valor al-dia">+{{ i18n.euros(pago.importe_centimos) }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    }
+  }
+</main>

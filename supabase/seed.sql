@@ -46,6 +46,8 @@ insert into public.equipos (id, nombre, codigo_invitacion) values
   ('10000000-0000-4000-a000-000000000001', 'CD Vestuario', 'VESTUAR2'),
   ('10000000-0000-4000-a000-000000000002', 'Atlético Banquillo', 'BANQUE22');
 
+update public.equipos set color = 'gorri' where id = '10000000-0000-4000-a000-000000000002';
+
 -- Miembros -----------------------------------------------------------------
 
 insert into public.miembros (id, equipo_id, usuario_id, nombre, rol, activo, pendiente) values

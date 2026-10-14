@@ -1,37 +1,41 @@
 import { Component, inject } from '@angular/core';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { Cabecera } from '../../shared/cabecera';
+import { CifraAnimada } from '../../shared/cifra-animada';
 import { DialogosService } from '../../shared/dialogos/dialogos.service';
-import { fechaRelativa } from '../../shared/fechas';
-import { EurosPipe } from '../../shared/pipes/euros.pipe';
+import { BotonMenu } from '../menu/boton-menu';
 import { AccionesEquipo } from './acciones-equipo';
 import { EquipoService, Gasto } from './equipo.service';
 
 /** El bote: cuánto se ha recaudado, en qué se ha gastado y cuánto queda. */
 @Component({
   selector: 'app-gastos',
-  imports: [Cabecera, EurosPipe],
+  imports: [Cabecera, BotonMenu, CifraAnimada],
   template: `
     <main class="pagina">
-      <app-cabecera titulo="Gastos" />
+      <app-cabecera [titulo]="t('gastos.titulo')">
+        <app-boton-menu inicio class="solo-movil" />
+      </app-cabecera>
 
-      <section aria-label="Cuentas del bote">
-        <p class="cifra-grande cifra">{{ equipo.resumen()?.bote_centimos ?? 0 | euros }}</p>
-        <p class="nota">en el bote ahora mismo</p>
+      <section [attr.aria-label]="t('gastos.cuentas')">
+        <app-cifra class="cifra-grande" [centimos]="equipo.resumen()?.bote_centimos ?? 0" />
+        <p class="nota">{{ t('gastos.en-bote') }}</p>
         <ul class="lista cuentas">
           <li class="fila">
-            <span class="fila-texto">Recaudado</span>
-            <span class="fila-valor">{{ equipo.resumen()?.recaudado_centimos ?? 0 | euros }}</span>
+            <span class="fila-texto">{{ t('gastos.recaudado') }}</span>
+            <app-cifra class="fila-valor" [centimos]="equipo.resumen()?.recaudado_centimos ?? 0" />
           </li>
           <li class="fila">
-            <span class="fila-texto">Gastado</span>
-            <span class="fila-valor">−{{ equipo.resumen()?.gastado_centimos ?? 0 | euros }}</span>
+            <span class="fila-texto">{{ t('gastos.gastado') }}</span>
+            <span class="fila-valor"
+              >−{{ i18n.euros(equipo.resumen()?.gastado_centimos ?? 0) }}</span
+            >
           </li>
           <li class="fila">
-            <span class="fila-texto">Falta por cobrar</span>
+            <span class="fila-texto">{{ t('gastos.por-cobrar') }}</span>
             <span class="fila-valor texto-suave">{{
-              equipo.resumen()?.pendiente_cobro_centimos ?? 0 | euros
+              i18n.euros(equipo.resumen()?.pendiente_cobro_centimos ?? 0)
             }}</span>
           </li>
         </ul>
@@ -43,47 +47,43 @@ import { EquipoService, Gasto } from './equipo.service';
           class="boton boton-secundario boton-ancho registrar"
           (click)="registrar()"
         >
-          Registrar gasto
+          {{ t('gastos.registrar') }}
         </button>
       }
 
       <section class="seccion" aria-labelledby="gastos-titulo">
-        <h2 id="gastos-titulo">En qué se ha gastado</h2>
+        <h2 id="gastos-titulo">{{ t('gastos.en-que') }}</h2>
         @if (equipo.gastos().length === 0) {
-          <p class="estado-vacio">Aún no se ha gastado nada. El bote espera su cena.</p>
+          <p class="estado-vacio">{{ fraseVacia }}</p>
         } @else {
           <ul class="lista">
-            @for (gasto of equipo.gastos(); track gasto.id) {
-              <li>
+            @for (gasto of equipo.gastos(); track gasto.id; let i = $index) {
+              <li [style.--i]="i">
                 @if (equipo.puedeGestionar() && !gasto.anulado) {
                   <button type="button" class="fila" (click)="anular(gasto)">
                     <span class="fila-texto">
                       <span>{{ gasto.concepto }}</span>
-                      <span class="fila-detalle"
-                        >{{ fecha(gasto.fecha) }}{{ gasto.nota ? ' · ' + gasto.nota : '' }}</span
-                      >
+                      <span class="fila-detalle">{{ detalle(gasto) }}</span>
                     </span>
-                    <span class="fila-valor">−{{ gasto.importe_centimos | euros }}</span>
+                    <span class="fila-valor">−{{ i18n.euros(gasto.importe_centimos) }}</span>
                   </button>
                 } @else {
                   <div class="fila" [class.anulado]="gasto.anulado">
                     <span class="fila-texto">
                       <span>{{ gasto.concepto }}</span>
-                      <span class="fila-detalle"
-                        >{{ fecha(gasto.fecha) }}{{ gasto.nota ? ' · ' + gasto.nota : '' }}</span
-                      >
+                      <span class="fila-detalle">{{ detalle(gasto) }}</span>
                     </span>
                     @if (gasto.anulado) {
-                      <span class="etiqueta">Anulado</span>
+                      <span class="etiqueta">{{ t('comun.anulado') }}</span>
                     }
-                    <span class="fila-valor">−{{ gasto.importe_centimos | euros }}</span>
+                    <span class="fila-valor">−{{ i18n.euros(gasto.importe_centimos) }}</span>
                   </div>
                 }
               </li>
             }
           </ul>
           @if (equipo.puedeGestionar()) {
-            <p class="pie-grupo">Toca un gasto para anularlo si se apuntó por error.</p>
+            <p class="pie-grupo">{{ t('gastos.anular-pista') }}</p>
           }
         }
       </section>
@@ -91,6 +91,7 @@ import { EquipoService, Gasto } from './equipo.service';
   `,
   styles: `
     .cifra-grande {
+      display: block;
       margin: 0 4px;
       font-size: 56px;
       line-height: 1.05;
@@ -106,6 +107,18 @@ import { EquipoService, Gasto } from './equipo.service';
       margin-top: 16px;
     }
 
+    .lista > li {
+      animation: fila-entra 420ms var(--ease-out) both;
+      animation-delay: calc(var(--i, 0) * 35ms);
+    }
+
+    @keyframes fila-entra {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+    }
+
     .anulado {
       color: var(--texto-2);
 
@@ -118,13 +131,17 @@ import { EquipoService, Gasto } from './equipo.service';
   `,
 })
 export class Gastos {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   protected readonly equipo = inject(EquipoService);
   private readonly acciones = inject(AccionesEquipo);
   private readonly dialogos = inject(DialogosService);
   private readonly avisos = inject(AvisosService);
 
-  protected fecha(fechaISO: string): string {
-    return fechaRelativa(fechaISO);
+  protected readonly fraseVacia = this.i18n.frase('gracia.sin-gastos');
+
+  protected detalle(gasto: Gasto): string {
+    return [this.i18n.fecha(gasto.fecha), gasto.nota].filter(Boolean).join(' · ');
   }
 
   protected registrar(): void {
@@ -133,17 +150,17 @@ export class Gastos {
 
   protected async anular(gasto: Gasto): Promise<void> {
     const confirmado = await this.dialogos.confirmar({
-      titulo: '¿Anular este gasto?',
-      mensaje: `${gasto.concepto}. El dinero volverá a contar en el bote y el gasto quedará tachado.`,
-      aceptar: 'Anular',
+      titulo: this.t('gastos.anular-titulo'),
+      mensaje: this.t('gastos.anular-texto', { concepto: gasto.concepto }),
+      aceptar: this.t('comun.anular'),
       peligro: true,
     });
     if (!confirmado) return;
     try {
       await this.equipo.anularGasto(gasto.id);
-      this.avisos.mostrar('Gasto anulado.');
+      this.avisos.mostrar(this.t('gastos.anulado'));
     } catch (e) {
-      this.avisos.mostrar(mensajeError(e));
+      this.avisos.mostrar(this.i18n.error(e));
     }
   }
 }

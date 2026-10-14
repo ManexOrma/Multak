@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
+import { I18n } from '../../core/i18n/i18n.service';
 
 /** Para quien tiene el código pero no el enlace: lleva a /unirse/:codigo. */
 @Component({
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
   imports: [FormRoot, FormField],
   template: `
     <form [formRoot]="formulario" class="pila">
-      <label for="unirse-codigo">Código de invitación</label>
+      <label for="unirse-codigo">{{ t('equipos.codigo') }}</label>
       <input
         id="unirse-codigo"
         class="codigo cifra"
@@ -26,9 +27,9 @@ import { Router } from '@angular/router';
           {{ formulario.codigo().errors()[0].message }}
         }
       </p>
-      <button type="submit" class="boton boton-secundario">Unirme</button>
+      <button type="submit" class="boton boton-secundario">{{ t('equipos.boton-unirme') }}</button>
       <p id="unirse-codigo-ayuda" class="pie-grupo">
-        Son 8 letras y números. Si tienes el enlace, ábrelo y listo.
+        {{ t('equipos.codigo-ayuda') }}
       </p>
     </form>
   `,
@@ -45,12 +46,14 @@ import { Router } from '@angular/router';
   `,
 })
 export class UnirseCodigo {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   private readonly router = inject(Router);
 
   protected readonly modelo = signal({ codigo: '' });
   protected readonly formulario = form(
     this.modelo,
-    (campo) => required(campo.codigo, { message: 'Escribe el código que te han pasado.' }),
+    (campo) => required(campo.codigo, { message: this.t('equipos.codigo-requerido') }),
     {
       submission: {
         action: async () => {

@@ -1,14 +1,18 @@
 import { computed, inject, Service, signal } from '@angular/core';
 import { AuthService } from '../../core/auth/auth.service';
+import { I18n } from '../../core/i18n/i18n.service';
 import { FichaReclamable, InfoInvitacion, MiEquipo } from '../../core/models/modelos';
 import { exigir } from '../../core/supabase/mensaje-error';
 import { SupabaseService } from '../../core/supabase/supabase.service';
+
+const ULTIMO = 'multak.ultimo-equipo';
 
 /** Mis equipos (en cualquier estado), crear equipo y unirse con código. */
 @Service()
 export class EquiposService {
   private readonly supabase = inject(SupabaseService).client;
   private readonly auth = inject(AuthService);
+  private readonly i18n = inject(I18n);
   private readonly cargados = signal<{ usuarioId: string; equipos: MiEquipo[] } | null>(null);
 
   /** undefined mientras no se han cargado los del usuario actual (si cambia de usuario, se descartan). */
@@ -18,6 +22,28 @@ export class EquiposService {
       ? cargados.equipos
       : undefined;
   });
+
+  /** Recuerda el último equipo abierto en este dispositivo (para entrar directo la próxima vez). */
+  recordar(equipoId: string): void {
+    try {
+      localStorage.setItem(ULTIMO, equipoId);
+    } catch {
+      // Sin almacenamiento: no pasa nada.
+    }
+  }
+
+  /** A qué equipo entrar al abrir la app: el único, o el último abierto si sigue activo. */
+  async equipoDeEntrada(): Promise<string | null> {
+    const activos = (this.misEquipos() ?? (await this.cargar())).filter((e) => e.activo);
+    if (activos.length === 1) return activos[0].equipo_id;
+    let ultimo: string | null = null;
+    try {
+      ultimo = localStorage.getItem(ULTIMO);
+    } catch {
+      ultimo = null;
+    }
+    return activos.find((e) => e.equipo_id === ultimo)?.equipo_id ?? null;
+  }
 
   async cargar(): Promise<MiEquipo[]> {
     const usuarioId = this.auth.usuario()?.id;
@@ -33,12 +59,19 @@ export class EquiposService {
   }
 
   /** Crea el equipo con el usuario como admin y devuelve su id. */
-  async crear(nombreEquipo: string, miNombre: string, conCatalogo: boolean): Promise<string> {
+  async crear(
+    nombreEquipo: string,
+    miNombre: string,
+    conCatalogo: boolean,
+    color: string,
+  ): Promise<string> {
     const id = exigir(
       await this.supabase.rpc('crear_equipo', {
         nombre_equipo: nombreEquipo,
         mi_nombre: miNombre,
         con_catalogo_ejemplo: conCatalogo,
+        idioma: this.i18n.idioma(),
+        color,
       }),
     );
     await this.cargar();

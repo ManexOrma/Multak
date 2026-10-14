@@ -26,7 +26,7 @@ Nombre provisional: «Multas» (repo `multas-app`).
 - **Backend:** Supabase (Postgres + Auth + RLS), sin API propia. Angular habla con Supabase mediante `@supabase/supabase-js`. Si hace falta lógica de servidor con permisos elevados (por ejemplo, borrar una cuenta), se usan Edge Functions.
 - **Base de datos como código:** Supabase CLI. Todo el esquema va en migraciones SQL versionadas en `supabase/migrations`, sin cambios a mano en el panel. Los tipos TypeScript se generan con `supabase gen types`.
 - **UI:** componentes propios con SCSS y variables CSS como design tokens, apoyados en Angular CDK (dialog, overlay, a11y). Sin librerías de componentes pesadas.
-- **Idioma:** interfaz en español de España, `LOCALE_ID` `es-ES`, con euros y fechas en formato español.
+- **Idioma:** euskera por defecto y castellano (`LOCALE_ID` `eu` o `es-ES` según el idioma elegido), con euros y fechas en el formato de cada idioma. Ver «Decisiones».
 - **Hosting:** estático (Vercel, Netlify o Cloudflare) con fallback SPA a `index.html`. Se decide en la fase 5.
 
 ## Reglas de trabajo
@@ -113,6 +113,7 @@ Invariantes:
 ## Pantallas y flujos
 
 - `/login`: email y luego el código. Botón de Google.
+- `/`: entrada. Con un solo equipo (o el último usado) entra directo en él; si no, va a `/equipos`.
 - `/equipos`: mis equipos, crear equipo y unirse con código.
 - `/unirse/:codigo`: llega por WhatsApp.
   - Si no hay sesión, guarda el código, pide login y vuelve.
@@ -120,11 +121,11 @@ Invariantes:
   - Al terminar, invita a instalar la app y avisa de que en iPhone tendrá que volver a entrar dentro de la app instalada.
 - `/e/:equipoId`: inicio del equipo, con el bote, lo pendiente de cobro, el saldo de cada jugador y las últimas multas.
 - **Poner multa:** es la acción estrella, siempre a mano y en 3 toques como máximo (jugador → tipo → confirmar). También permite multa libre con concepto e importe.
-- `/e/:equipoId/multas`: historial filtrable por jugador. Anular pide confirmación.
+- `/e/:equipoId/multas`: calendario del mes, con las multas y pagos de cada día y filtro por jugador. Se cambia de mes con flechas o deslizando. Al tocar un día se ve su detalle; anular pide confirmación.
 - `/e/:equipoId/jugador/:miembroId`: multas y pagos de un jugador. Desde aquí se registra un pago.
 - `/e/:equipoId/gastos`: registrar y listar los gastos del bote.
 - `/e/:equipoId/ajustes` (admin):
-  - datos del equipo;
+  - datos del equipo y su foto (solo admin);
   - miembros (alta sin cuenta, roles, desactivar, desvincular);
   - catálogo;
   - enlace de invitación para compartir por WhatsApp y regenerar.
@@ -187,3 +188,10 @@ Invariantes:
 - **Ajustes:** el admin ve todo; el tesorero entra en ajustes pero solo ve el catálogo.
 - **Diseño (fase 4):** tras dos tiradas de direcciones «de objeto» (cromos, acta, carnet, pizarra) que el autor rechazó, se eligió el estándar de la categoría con el listón de las apps de Apple (Wallet, Fitness, Salud): listas agrupadas de iOS, cifras redondeadas, claro y oscuro según el sistema. Un solo elemento memorable: la tarjeta amarilla del árbitro, reservada a «Poner multa». El sistema está documentado en `DESIGN.md`; el contexto de producto, en `PRODUCT.md`.
 - **Nombre:** la app se llama **Multak** (antes «Multas»).
+- **Idioma:** la interfaz está en euskera por defecto, con selector para castellano en el menú lateral. Es i18n en tiempo de ejecución: diccionarios tipados en `core/i18n/` (`es.ts` define las claves y `eu.ts` tiene que traducirlas todas) y servicio `I18n` (`t()`, `frase()` para las frases con gracia al azar, `error()`, fechas e importes). El idioma se guarda en el dispositivo y cambiarlo recarga la app. Los errores de la BD se traducen en el cliente (`claveError`).
+- **Catálogo de ejemplo en el idioma de quien crea el equipo:** `crear_equipo` recibe `idioma` ('eu' por defecto, o 'es').
+- **Menú lateral:** el botón para volver a equipos se sustituye por el avatar del equipo, que abre un menú con los equipos, «Unirme o crear», apariencia (sistema, claro u oscuro), idioma, privacidad y cerrar sesión.
+- **Foto del equipo:** bucket privado `equipos` de Supabase Storage (`{equipoId}/foto.jpg`, recortada a 512 px en el cliente, máx. 1 MB). La ven los miembros (URL firmada) y solo la sube o la quita el admin (políticas de Storage). `equipos.foto_version` invalida la caché.
+- **Más vida:** cifras que cuentan, listas escalonadas, transiciones de vista entre pantallas, vibración al poner multa o registrar pago y celebración cuando todo el equipo está al día. Todo respeta `prefers-reduced-motion`.
+- **Tema «Bero klub» y color del club:** suelo crema, sombras cálidas, radios grandes y Figtree autoalojada (sin llamadas a Google). Cada equipo elige un color de club de una paleta cerrada de 8 (`equipos.color`, con check en la BD para garantizar el contraste). Lo elige quien crea el equipo y lo cambia el admin en Ajustes. Viste la app del equipo: el «pase de temporada» del Inicio, el escudo rayado (si no hay foto), los enlaces, la pestaña activa y la cinta de la tarjeta amarilla. La deuda va siempre en rojo sobre una pastilla clara. Hay interacción física: el pase y la tarjeta se inclinan hacia el dedo, y hay confeti cuando el equipo o un jugador queda al día. El sistema está en `DESIGN.md`.
+- **Frases con gracia:** con tono de vestuario, para picar; las mismas ideas en euskera y en castellano (`docs/frases-graciosas.md`).

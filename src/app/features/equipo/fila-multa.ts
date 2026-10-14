@@ -1,11 +1,9 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { Avatar } from '../../shared/avatar';
 import { DialogosService } from '../../shared/dialogos/dialogos.service';
-import { fechaRelativa } from '../../shared/fechas';
-import { EurosPipe } from '../../shared/pipes/euros.pipe';
 import { EquipoService, Multa } from './equipo.service';
 
 /**
@@ -14,7 +12,7 @@ import { EquipoService, Multa } from './equipo.service';
  */
 @Component({
   selector: 'app-fila-multa',
-  imports: [NgTemplateOutlet, Avatar, EurosPipe],
+  imports: [NgTemplateOutlet, Avatar],
   template: `
     @if (anulable()) {
       <button type="button" class="fila" (click)="anular()" [attr.aria-label]="etiqueta()">
@@ -27,7 +25,7 @@ import { EquipoService, Multa } from './equipo.service';
     }
     <ng-template #contenido>
       @if (conJugador()) {
-        <app-avatar [nombre]="jugador()" [semilla]="multa().miembro_id" />
+        <app-avatar [nombre]="jugador()" />
       }
       <span class="fila-texto" [class.anulada]="multa().anulada">
         <span>{{ multa().concepto }}</span>
@@ -36,10 +34,10 @@ import { EquipoService, Multa } from './equipo.service';
         </span>
       </span>
       @if (multa().anulada) {
-        <span class="etiqueta">Anulada</span>
+        <span class="etiqueta">{{ t('comun.anulada') }}</span>
       }
       <span class="fila-valor" [class.anulada]="multa().anulada">
-        {{ multa().importe_centimos | euros }}
+        {{ i18n.euros(multa().importe_centimos) }}
       </span>
     </ng-template>
   `,
@@ -66,6 +64,8 @@ import { EquipoService, Multa } from './equipo.service';
   `,
 })
 export class FilaMulta {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   private readonly equipo = inject(EquipoService);
   private readonly dialogos = inject(DialogosService);
   private readonly avisos = inject(AvisosService);
@@ -79,7 +79,7 @@ export class FilaMulta {
   protected readonly jugador = computed(
     () => this.equipo.nombres().get(this.multa().miembro_id) ?? '—',
   );
-  protected readonly fecha = computed(() => fechaRelativa(this.multa().fecha));
+  protected readonly fecha = computed(() => this.i18n.fecha(this.multa().fecha));
   protected readonly detalle = computed(() =>
     [
       this.conJugador() ? this.jugador() : null,
@@ -94,24 +94,24 @@ export class FilaMulta {
   );
   protected readonly etiqueta = computed(() => {
     const m = this.multa();
-    const estado = m.anulada ? ', anulada' : '';
-    return `${this.jugador()}: ${m.concepto}, ${(m.importe_centimos / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })}, ${this.fecha()}${estado}`;
+    const estado = m.anulada ? this.t('fila.anulada-sufijo') : '';
+    return `${this.jugador()}: ${m.concepto}, ${this.i18n.euros(m.importe_centimos)}, ${this.fecha()}${estado}`;
   });
 
   protected async anular(): Promise<void> {
     const m = this.multa();
     const confirmado = await this.dialogos.confirmar({
-      titulo: '¿Anular esta multa?',
-      mensaje: `${this.jugador()} · ${m.concepto}. Dejará de contar en su saldo y quedará tachada en el historial.`,
-      aceptar: 'Anular',
+      titulo: this.t('fila.anular-titulo'),
+      mensaje: this.t('fila.anular-texto', { nombre: this.jugador(), motivo: m.concepto }),
+      aceptar: this.t('comun.anular'),
       peligro: true,
     });
     if (!confirmado) return;
     try {
       await this.equipo.anularMulta(m.id);
-      this.avisos.mostrar('Multa anulada.');
+      this.avisos.mostrar(this.t('fila.anulada-aviso'));
     } catch (e) {
-      this.avisos.mostrar(mensajeError(e));
+      this.avisos.mostrar(this.i18n.error(e));
     }
   }
 }

@@ -1,0 +1,466 @@
+// Textos en castellano. Define las claves: eu.ts tiene que traducirlas todas.
+// Las listas («gracia.*») son variantes al azar para los mensajes con gracia.
+
+const euros = (centimos: number) =>
+  (centimos / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+
+export const es = {
+  // --- Común ---
+  'comun.cancelar': 'Cancelar',
+  'comun.cerrar': 'Cerrar',
+  'comun.atras': 'Atrás',
+  'comun.guardar': 'Guardar',
+  'comun.reintentar': 'Reintentar',
+  'comun.cargando': 'Cargando…',
+  'comun.anular': 'Anular',
+  'comun.anulada': 'Anulada',
+  'comun.anulado': 'Anulado',
+  'comun.continuar': 'Continuar',
+  'comun.tu': '(tú)',
+  'comun.al-dia': 'Al día',
+  'comun.fecha': 'Fecha',
+  'comun.nota-opcional': 'Nota (opcional)',
+  'comun.importe': 'Importe (€)',
+  'comun.max-caracteres': (p: { n: number }) => `Como mucho ${p.n} caracteres.`,
+  'comun.importe-invalido': 'Pon un importe entre 0,01 y 1.000 €, p. ej. 2,50.',
+  'comun.importe-requerido': 'Pon el importe.',
+  'comun.fecha-requerida': 'Elige la fecha.',
+  'comun.multas-n': (p: { n: number }) => (p.n === 1 ? '1 multa' : `${p.n} multas`),
+  'comun.euros': (p: { centimos: number }) => euros(p.centimos),
+
+  'rol.admin': 'Admin',
+  'rol.tesorero': 'Tesorero',
+  'rol.jugador': 'Jugador',
+  'metodo.bizum': 'Bizum',
+  'metodo.efectivo': 'Efectivo',
+  'metodo.otro': 'Otro',
+
+  'fecha.hoy': 'Hoy',
+  'fecha.ayer': 'Ayer',
+
+  // --- Títulos de pestaña del navegador ---
+  'titulo.login': 'Entrar',
+  'titulo.privacidad': 'Privacidad',
+  'titulo.equipos': 'Mis equipos',
+  'titulo.unirse': 'Unirme a un equipo',
+  'titulo.equipo': 'Equipo',
+  'titulo.multas': 'Multas',
+  'titulo.jugador': 'Jugador',
+  'titulo.gastos': 'Gastos',
+  'titulo.ajustes': 'Ajustes',
+
+  // --- Errores ---
+  'error.permiso': 'No tienes permiso para hacer esto.',
+  'error.datos': 'Algún dato no es válido. Revísalo y vuelve a intentarlo.',
+  'error.conexion': 'No hay conexión. Comprueba tu internet y vuelve a intentarlo.',
+  'error.generico': 'Algo ha fallado. Vuelve a intentarlo en un momento.',
+  'error.auth.codigo': 'El código no es correcto o ha caducado. Revísalo o pide uno nuevo.',
+  'error.auth.demasiados':
+    'Has pedido demasiados códigos seguidos. Espera unos minutos y vuelve a intentarlo.',
+  'error.auth.email': 'Ese email no parece válido. Revísalo.',
+  'error.auth.registro': 'Ahora mismo no se pueden crear cuentas nuevas. Inténtalo más tarde.',
+  'error.auth.generico': 'Algo ha fallado al entrar. Vuelve a intentarlo en un momento.',
+  // Mensajes de la base de datos (RPCs y triggers).
+  'error.db.aceptar-antes': 'Acepta antes la solicitud de esta persona.',
+  'error.db.ultimo-admin':
+    'El equipo tiene que tener al menos un admin. Nombra a otro admin antes.',
+  'error.db.es-solicitud': 'Es una solicitud: acéptala o recházala.',
+  'error.db.ficha-ocupada': 'Esa ficha ya no está libre. Elige otra o entra como nuevo.',
+  'error.db.solicitud-resuelta': 'Esa solicitud ya no está pendiente.',
+  'error.db.falta-nombre': 'Escribe tu nombre para unirte.',
+  'error.db.codigo-inexistente':
+    'Ese código de invitación no existe. Revisa el enlace o pide uno nuevo.',
+  'error.db.jugador-inactivo': 'Ese jugador no está activo en el equipo.',
+  'error.db.no-aceptado': 'Ese miembro aún no ha sido aceptado en el equipo.',
+  'error.db.tipo-inexistente': 'Ese tipo de multa no existe o está desactivado.',
+  'error.db.sin-cuenta': 'Esta ficha no tiene ninguna cuenta vinculada.',
+  'error.db.multa-anulada': 'Esta multa ya estaba anulada.',
+  'error.db.gasto-anulado': 'Este gasto ya estaba anulado.',
+  'error.db.pago-anulado': 'Este pago ya estaba anulado.',
+  'error.db.no-anular-multa': 'No puedes anular esta multa.',
+  'error.db.no-anular-gasto': 'No puedes anular este gasto.',
+  'error.db.no-anular-pago': 'No puedes anular este pago.',
+  'error.db.rol-sin-cuenta':
+    'Solo se puede dar un rol a alguien con cuenta. Pídele que se una con el enlace.',
+  'error.db.solo-admin-miembros': 'Solo un admin del equipo puede gestionar sus miembros.',
+  'error.db.solo-admin-enlace': 'Solo un admin puede cambiar el enlace de invitación.',
+  'error.db.sin-sesion': 'Tienes que iniciar sesión.',
+  'error.db.ficha-desactivada':
+    'Tu ficha en este equipo está desactivada. Pide a un admin que la reactive.',
+  'error.db.solicitud-enviada': 'Tu solicitud ya está enviada. Falta que un admin la acepte.',
+  'error.db.ya-dentro': 'Ya estás en este equipo.',
+  'error.foto': 'No se ha podido subir la foto. Prueba con otra imagen.',
+
+  // --- Login ---
+  'login.lema': 'Las multas del equipo, claras para todos.',
+  'login.email': 'Tu email',
+  'login.email-requerido': 'Escribe tu email.',
+  'login.email-invalido': 'Ese email no parece válido. Revísalo.',
+  'login.enviar': 'Enviarme un código',
+  'login.enviando': 'Enviando…',
+  'login.ayuda': 'Te mandamos un código de 6 cifras. Sin contraseñas.',
+  'login.o': 'o',
+  'login.google': 'Entrar con Google',
+  'login.enviado': (p: { email: string }) =>
+    `Te hemos enviado un código a ${p.email}. Si no lo ves, mira en spam.`,
+  'login.codigo': 'Código',
+  'login.codigo-requerido': 'Escribe el código que te hemos enviado.',
+  'login.codigo-invalido': 'El código tiene 6 cifras.',
+  'login.entrar': 'Entrar',
+  'login.comprobando': 'Comprobando…',
+  'login.reenviar': 'Reenviar código',
+  'login.reenviar-en': (p: { s: number }) => `Reenviar en ${p.s} s`,
+  'login.reenviado': 'Te hemos enviado un código nuevo.',
+  'login.otro-email': 'Usar otro email',
+  'login.privacidad': 'Privacidad',
+
+  // --- Menú lateral ---
+  'menu.abrir': 'Abrir menú',
+  'menu.titulo': 'Menú',
+  'menu.equipos': 'Tus equipos',
+  'menu.equipo-actual': 'Equipo actual',
+  'menu.pendiente': 'Pendiente',
+  'menu.unirse-crear': 'Unirme o crear un equipo',
+  'menu.apariencia': 'Apariencia',
+  'menu.tema-sistema': 'Sistema',
+  'menu.tema-claro': 'Claro',
+  'menu.tema-oscuro': 'Oscuro',
+  'menu.idioma': 'Idioma',
+  'menu.privacidad': 'Privacidad',
+  'menu.cerrar-sesion': 'Cerrar sesión',
+  'menu.como': (p: { email: string }) => `Has entrado como ${p.email}`,
+
+  // --- Mis equipos ---
+  'equipos.titulo': 'Mis equipos',
+  'equipos.vacio':
+    'Aún no estás en ningún equipo. Únete con el código que te hayan pasado o crea el tuyo.',
+  'equipos.cargando': 'Cargando tus equipos…',
+  'equipos.esperando': 'Esperando a que un admin te acepte',
+  'equipos.desactivada': 'Tu ficha está desactivada',
+  'equipos.pendiente': 'Pendiente',
+  'equipos.desactivado': 'Desactivado',
+  'equipos.unirme': 'Unirme a un equipo',
+  'equipos.crear': 'Crear un equipo',
+  'equipos.codigo': 'Código de invitación',
+  'equipos.codigo-requerido': 'Escribe el código que te han pasado.',
+  'equipos.codigo-ayuda': 'Son 8 letras y números. Si tienes el enlace, ábrelo y listo.',
+  'equipos.boton-unirme': 'Unirme',
+  'equipos.nombre-equipo': 'Nombre del equipo',
+  'equipos.nombre-equipo-requerido': 'Ponle un nombre al equipo.',
+  'equipos.mi-nombre': 'Tu nombre en el equipo',
+  'equipos.mi-nombre-requerido': 'Escribe cómo te llaman en el equipo.',
+  'equipos.catalogo': 'Empezar con un catálogo de multas de ejemplo (lo podrás cambiar)',
+  'equipos.boton-crear': 'Crear equipo',
+  'equipos.creando': 'Creando…',
+  'equipos.creado': 'Equipo creado. Ahora invita a tu gente.',
+  'equipos.cerrar-sesion': 'Cerrar sesión',
+
+  // --- Unirse ---
+  'unirse.titulo': 'Unirme a un equipo',
+  'unirse.buscando': 'Buscando el equipo…',
+  'unirse.no-existe': 'Ese código no existe',
+  'unirse.no-existe-texto': (p: { codigo: string }) =>
+    `Revisa que el enlace o el código (${p.codigo}) estén bien, o pide uno nuevo a quien te invitó: puede que lo hayan cambiado.`,
+  'unirse.ir-equipos': 'Ir a mis equipos',
+  'unirse.ya-dentro': (p: { nombre: string }) => `Ya estás en este equipo como ${p.nombre}.`,
+  'unirse.ir-equipo': 'Ir al equipo',
+  'unirse.ya-pendiente': 'Tu solicitud para entrar ya está enviada. Falta que un admin la acepte.',
+  'unirse.ya-desactivado':
+    'Tu ficha en este equipo está desactivada. Pide a un admin que la reactive.',
+  'unirse.unete': (p: { equipo: string }) => `Únete a ${p.equipo}`,
+  'unirse.eres': '¿Eres alguno de estos?',
+  'unirse.sin-fichas': 'Aún no hay fichas libres: entra como nuevo.',
+  'unirse.nuevo': 'Soy nuevo, no estoy en la lista',
+  'unirse.eleccion-requerida': 'Elige tu nombre o «Soy nuevo».',
+  'unirse.mi-nombre': 'Tu nombre en el equipo',
+  'unirse.mi-nombre-ayuda': 'Un admin del equipo tendrá que aceptarte antes de que veas nada.',
+  'unirse.soy': (p: { nombre: string }) => `Soy ${p.nombre}`,
+  'unirse.pedir': 'Pedir entrar',
+  'unirse.momento': 'Un momento…',
+  'unirse.enviada': 'Solicitud enviada',
+  'unirse.enviada-texto': (p: { equipo: string }) =>
+    `Cuando un admin de ${p.equipo} te acepte, verás el equipo en «Mis equipos».`,
+  'unirse.dentro': (p: { equipo: string }) => `¡Ya estás en ${p.equipo}!`,
+  'instalar.titulo': 'Instala la app',
+  'instalar.texto': 'Tenla a mano en el móvil, como una app más:',
+  'instalar.iphone': 'iPhone: en Safari, pulsa Compartir → «Añadir a pantalla de inicio».',
+  'instalar.android': 'Android: en Chrome, menú ⋮ → «Instalar aplicación».',
+  'instalar.aviso':
+    'En iPhone, al abrir la app instalada tendrás que volver a entrar con tu email: la app y Safari no comparten la sesión. Tu equipo ya estará ahí.',
+
+  // --- Estructura del equipo ---
+  'nav.secciones': 'Secciones del equipo',
+  'nav.inicio': 'Inicio',
+  'nav.multas': 'Multas',
+  'nav.gastos': 'Gastos',
+  'nav.ajustes': 'Ajustes',
+  'nav.poner-multa': 'Poner multa',
+
+  // --- Inicio ---
+  'inicio.etiqueta-debes': 'Debes',
+  'inicio.etiqueta-al-dia': 'No debes nada',
+  'inicio.lo-tuyo': 'Lo tuyo',
+  'inicio.debes': (p: { nombre: string; n: number }) =>
+    `${p.nombre}, debes ${p.n === 1 ? 'una multa' : `${p.n} multas`}. Paga por Bizum o en efectivo y que el tesorero lo apunte.`,
+  'inicio.bote': 'Bote',
+  'inicio.por-cobrar': (p: { importe: string }) => `Faltan por cobrar ${p.importe}`,
+  'inicio.saldos': 'Saldos',
+  'inicio.sin-cuenta': 'Sin cuenta',
+  'inicio.desactivado': 'Desactivado',
+  'inicio.ultimas': 'Últimas multas',
+  'inicio.ver-todas': 'Ver todas las multas',
+  'inicio.cargando': 'Cargando el equipo…',
+  'inicio.foto': (p: { equipo: string }) => `Foto de ${p.equipo}`,
+
+  // --- Poner multa ---
+  'multa.titulo': 'Poner multa',
+  'multa.a-quien': '¿A quién?',
+  'multa.por-que': (p: { nombre: string }) => `¿Por qué a ${p.nombre}?`,
+  'multa.vacio-equipo': 'Aún no hay nadie en el equipo. Añade jugadores en Ajustes.',
+  'multa.otra': 'Otra multa (escribe motivo e importe)',
+  'multa.catalogo-vacio':
+    'El catálogo está vacío: puedes poner una multa libre o crear tipos en Ajustes.',
+  'multa.otra-a': (p: { nombre: string }) => `Otra multa a ${p.nombre}`,
+  'multa.motivo': 'Motivo',
+  'multa.motivo-requerido': 'Escribe el motivo de la multa.',
+  'multa.motivo-ejemplo': 'p. ej. Perder las llaves del vestuario',
+  'multa.nota-ejemplo': 'p. ej. Llegó en el minuto 20',
+  'multa.etiqueta': (p: { nombre: string; motivo: string; importe: string }) =>
+    `Multa a ${p.nombre}: ${p.motivo}, ${p.importe}`,
+  'multa.boton': 'Poner multa',
+  'multa.poniendo': 'Poniendo…',
+
+  // --- Multas: calendario ---
+  'multas.titulo': 'Multas',
+  'multas.filtrar': 'Filtrar por jugador',
+  'multas.todos': 'Todos',
+  'multas.mes-anterior': 'Mes anterior',
+  'multas.mes-siguiente': 'Mes siguiente',
+  'multas.hoy': 'Hoy',
+  'multas.dias-semana': 'L,M,X,J,V,S,D',
+  'multas.resumen-mes': (p: { n: number; importe: string }) =>
+    `${p.n === 1 ? '1 multa' : `${p.n} multas`} este mes · ${p.importe}`,
+  'multas.dia-etiqueta': (p: { fecha: string; n: number }) =>
+    p.n === 0 ? p.fecha : `${p.fecha}: ${p.n === 1 ? '1 multa' : `${p.n} multas`}`,
+  'multas.dia-vacio': 'Este día no hubo multas.',
+  'multas.pagos-dia': 'Pagos',
+  'multas.anular-pista': 'Toca una multa para anularla. Se quedará tachada, no se borra.',
+
+  // --- Fila de multa ---
+  'fila.anular-titulo': '¿Anular esta multa?',
+  'fila.anular-texto': (p: { nombre: string; motivo: string }) =>
+    `${p.nombre} · ${p.motivo}. Dejará de contar en su saldo y quedará tachada en el historial.`,
+  'fila.anulada-aviso': 'Multa anulada.',
+  'fila.anulada-sufijo': ', anulada',
+
+  // --- Jugador ---
+  'jugador.titulo': 'Jugador',
+  'jugador.lo-que-debes': 'Lo que debes',
+  'jugador.lo-que-debe': 'Lo que debe',
+  'jugador.balance': (p: { multas: string; pagado: string }) =>
+    `Multas ${p.multas} · Pagado ${p.pagado}`,
+  'jugador.desactivado': 'Desactivado: no se le pueden poner multas.',
+  'jugador.registrar-pago': 'Registrar pago',
+  'jugador.que-ver': 'Qué ver',
+  'jugador.multas-n': (p: { n: number }) => `Multas (${p.n})`,
+  'jugador.pagos': 'Pagos',
+  'jugador.no-esta': 'Este jugador no está en el equipo.',
+  'jugador.cargando-pagos': 'Cargando pagos…',
+  'jugador.sin-pagos': 'Aún no hay pagos registrados.',
+  'jugador.anular-pago-pista': 'Toca un pago para anularlo si se apuntó por error.',
+  'jugador.anular-pago-titulo': '¿Anular este pago?',
+  'jugador.anular-pago-texto': (p: { importe: string; fecha: string }) =>
+    `${p.importe} del ${p.fecha}. Volverá a contar como deuda y quedará tachado.`,
+  'jugador.pago-anulado': 'Pago anulado.',
+
+  // --- Registrar pago ---
+  'pago.titulo': 'Registrar pago',
+  'pago.debe': (p: { importe: string }) => `Debe ${p.importe}`,
+  'pago.al-dia': 'Está al día',
+  'pago.requerido': 'Pon el importe pagado.',
+  'pago.como': 'Cómo ha pagado',
+  'pago.boton': 'Registrar pago',
+  'pago.registrando': 'Registrando…',
+
+  // --- Gastos ---
+  'gastos.titulo': 'Gastos',
+  'gastos.cuentas': 'Cuentas del bote',
+  'gastos.en-bote': 'en el bote ahora mismo',
+  'gastos.recaudado': 'Recaudado',
+  'gastos.gastado': 'Gastado',
+  'gastos.por-cobrar': 'Falta por cobrar',
+  'gastos.registrar': 'Registrar gasto',
+  'gastos.en-que': 'En qué se ha gastado',
+  'gastos.anular-pista': 'Toca un gasto para anularlo si se apuntó por error.',
+  'gastos.anular-titulo': '¿Anular este gasto?',
+  'gastos.anular-texto': (p: { concepto: string }) =>
+    `${p.concepto}. El dinero volverá a contar en el bote y el gasto quedará tachado.`,
+  'gastos.anulado': 'Gasto anulado.',
+  'gasto.titulo': 'Registrar gasto',
+  'gasto.hay': (p: { importe: string }) => `Hay ${p.importe} en el bote.`,
+  'gasto.concepto': 'Concepto',
+  'gasto.concepto-ejemplo': 'p. ej. Cena de fin de temporada',
+  'gasto.concepto-requerido': 'Escribe en qué se ha gastado.',
+  'gasto.registrado': 'Gasto registrado.',
+
+  // --- Ajustes ---
+  'ajustes.titulo': 'Ajustes',
+  'ajustes.invitar': 'Invitar al equipo',
+  'ajustes.codigo': 'Código de invitación',
+  'ajustes.whatsapp': 'Compartir por WhatsApp',
+  'ajustes.copiar': 'Copiar enlace',
+  'ajustes.mas': 'Más opciones',
+  'ajustes.invitar-pie':
+    'Quien entre podrá reclamar su ficha al momento o pedir entrar como nuevo (eso lo aceptas tú).',
+  'ajustes.cambiar-enlace': 'Cambiar el enlace',
+  'ajustes.cambiar-titulo': '¿Cambiar el enlace?',
+  'ajustes.cambiar-texto':
+    'El enlace y el código actuales dejarán de funcionar. Quien ya está en el equipo no se ve afectado.',
+  'ajustes.cambiar': 'Cambiar',
+  'ajustes.enlace-nuevo': 'Enlace nuevo listo. Compártelo.',
+  'ajustes.copiado': 'Enlace copiado.',
+  'ajustes.mensaje-invitacion': (p: { equipo: string }) =>
+    `Únete a ${p.equipo} en Multak para ver las multas y el bote:`,
+  'ajustes.solicitudes': (p: { n: number }) => `Quieren entrar (${p.n})`,
+  'ajustes.quiere-entrar': 'Quiere entrar como nuevo',
+  'ajustes.rechazar': 'Rechazar',
+  'ajustes.aceptar': 'Aceptar',
+  'ajustes.rechazar-a': (p: { nombre: string }) => `Rechazar a ${p.nombre}`,
+  'ajustes.aceptar-a': (p: { nombre: string }) => `Aceptar a ${p.nombre}`,
+  'ajustes.rechazar-titulo': (p: { nombre: string }) => `¿Rechazar a ${p.nombre}?`,
+  'ajustes.rechazar-texto':
+    'No entrará en el equipo. Si es un error, podrá volver a pedirlo con el enlace.',
+  'ajustes.aceptado': (p: { nombre: string }) => `${p.nombre} ya está en el equipo.`,
+  'ajustes.rechazada': 'Solicitud rechazada.',
+  'ajustes.miembros': 'Miembros',
+  'ajustes.con-cuenta': 'Con cuenta',
+  'ajustes.sin-cuenta-largo': 'Sin cuenta: aún no ha reclamado su ficha',
+  'ajustes.desactivado': 'Desactivado',
+  'ajustes.alta': 'Añadir jugador sin cuenta',
+  'ajustes.alta-nombre': 'Nombre',
+  'ajustes.alta-requerido': 'Escribe el nombre.',
+  'ajustes.alta-boton': 'Añadir',
+  'ajustes.alta-ayuda':
+    'Para poder multarle aunque aún no use la app. Con el enlace podrá reclamar su ficha.',
+  'ajustes.anadido': (p: { nombre: string }) => `${p.nombre} añadido al equipo.`,
+  'ajustes.catalogo': 'Catálogo de multas',
+  'ajustes.tipo-desactivado': 'Desactivado: no sale al poner multas',
+  'ajustes.catalogo-vacio': 'Aún no hay tipos de multa. Añade el primero.',
+  'ajustes.anadir-tipo': 'Añadir tipo de multa',
+  'ajustes.catalogo-pie': 'Cambiar un importe no afecta a las multas ya puestas.',
+  'ajustes.datos': 'Datos del equipo',
+  'ajustes.nombre-guardado': 'Nombre guardado.',
+  'ajustes.guardar-nombre': 'Guardar nombre',
+  'ajustes.foto': 'Foto del equipo',
+  'ajustes.foto-cambiar': 'Cambiar foto',
+  'ajustes.foto-poner': 'Poner foto',
+  'ajustes.foto-quitar': 'Quitar foto',
+  'ajustes.foto-subiendo': 'Subiendo…',
+  'ajustes.foto-lista': 'Foto del equipo actualizada.',
+  'ajustes.foto-quitada': 'Foto quitada.',
+  'color.titulo': 'Color del club',
+  'color.ayuda':
+    'Viste la app del equipo para todos: la tarjeta del inicio, el escudo y los enlaces.',
+  'color.guardado': 'Color cambiado.',
+  'color.urdin': 'Azul',
+  'color.zeru': 'Celeste',
+  'color.berde': 'Verde',
+  'color.gorri': 'Rojo',
+  'color.granate': 'Granate',
+  'color.more': 'Morado',
+  'color.laranja': 'Naranja',
+  'color.beltz': 'Negro',
+  'ajustes.foto-ayuda': 'La ven solo los miembros del equipo.',
+
+  // --- Diálogo de miembro ---
+  'miembro.titulo': 'Miembro',
+  'miembro.tiene-cuenta': 'Tiene cuenta',
+  'miembro.nombre': 'Nombre',
+  'miembro.rol': 'Rol',
+  'miembro.rol-ayuda':
+    'Tesorero: pone multas y registra pagos y gastos. Admin: además gestiona el equipo.',
+  'miembro.rol-sin-cuenta': 'Solo se puede dar un rol a alguien con cuenta.',
+  'miembro.guardar': 'Guardar cambios',
+  'miembro.desactivar': 'Desactivar',
+  'miembro.reactivar': 'Reactivar',
+  'miembro.desvincular': 'Desvincular cuenta',
+  'miembro.guardado': 'Cambios guardados.',
+  'miembro.desactivar-titulo': (p: { nombre: string }) => `¿Desactivar a ${p.nombre}?`,
+  'miembro.desactivar-texto':
+    'Dejará de ver el equipo y no se le podrán poner multas. Su historial y su saldo se quedan, y podrás reactivarle cuando quieras.',
+  'miembro.desactivado': 'Miembro desactivado.',
+  'miembro.reactivado': 'Miembro reactivado.',
+  'miembro.desvincular-titulo': '¿Desvincular la cuenta?',
+  'miembro.desvincular-texto':
+    'La ficha y su historial se quedan, como jugador y sin cuenta. Esa persona dejará de ver el equipo, aunque podrá volver a reclamar la ficha con el enlace.',
+  'miembro.desvinculado': 'Cuenta desvinculada.',
+
+  // --- Tipo de multa ---
+  'tipo.editar': 'Editar tipo de multa',
+  'tipo.nuevo': 'Nuevo tipo de multa',
+  'tipo.nombre-ejemplo': 'p. ej. Llegar tarde',
+  'tipo.nombre-requerido': 'Ponle un nombre.',
+  'tipo.importe-ayuda': 'Cambiarlo no afecta a las multas ya puestas.',
+  'tipo.activo': 'Activo (si no, no aparece al poner multas)',
+  'tipo.anadir': 'Añadir al catálogo',
+  'tipo.guardado': 'Tipo de multa guardado.',
+  'tipo.anadido': 'Tipo de multa añadido.',
+
+  // --- Mensajes con gracia (variantes al azar). PENDIENTE: el autor da el euskera. ---
+  'gracia.multa-puesta': [
+    (p: { nombre: string }) => `Multa para ${p.nombre}. Ve sacando la cartera.`,
+    (p: { nombre: string }) => `${p.nombre}, otra al saco. El bote te quiere.`,
+    (p: { nombre: string }) => `Tarjeta para ${p.nombre}. Ni el árbitro te aguanta.`,
+    (p: { nombre: string }) => `${p.nombre} vuelve a pagar la cena de todos. Gracias, crack.`,
+    (p: { nombre: string }) => `Apuntado, ${p.nombre}. Esta no se te olvida como los entrenos.`,
+  ],
+  'gracia.pago-registrado': [
+    () => 'Pagado. Milagro: ha soltado la pasta.',
+    () => 'Pago registrado. Ya puedes mirar al tesorero a la cara.',
+    () => 'Pagado. A ver cuánto te dura.',
+    () => 'Pagado. El bote llora de alegría.',
+  ],
+  'gracia.al-dia': [
+    (p: { nombre: string }) => `${p.nombre}, no debes nada. Sospechoso.`,
+    (p: { nombre: string }) => `${p.nombre}, limpio. ¿Seguro que vas a entrenar?`,
+    (p: { nombre: string }) => `Ni un euro, ${p.nombre}. Disfrútalo, que no va a durar.`,
+    (p: { nombre: string }) => `${p.nombre} al día. Que alguien avise a la prensa.`,
+  ],
+  'gracia.sin-multas-gestor': [
+    () => 'Ni una multa. ¿Sois un equipo o un convento?',
+    () => 'Cero multas. Pon la primera, que el bote tiene hambre.',
+    () => 'Nadie multado aún. Tú sabrás a quién le tienes ganas.',
+  ],
+  'gracia.sin-multas-jugador': [
+    () => 'Ni una multa. Esto no es normal.',
+    () => 'Cero multas. El tesorero estará dormido.',
+    () => 'Sin multas todavía. Disfrutad mientras dure.',
+  ],
+  'gracia.sin-multas-jugador-ficha': [
+    () => 'Sin multas. O es un santo o nadie le vigila.',
+    () => 'Expediente limpio. Por ahora.',
+    () => 'Ni una multa. Sospechosamente perfecto.',
+  ],
+  'gracia.sin-gastos': [
+    () => 'El bote no ha gastado nada. ¿Para cuándo la cena?',
+    () => 'Cero gastos. El tesorero guarda la pasta debajo del colchón.',
+  ],
+  'gracia.todos-al-dia': [
+    () => '¡Nadie debe nada! ¿Quién ha hackeado la app?',
+    () => 'Todos al día. Esto huele a cena.',
+    () => 'Cero deudas. El tesorero no sabe qué hacer con su vida.',
+  ],
+  'gracia.dia-sin-multas': [
+    () => 'Día sin multas. Nadie hizo nada… o nadie lo vio.',
+    () => 'Ni una multa. Día de santos.',
+    () => 'Día limpio. Raro, raro.',
+  ],
+};
+
+export type Diccionario = typeof es;
+export type Clave = keyof Diccionario;
+/** Claves con variantes al azar (listas). */
+export type ClaveLista = {
+  [K in Clave]: Diccionario[K] extends readonly unknown[] ? K : never;
+}[Clave];
+export type ClaveTexto = Exclude<Clave, ClaveLista>;

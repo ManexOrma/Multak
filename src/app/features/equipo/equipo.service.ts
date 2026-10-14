@@ -35,6 +35,8 @@ export class EquipoService {
   readonly saldos = signal<Saldo[]>([]);
   readonly multas = signal<Multa[]>([]);
   readonly gastos = signal<Gasto[]>([]);
+  /** Pagos de todo el equipo (para el calendario). */
+  readonly pagos = signal<Pago[]>([]);
   readonly tipos = signal<TipoActivo[]>([]);
   readonly cargado = signal(false);
   /** Jugador al que se acaba de multar (la lista lo resalta un instante). */
@@ -67,6 +69,7 @@ export class EquipoService {
       this.saldos.set([]);
       this.multas.set([]);
       this.gastos.set([]);
+      this.pagos.set([]);
       this.tipos.set([]);
     }
     await Promise.all([
@@ -74,6 +77,7 @@ export class EquipoService {
       this.cargarMultas(),
       this.cargarGastos(),
       this.cargarTipos(),
+      this.cargarPagos(),
     ]);
     this.cargado.set(true);
   }
@@ -150,12 +154,12 @@ export class EquipoService {
         nota: pago.nota,
       }),
     );
-    await this.cargarCuentas();
+    await Promise.all([this.cargarCuentas(), this.cargarPagos()]);
   }
 
   async anularPago(pagoId: string): Promise<void> {
     exigir(await this.supabase.rpc('anular_pago', { pago_id: pagoId }));
-    await this.cargarCuentas();
+    await Promise.all([this.cargarCuentas(), this.cargarPagos()]);
   }
 
   async registrarGasto(gasto: {
@@ -221,6 +225,19 @@ export class EquipoService {
           .eq('equipo_id', this.equipoId)
           .order('fecha', { ascending: false })
           .order('creado_en', { ascending: false }),
+      ),
+    );
+  }
+
+  private async cargarPagos(): Promise<void> {
+    this.pagos.set(
+      exigir(
+        await this.supabase
+          .from('pagos')
+          .select('*')
+          .eq('equipo_id', this.equipoId)
+          .order('fecha', { ascending: false })
+          .limit(500),
       ),
     );
   }

@@ -92,3 +92,20 @@ legend {
 .boton {
   margin-top: 8px;
 }
+
+// Celebración al entrar en el equipo (momento raro: aquí sí cabe un poco de fiesta).
+.celebra {
+  animation: celebra 700ms var(--ease-out) both;
+}
+
+@keyframes celebra {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) rotate(-2deg);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.04) rotate(0.5deg);
+  }
+}

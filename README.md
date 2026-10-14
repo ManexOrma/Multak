@@ -82,7 +82,8 @@ npx supabase db push   # aplica las migraciones pendientes
 src/app/
   core/       # singleton: cliente Supabase, auth, guards, modelos/tipos generados
   features/   # una carpeta por funcionalidad, con su servicio de datos
-  shared/     # piezas reutilizables (p. ej. el pipe `euros`)
+  core/i18n/  # textos: es.ts define las claves, eu.ts las traduce (euskera por defecto)
+  shared/     # piezas reutilizables (avatar, cifra animada, fechas, diálogos…)
 supabase/
   config.toml # configuración local
   migrations/ # esquema versionado (nunca cambios a mano en el panel)

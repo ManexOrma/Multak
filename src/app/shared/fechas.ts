@@ -1,29 +1,41 @@
 /** Fecha local de hoy en formato de la BD (AAAA-MM-DD). */
 export function hoyISO(ahora: Date = new Date()): string {
-  const mes = String(ahora.getMonth() + 1).padStart(2, '0');
-  const dia = String(ahora.getDate()).padStart(2, '0');
-  return `${ahora.getFullYear()}-${mes}-${dia}`;
+  return aISO(ahora);
 }
 
-const DIA_SEMANA = new Intl.DateTimeFormat('es-ES', { weekday: 'long' });
-const DIA_MES = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long' });
-const DIA_MES_ANO = new Intl.DateTimeFormat('es-ES', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-});
+/** Date local → AAAA-MM-DD. */
+export function aISO(fecha: Date): string {
+  const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+  const dia = String(fecha.getDate()).padStart(2, '0');
+  return `${fecha.getFullYear()}-${mes}-${dia}`;
+}
 
-/** «Hoy», «Ayer», «Lunes» (última semana), «6 de octubre» o «6 de octubre de 2025». */
-export function fechaRelativa(fechaISO: string, ahora: Date = new Date()): string {
+/** AAAA-MM-DD → Date local (sin desfase de zona horaria). */
+export function deISO(fechaISO: string): Date {
   const [a, m, d] = fechaISO.split('-').map(Number);
-  const fecha = new Date(a, m - 1, d);
+  return new Date(a, m - 1, d);
+}
+
+const capitalizar = (texto: string) => texto.charAt(0).toUpperCase() + texto.slice(1);
+
+/** «Hoy», «Ayer», el día de la semana (última semana) o la fecha, en el idioma dado. */
+export function fechaRelativa(
+  fechaISO: string,
+  locale: string,
+  textos: { hoy: string; ayer: string },
+  ahora: Date = new Date(),
+): string {
+  const fecha = deISO(fechaISO);
   const hoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
   const dias = Math.round((hoy.getTime() - fecha.getTime()) / 86_400_000);
-  if (dias === 0) return 'Hoy';
-  if (dias === 1) return 'Ayer';
+  if (dias === 0) return textos.hoy;
+  if (dias === 1) return textos.ayer;
   if (dias > 1 && dias < 7) {
-    const nombre = DIA_SEMANA.format(fecha);
-    return nombre.charAt(0).toUpperCase() + nombre.slice(1);
+    return capitalizar(new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(fecha));
   }
-  return a === ahora.getFullYear() ? DIA_MES.format(fecha) : DIA_MES_ANO.format(fecha);
+  const opciones: Intl.DateTimeFormatOptions =
+    fecha.getFullYear() === ahora.getFullYear()
+      ? { day: 'numeric', month: 'long' }
+      : { day: 'numeric', month: 'long', year: 'numeric' };
+  return new Intl.DateTimeFormat(locale, opciones).format(fecha);
 }

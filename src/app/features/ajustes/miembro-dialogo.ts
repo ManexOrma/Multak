@@ -1,8 +1,8 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, signal } from '@angular/core';
 import { disabled, form, FormField, FormRoot, maxLength, required } from '@angular/forms/signals';
-import { Miembro, NOMBRE_ROL, Rol } from '../../core/models/modelos';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { Miembro, Rol } from '../../core/models/modelos';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { Avatar } from '../../shared/avatar';
 import { cerrarHoja, DialogosService } from '../../shared/dialogos/dialogos.service';
@@ -22,23 +22,23 @@ const ROLES: Rol[] = ['jugador', 'tesorero', 'admin'];
   template: `
     <div class="hoja-cabecera">
       <span></span>
-      <h2 id="miembro-dialogo-titulo">Miembro</h2>
-      <button type="button" class="boton-enlace" (click)="cerrar()">Cerrar</button>
+      <h2 id="miembro-dialogo-titulo">{{ t('miembro.titulo') }}</h2>
+      <button type="button" class="boton-enlace" (click)="cerrar()">{{ t('comun.cerrar') }}</button>
     </div>
 
     <div class="quien">
-      <app-avatar [nombre]="miembro.nombre" [semilla]="miembro.id" [tamano]="64" />
-      <p class="titulo-2">{{ miembro.nombre }}{{ esYo ? ' (tú)' : '' }}</p>
+      <app-avatar [nombre]="miembro.nombre" [tamano]="64" />
+      <p class="titulo-2">{{ miembro.nombre }}{{ esYo ? ' ' + t('comun.tu') : '' }}</p>
       <p class="nota">
-        {{ miembro.usuario_id ? 'Tiene cuenta' : 'Sin cuenta: aún no ha reclamado su ficha' }}
+        {{ miembro.usuario_id ? t('miembro.tiene-cuenta') : t('ajustes.sin-cuenta-largo') }}
         @if (!miembro.activo) {
-          · Desactivado
+          · {{ t('ajustes.desactivado') }}
         }
       </p>
     </div>
 
     <form [formRoot]="formulario" class="pila">
-      <label for="miembro-nombre">Nombre</label>
+      <label for="miembro-nombre">{{ t('miembro.nombre') }}</label>
       <input
         id="miembro-nombre"
         autocomplete="off"
@@ -52,17 +52,17 @@ const ROLES: Rol[] = ['jugador', 'tesorero', 'admin'];
         }
       </p>
 
-      <label for="miembro-rol">Rol</label>
+      <label for="miembro-rol">{{ t('miembro.rol') }}</label>
       <select id="miembro-rol" [formField]="formulario.rol" aria-describedby="miembro-rol-ayuda">
         @for (rol of roles; track rol) {
-          <option [value]="rol">{{ nombreRol[rol] }}</option>
+          <option [value]="rol">{{ nombreRol(rol) }}</option>
         }
       </select>
       <p id="miembro-rol-ayuda" class="pie-grupo">
         @if (miembro.usuario_id) {
-          Tesorero: pone multas y registra pagos y gastos. Admin: además gestiona el equipo.
+          {{ t('miembro.rol-ayuda') }}
         } @else {
-          Solo se puede dar un rol a alguien con cuenta.
+          {{ t('miembro.rol-sin-cuenta') }}
         }
       </p>
 
@@ -71,22 +71,26 @@ const ROLES: Rol[] = ['jugador', 'tesorero', 'admin'];
         class="boton boton-principal guardar"
         [disabled]="formulario().submitting()"
       >
-        Guardar cambios
+        {{ t('miembro.guardar') }}
       </button>
     </form>
 
     <ul class="lista otras">
       <li>
         @if (miembro.activo) {
-          <button type="button" class="fila peligro" (click)="desactivar()">Desactivar</button>
+          <button type="button" class="fila peligro" (click)="desactivar()">
+            {{ t('miembro.desactivar') }}
+          </button>
         } @else {
-          <button type="button" class="fila enlace" (click)="reactivar()">Reactivar</button>
+          <button type="button" class="fila enlace" (click)="reactivar()">
+            {{ t('miembro.reactivar') }}
+          </button>
         }
       </li>
       @if (miembro.usuario_id) {
         <li>
           <button type="button" class="fila peligro" (click)="desvincular()">
-            Desvincular cuenta
+            {{ t('miembro.desvincular') }}
           </button>
         </li>
       }
@@ -129,6 +133,8 @@ const ROLES: Rol[] = ['jugador', 'tesorero', 'admin'];
   `,
 })
 export class MiembroDialogo {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   private readonly datos = inject<DatosMiembroDialogo>(DIALOG_DATA);
   private readonly ref = inject<DialogRef<void>>(DialogRef);
   private readonly ajustes = inject(AjustesService);
@@ -139,15 +145,17 @@ export class MiembroDialogo {
   protected readonly miembro = this.datos.miembro;
   protected readonly esYo = this.datos.esYo;
   protected readonly roles = ROLES;
-  protected readonly nombreRol = NOMBRE_ROL;
+  protected nombreRol(rol: Rol): string {
+    return this.t(`rol.${rol}`);
+  }
   protected readonly error = signal<string | null>(null);
 
   protected readonly modelo = signal({ nombre: this.miembro.nombre, rol: this.miembro.rol });
   protected readonly formulario = form(
     this.modelo,
     (campo) => {
-      required(campo.nombre, { message: 'Escribe el nombre.' });
-      maxLength(campo.nombre, 40, { message: 'Como mucho 40 caracteres.' });
+      required(campo.nombre, { message: this.t('ajustes.alta-requerido') });
+      maxLength(campo.nombre, 40, { message: this.t('comun.max-caracteres', { n: 40 }) });
       disabled(campo.rol, { when: () => !this.miembro.usuario_id });
     },
     { submission: { action: () => this.guardar() } },
@@ -164,36 +172,43 @@ export class MiembroDialogo {
       if (nombre !== this.miembro.nombre)
         await this.ajustes.renombrarMiembro(this.miembro.id, nombre);
       if (rol !== this.miembro.rol) await this.ajustes.cambiarRol(this.miembro.id, rol);
-    }, 'Cambios guardados.');
+    }, this.t('miembro.guardado'));
   }
 
   protected async desactivar(): Promise<void> {
     const confirmado = await this.dialogos.confirmar({
-      titulo: `¿Desactivar a ${this.miembro.nombre}?`,
-      mensaje:
-        'Dejará de ver el equipo y no se le podrán poner multas. Su historial y su saldo se quedan, y podrás reactivarle cuando quieras.',
-      aceptar: 'Desactivar',
+      titulo: this.t('miembro.desactivar-titulo', { nombre: this.miembro.nombre }),
+      mensaje: this.t('miembro.desactivar-texto'),
+      aceptar: this.t('miembro.desactivar'),
       peligro: true,
     });
     if (confirmado) {
-      await this.ejecutar(() => this.ajustes.desactivar(this.miembro.id), 'Miembro desactivado.');
+      await this.ejecutar(
+        () => this.ajustes.desactivar(this.miembro.id),
+        this.t('miembro.desactivado'),
+      );
     }
   }
 
   protected async reactivar(): Promise<void> {
-    await this.ejecutar(() => this.ajustes.reactivar(this.miembro.id), 'Miembro reactivado.');
+    await this.ejecutar(
+      () => this.ajustes.reactivar(this.miembro.id),
+      this.t('miembro.reactivado'),
+    );
   }
 
   protected async desvincular(): Promise<void> {
     const confirmado = await this.dialogos.confirmar({
-      titulo: '¿Desvincular la cuenta?',
-      mensaje:
-        'La ficha y su historial se quedan, como jugador y sin cuenta. Esa persona dejará de ver el equipo, aunque podrá volver a reclamar la ficha con el enlace.',
-      aceptar: 'Desvincular',
+      titulo: this.t('miembro.desvincular-titulo'),
+      mensaje: this.t('miembro.desvincular-texto'),
+      aceptar: this.t('miembro.desvincular'),
       peligro: true,
     });
     if (confirmado) {
-      await this.ejecutar(() => this.ajustes.desvincular(this.miembro.id), 'Cuenta desvinculada.');
+      await this.ejecutar(
+        () => this.ajustes.desvincular(this.miembro.id),
+        this.t('miembro.desvinculado'),
+      );
     }
   }
 
@@ -206,7 +221,7 @@ export class MiembroDialogo {
       this.avisos.mostrar(aviso);
       await cerrarHoja(this.ref);
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
     }
   }
 }

@@ -1,13 +1,13 @@
 <main class="login">
   <header class="cabeza">
     <h1><app-marca /></h1>
-    <p class="lema">Las multas del equipo, claras para todos.</p>
+    <p class="lema">{{ t('login.lema') }}</p>
   </header>
 
   @switch (paso()) {
     @case ('email') {
       <form [formRoot]="emailForm" class="pila">
-        <label for="login-email">Tu email</label>
+        <label for="login-email">{{ t('login.email') }}</label>
         <input
           id="login-email"
           type="email"
@@ -27,32 +27,31 @@
           }
         </p>
         <button type="submit" class="boton boton-principal" [disabled]="emailForm().submitting()">
-          {{ emailForm().submitting() ? 'Enviando…' : 'Enviarme un código' }}
+          {{ emailForm().submitting() ? t('login.enviando') : t('login.enviar') }}
         </button>
         <p id="login-email-ayuda" class="pie-grupo">
-          Te mandamos un código de 6 cifras. Sin contraseñas.
+          {{ t('login.ayuda') }}
         </p>
       </form>
 
       @if (googleActivo) {
-        <div class="separador" aria-hidden="true"><span>o</span></div>
+        <div class="separador" aria-hidden="true">
+          <span>{{ t('login.o') }}</span>
+        </div>
         <button
           type="button"
           class="boton boton-secundario boton-ancho"
           (click)="entrarConGoogle()"
         >
-          Entrar con Google
+          {{ t('login.google') }}
         </button>
       }
     }
     @case ('codigo') {
-      <p class="intro">
-        Te hemos enviado un código a <strong>{{ email() }}</strong
-        >. Si no lo ves, mira en spam.
-      </p>
+      <p class="intro">{{ t('login.enviado', { email: email() }) }}</p>
 
       <form [formRoot]="codigoForm" class="pila">
-        <label for="login-codigo">Código</label>
+        <label for="login-codigo">{{ t('login.codigo') }}</label>
         <input
           id="login-codigo"
           class="codigo cifra"
@@ -71,7 +70,7 @@
           }
         </p>
         <button type="submit" class="boton boton-principal" [disabled]="codigoForm().submitting()">
-          {{ codigoForm().submitting() ? 'Comprobando…' : 'Entrar' }}
+          {{ codigoForm().submitting() ? t('login.comprobando') : t('login.entrar') }}
         </button>
       </form>
 
@@ -83,13 +82,13 @@
           (click)="reenviarCodigo()"
         >
           @if (segundosParaReenviar() > 0) {
-            Reenviar en {{ segundosParaReenviar() }} s
+            {{ t('login.reenviar-en', { s: segundosParaReenviar() }) }}
           } @else {
-            Reenviar código
+            {{ t('login.reenviar') }}
           }
         </button>
         <button type="button" class="boton-enlace" (click)="usarOtroEmail()">
-          Usar otro email
+          {{ t('login.otro-email') }}
         </button>
       </div>
     }
@@ -99,6 +98,6 @@
   <p class="error" role="alert">{{ error() }}</p>
 
   <footer class="pie">
-    <a routerLink="/privacidad">Privacidad</a>
+    <a routerLink="/privacidad">{{ t('login.privacidad') }}</a>
   </footer>
 </main>

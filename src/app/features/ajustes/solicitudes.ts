@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Miembro } from '../../core/models/modelos';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { DialogosService } from '../../shared/dialogos/dialogos.service';
 import { Avatar } from '../../shared/avatar';
@@ -12,31 +12,33 @@ import { AjustesService } from './ajustes.service';
   template: `
     @if (ajustes.solicitudes().length > 0) {
       <section class="seccion" aria-labelledby="titulo-solicitudes">
-        <h2 id="titulo-solicitudes">Quieren entrar ({{ ajustes.solicitudes().length }})</h2>
+        <h2 id="titulo-solicitudes">
+          {{ t('ajustes.solicitudes', { n: ajustes.solicitudes().length }) }}
+        </h2>
         <ul class="lista lista--avatares">
           @for (solicitud of ajustes.solicitudes(); track solicitud.id) {
             <li class="fila">
               <app-avatar [nombre]="solicitud.nombre" [semilla]="solicitud.id" />
               <span class="fila-texto">
                 <span>{{ solicitud.nombre }}</span>
-                <span class="fila-detalle">Quiere entrar como nuevo</span>
+                <span class="fila-detalle">{{ t('ajustes.quiere-entrar') }}</span>
               </span>
               <span class="acciones">
                 <button
                   type="button"
                   class="boton boton-secundario pequeno"
-                  [attr.aria-label]="'Rechazar a ' + solicitud.nombre"
+                  [attr.aria-label]="t('ajustes.rechazar-a', { nombre: solicitud.nombre })"
                   (click)="rechazar(solicitud)"
                 >
-                  Rechazar
+                  {{ t('ajustes.rechazar') }}
                 </button>
                 <button
                   type="button"
                   class="boton boton-principal pequeno"
-                  [attr.aria-label]="'Aceptar a ' + solicitud.nombre"
+                  [attr.aria-label]="t('ajustes.aceptar-a', { nombre: solicitud.nombre })"
                   (click)="aceptar(solicitud)"
                 >
-                  Aceptar
+                  {{ t('ajustes.aceptar') }}
                 </button>
               </span>
             </li>
@@ -61,6 +63,8 @@ import { AjustesService } from './ajustes.service';
   `,
 })
 export class Solicitudes {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   protected readonly ajustes = inject(AjustesService);
   private readonly avisos = inject(AvisosService);
   private readonly dialogos = inject(DialogosService);
@@ -71,26 +75,26 @@ export class Solicitudes {
     this.error.set(null);
     try {
       await this.ajustes.aceptarSolicitud(solicitud.id);
-      this.avisos.mostrar(`${solicitud.nombre} ya está en el equipo.`);
+      this.avisos.mostrar(this.t('ajustes.aceptado', { nombre: solicitud.nombre }));
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
     }
   }
 
   protected async rechazar(solicitud: Miembro): Promise<void> {
     const confirmado = await this.dialogos.confirmar({
-      titulo: `¿Rechazar a ${solicitud.nombre}?`,
-      mensaje: 'No entrará en el equipo. Si es un error, podrá volver a pedirlo con el enlace.',
-      aceptar: 'Rechazar',
+      titulo: this.t('ajustes.rechazar-titulo', { nombre: solicitud.nombre }),
+      mensaje: this.t('ajustes.rechazar-texto'),
+      aceptar: this.t('ajustes.rechazar'),
       peligro: true,
     });
     if (!confirmado) return;
     this.error.set(null);
     try {
       await this.ajustes.rechazarSolicitud(solicitud.id);
-      this.avisos.mostrar('Solicitud rechazada.');
+      this.avisos.mostrar(this.t('ajustes.rechazada'));
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
     }
   }
 }

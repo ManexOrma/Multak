@@ -16,7 +16,10 @@ export type NombreIcono =
   | 'salir'
   | 'tarjeta'
   | 'euro'
-  | 'persona-mas';
+  | 'persona-mas'
+  | 'menu'
+  | 'camara'
+  | 'calendario';
 
 /** Iconos de trazo uniforme (2px, extremos redondos) dibujados en SVG. Decorativos: aria-hidden. */
 @Component({
@@ -95,6 +98,19 @@ export type NombreIcono =
         }
         @case ('euro') {
           <path d="M17.5 6.4A7 7 0 1 0 17.5 17.6M4.5 10h9M4.5 14h9" />
+        }
+        @case ('menu') {
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        }
+        @case ('camara') {
+          <path
+            d="M4.5 8A1.5 1.5 0 0 1 6 6.5h2.2l1.4-2h4.8l1.4 2H18A1.5 1.5 0 0 1 19.5 8v10a1.5 1.5 0 0 1-1.5 1.5H6A1.5 1.5 0 0 1 4.5 18z"
+          />
+          <circle cx="12" cy="12.8" r="3.4" />
+        }
+        @case ('calendario') {
+          <rect x="4" y="5" width="16" height="15" rx="2.5" />
+          <path d="M4 10h16M8.5 3v4M15.5 3v4" />
         }
         @case ('persona-mas') {
           <circle cx="10" cy="8" r="4" />

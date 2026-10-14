@@ -1,5 +1,5 @@
 /** Ruta a la que se va tras el login si no hay `volver` válido. */
-export const RUTA_INICIO = '/equipos';
+export const RUTA_INICIO = '/';
 
 /**
  * Devuelve `volver` solo si es una ruta interna de la app (evita redirecciones

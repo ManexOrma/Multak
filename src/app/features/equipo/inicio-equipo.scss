@@ -1,5 +1,119 @@
-.lo-mio {
-  margin: 0 4px 20px;
+// --- El «pase de temporada» --------------------------------------------------------
+// Tarjeta en el degradado del club con rayas de camiseta y brillo. Lo que debes va
+// en una pastilla blanca encajada, con su rojo: nunca depende del color del club.
+
+.pase {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin: 0 0 14px;
+  padding: 10px 10px 16px;
+  border-radius: 28px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 92% -10%, rgb(255 255 255 / 0.3), transparent 46%),
+    linear-gradient(140deg, var(--klub) 0%, var(--klub-sakon) 100%);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--klub) 34%, transparent);
+  transform: perspective(900px) rotateX(var(--inclina-x, 0deg)) rotateY(var(--inclina-y, 0deg));
+  transition: transform 500ms var(--ease-muelle);
+  animation: pase-entra 620ms var(--ease-muelle) both;
+  touch-action: pan-y;
+
+  // Rayas de camiseta que se mecen despacio, como la tela con viento.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 -60px;
+    z-index: -1;
+    background: repeating-linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0) 0 26px,
+      rgb(255 255 255 / 0.07) 26px 52px
+    );
+    animation: rayas-viento 9s var(--ease-in-out) infinite alternate;
+  }
+
+  &.inclinada {
+    transition: transform 80ms linear;
+  }
+}
+
+// Brillo que sigue al dedo.
+.pase-brillo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    circle at var(--brillo-x, 50%) var(--brillo-y, 0%),
+    rgb(255 255 255 / 0.28),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out);
+  pointer-events: none;
+
+  .inclinada & {
+    opacity: 1;
+  }
+}
+
+@keyframes pase-entra {
+  from {
+    opacity: 0;
+    transform: perspective(900px) translateY(14px) rotateX(8deg) scale(0.97);
+  }
+}
+
+@keyframes rayas-viento {
+  to {
+    transform: translateX(52px);
+  }
+}
+
+.pastilla {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+  padding: 12px 16px 8px;
+  border-radius: 20px;
+  background: var(--fondo-pastilla);
+  color: var(--texto);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.14);
+}
+
+.estado {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+
+  // Punto que late: hay algo pendiente (o todo bien).
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: punto-late 2.4s var(--ease-in-out) infinite;
+  }
+}
+
+@keyframes punto-late {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 45%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 5px transparent;
+  }
+}
+
+.pase .explicacion {
+  max-width: none;
+  margin: 0 8px;
+  color: #fff;
 }
 
 // La fila del jugador recién multado se ilumina un instante: «aquí ha caído».
@@ -17,9 +131,9 @@
 .cifra-grande {
   font-family: var(--fuente-cifras);
   font-variant-numeric: tabular-nums;
-  font-size: 56px;
-  line-height: 1.05;
-  font-weight: 700;
+  font-size: 52px;
+  line-height: 1.1;
+  font-weight: 800;
   letter-spacing: -0.03em;
 }
 
@@ -36,9 +150,14 @@
   place-items: center;
   width: 36px;
   height: 36px;
-  border-radius: 9px;
-  background: var(--amarillo);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffd54a, #ff9f1c);
   color: var(--sobre-amarillo);
+  transition: transform 300ms var(--ease-muelle);
+
+  .fila:active & {
+    transform: rotate(-12deg) scale(1.08);
+  }
 
   app-icono {
     width: 22px;
@@ -70,4 +189,56 @@
   .ultimas {
     margin-top: 0;
   }
+}
+
+// Entrada escalonada de las listas al abrir el equipo (una vez por visita).
+.lista > li {
+  animation: fila-entra 420ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 35ms);
+}
+
+@keyframes fila-entra {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+// «Al día» entra con un pequeño rebote: es una buena noticia.
+.aparece {
+  animation: al-dia-entra 560ms var(--ease-out) both;
+}
+
+@keyframes al-dia-entra {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
+
+.todos-al-dia {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 12px 16px;
+  border-radius: var(--radio);
+  background: color-mix(in srgb, var(--verde) 16%, var(--celda));
+  color: var(--verde-texto);
+  font-weight: 600;
+  animation: al-dia-entra 560ms var(--ease-out) both;
+
+  app-icono {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+app-cifra.cifra-grande {
+  display: block;
 }

@@ -1,0 +1,310 @@
+.filtros {
+  display: flex;
+  gap: 8px;
+  margin: 0 -16px 16px;
+  padding: 2px 16px 6px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.chip {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  border: 0;
+  border-radius: 18px;
+  background: var(--celda);
+  color: var(--texto);
+  scroll-snap-align: start;
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ease-out),
+    color 160ms var(--ease-out),
+    transform 140ms var(--ease-out);
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &[aria-pressed='true'] {
+    background: linear-gradient(140deg, var(--klub), var(--klub-sakon));
+    color: #fff;
+    box-shadow: 0 6px 14px color-mix(in srgb, var(--klub) 30%, transparent);
+  }
+}
+
+// --- Calendario --------------------------------------------------------------------
+
+.calendario {
+  padding: 8px 8px 12px;
+  border-radius: var(--radio-grupo);
+  background: var(--celda);
+  box-shadow: var(--sombra-celda);
+  overflow: hidden;
+}
+
+.mes {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+
+  h2 {
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    text-align: center;
+  }
+}
+
+.flecha {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--tinte);
+  cursor: pointer;
+  transition:
+    background-color 140ms var(--ease-out),
+    transform 140ms var(--ease-out);
+
+  app-icono {
+    width: 22px;
+    height: 22px;
+  }
+
+  &:active {
+    background: var(--relleno);
+    transform: scale(0.92);
+  }
+}
+
+.semana,
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.semana {
+  margin: 4px 0 2px;
+
+  span {
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--texto-2);
+  }
+}
+
+.rejilla {
+  gap: 4px;
+  outline: none;
+  touch-action: pan-y; // el gesto horizontal es nuestro (cambiar de mes)
+}
+
+// El mes entra desde el lado hacia el que se ha ido.
+.desde-derecha {
+  animation: mes-derecha 340ms var(--ease-out);
+}
+
+.desde-izquierda {
+  animation: mes-izquierda 340ms var(--ease-out);
+}
+
+@keyframes mes-derecha {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+}
+
+@keyframes mes-izquierda {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+}
+
+.dia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  aspect-ratio: 1 / 1.12;
+  min-height: 44px;
+  padding: 6px 0 0;
+  font: inherit;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+  transition:
+    background-color 200ms var(--ease-out),
+    transform 160ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  // Cuanto más dinero en multas, más «caliente» el día.
+  &[data-intensidad='1'] {
+    background: color-mix(in srgb, var(--amarillo) 22%, transparent);
+  }
+
+  &[data-intensidad='2'] {
+    background: color-mix(in srgb, var(--amarillo) 45%, transparent);
+  }
+
+  &[data-intensidad='3'] {
+    background: color-mix(in srgb, var(--amarillo) 75%, transparent);
+  }
+
+  &[data-intensidad='2'],
+  &[data-intensidad='3'] {
+    color: var(--sobre-amarillo);
+  }
+
+  &[aria-pressed='true'] {
+    box-shadow: inset 0 0 0 2.5px var(--klub-tinta);
+    animation: dia-elegido 380ms var(--ease-muelle);
+  }
+
+  &.fuera {
+    opacity: 0.35;
+  }
+}
+
+.numero {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-family: var(--fuente-cifras);
+  font-variant-numeric: tabular-nums;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+
+  &.es-hoy {
+    background: var(--klub);
+    color: #fff;
+    font-weight: 700;
+  }
+}
+
+.marcas {
+  display: flex;
+  gap: 3px;
+  height: 6px;
+}
+
+.punto {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rojo);
+
+  &.pago {
+    background: var(--verde);
+  }
+}
+
+.pie-mes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  margin: 6px 8px 0;
+
+  .boton-enlace {
+    min-height: 36px;
+  }
+}
+
+// --- Detalle del día ------------------------------------------------------------------
+
+.detalle {
+  margin-top: 28px;
+  animation: detalle-entra 320ms var(--ease-out);
+
+  h2 {
+    margin: 0 4px 10px;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  li {
+    animation: fila-entra 360ms var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+}
+
+.subtitulo {
+  margin: 20px 4px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--texto-2);
+}
+
+@keyframes detalle-entra {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes fila-entra {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (min-width: 1100px) {
+  :host .pagina {
+    max-width: 64rem;
+  }
+
+  // En pantallas anchas: calendario a la izquierda y el día a la derecha.
+  :host .pagina {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    column-gap: 32px;
+    align-items: start;
+
+    > app-cabecera,
+    > .filtros {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .detalle {
+    margin-top: 0;
+  }
+}
+
+@keyframes dia-elegido {
+  50% {
+    transform: scale(1.08);
+  }
+}

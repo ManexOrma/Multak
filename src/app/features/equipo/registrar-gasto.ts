@@ -1,34 +1,35 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, signal } from '@angular/core';
 import { form, FormField, FormRoot, maxLength, required, validate } from '@angular/forms/signals';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { cerrarHoja } from '../../shared/dialogos/dialogos.service';
 import { hoyISO } from '../../shared/fechas';
 import { eurosACentimos } from '../../shared/importe';
-import { EurosPipe } from '../../shared/pipes/euros.pipe';
 import { EquipoService } from './equipo.service';
 
 /** Registrar un gasto pagado con el bote (cena, material…). */
 @Component({
   selector: 'app-registrar-gasto',
-  imports: [FormRoot, FormField, EurosPipe],
+  imports: [FormRoot, FormField],
   template: `
     <div class="hoja-cabecera">
       <span></span>
-      <h2 id="registrar-gasto-titulo">Registrar gasto</h2>
-      <button type="button" class="boton-enlace" (click)="cancelar()">Cancelar</button>
+      <h2 id="registrar-gasto-titulo">{{ t('gasto.titulo') }}</h2>
+      <button type="button" class="boton-enlace" (click)="cancelar()">
+        {{ t('comun.cancelar') }}
+      </button>
     </div>
     <p class="nota disponible">
-      Hay {{ equipo.resumen()?.bote_centimos ?? 0 | euros }} en el bote.
+      {{ t('gasto.hay', { importe: i18n.euros(equipo.resumen()?.bote_centimos ?? 0) }) }}
     </p>
 
     <form [formRoot]="formulario" class="pila">
-      <label for="gasto-concepto">Concepto</label>
+      <label for="gasto-concepto">{{ t('gasto.concepto') }}</label>
       <input
         id="gasto-concepto"
         autocomplete="off"
-        placeholder="p. ej. Cena de fin de temporada"
+        [placeholder]="t('gasto.concepto-ejemplo')"
         [formField]="formulario.concepto"
         [attr.aria-invalid]="formulario.concepto().touched() && formulario.concepto().invalid()"
         aria-describedby="gasto-concepto-error"
@@ -39,7 +40,7 @@ import { EquipoService } from './equipo.service';
         }
       </p>
 
-      <label for="gasto-importe">Importe (€)</label>
+      <label for="gasto-importe">{{ t('comun.importe') }}</label>
       <input
         id="gasto-importe"
         class="cifra"
@@ -56,15 +57,15 @@ import { EquipoService } from './equipo.service';
         }
       </p>
 
-      <label for="gasto-fecha">Fecha</label>
+      <label for="gasto-fecha">{{ t('comun.fecha') }}</label>
       <input id="gasto-fecha" type="date" [formField]="formulario.fecha" />
 
-      <label for="gasto-nota">Nota (opcional)</label>
+      <label for="gasto-nota">{{ t('comun.nota-opcional') }}</label>
       <input id="gasto-nota" autocomplete="off" [formField]="formulario.nota" />
 
       <p class="error" role="alert">{{ error() }}</p>
       <button type="submit" class="boton boton-principal" [disabled]="formulario().submitting()">
-        {{ formulario().submitting() ? 'Registrando…' : 'Registrar gasto' }}
+        {{ formulario().submitting() ? t('pago.registrando') : t('gastos.registrar') }}
       </button>
     </form>
   `,
@@ -75,6 +76,8 @@ import { EquipoService } from './equipo.service';
   `,
 })
 export class RegistrarGasto {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   private readonly ref = inject<DialogRef<boolean>>(DialogRef);
   protected readonly equipo = inject(EquipoService);
   private readonly avisos = inject(AvisosService);
@@ -84,16 +87,16 @@ export class RegistrarGasto {
   protected readonly formulario = form(
     this.modelo,
     (campo) => {
-      required(campo.concepto, { message: 'Escribe en qué se ha gastado.' });
-      maxLength(campo.concepto, 60, { message: 'Como mucho 60 caracteres.' });
-      required(campo.importe, { message: 'Pon el importe.' });
+      required(campo.concepto, { message: this.t('gasto.concepto-requerido') });
+      maxLength(campo.concepto, 60, { message: this.t('comun.max-caracteres', { n: 60 }) });
+      required(campo.importe, { message: this.t('comun.importe-requerido') });
       validate(campo.importe, ({ value }) =>
         value() && eurosACentimos(value()) === null
-          ? { kind: 'importe', message: 'Pon un importe entre 0,01 y 1.000 €, p. ej. 60.' }
+          ? { kind: 'importe', message: this.t('comun.importe-invalido') }
           : undefined,
       );
-      required(campo.fecha, { message: 'Elige la fecha.' });
-      maxLength(campo.nota, 500, { message: 'Como mucho 500 caracteres.' });
+      required(campo.fecha, { message: this.t('comun.fecha-requerida') });
+      maxLength(campo.nota, 500, { message: this.t('comun.max-caracteres', { n: 500 }) });
     },
     { submission: { action: () => this.registrar() } },
   );
@@ -112,10 +115,10 @@ export class RegistrarGasto {
         fecha,
         nota: nota.trim() || null,
       });
-      this.avisos.mostrar('Gasto registrado.');
+      this.avisos.mostrar(this.t('gasto.registrado'));
       await cerrarHoja(this.ref, true);
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
     }
   }
 }

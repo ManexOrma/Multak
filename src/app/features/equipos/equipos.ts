@@ -1,69 +1,63 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
-import { NOMBRE_ROL } from '../../core/models/modelos';
-import { mensajeError } from '../../core/supabase/mensaje-error';
-import { Avatar } from '../../shared/avatar';
+import { I18n } from '../../core/i18n/i18n.service';
+import { MiEquipo } from '../../core/models/modelos';
+import { FotosService } from '../../core/supabase/fotos.service';
+import { Escudo } from '../../shared/escudo';
 import { Cabecera } from '../../shared/cabecera';
 import { Icono } from '../../shared/icono';
+import { BotonMenu } from '../menu/boton-menu';
 import { CrearEquipo } from './crear-equipo';
 import { EquiposService } from './equipos.service';
 import { UnirseCodigo } from './unirse-codigo';
 
 @Component({
   selector: 'app-equipos',
-  imports: [RouterLink, Cabecera, Avatar, Icono, CrearEquipo, UnirseCodigo],
+  imports: [RouterLink, Cabecera, BotonMenu, Escudo, Icono, CrearEquipo, UnirseCodigo],
   template: `
     <main class="pagina">
-      <app-cabecera titulo="Mis equipos" />
+      <app-cabecera [titulo]="t('equipos.titulo')">
+        <app-boton-menu inicio />
+      </app-cabecera>
 
       @if (error()) {
         <p class="error" role="alert">{{ error() }}</p>
-        <button type="button" class="boton boton-secundario" (click)="cargar()">Reintentar</button>
+        <button type="button" class="boton boton-secundario" (click)="cargar()">
+          {{ t('comun.reintentar') }}
+        </button>
       } @else if (equipos.misEquipos(); as lista) {
         @if (lista.length === 0) {
-          <p class="estado-vacio">
-            Aún no estás en ningún equipo. Únete con el código que te hayan pasado o crea el tuyo.
-          </p>
+          <p class="estado-vacio">{{ t('equipos.vacio') }}</p>
         } @else {
           <ul class="lista lista--equipos">
-            @for (equipo of lista; track equipo.miembro_id) {
-              <li>
+            @for (equipo of lista; track equipo.miembro_id; let i = $index) {
+              <li [style.--i]="i">
                 @if (equipo.activo) {
                   <a class="fila" [routerLink]="['/e', equipo.equipo_id]">
-                    <app-avatar
-                      [nombre]="equipo.equipo_nombre"
-                      [semilla]="equipo.equipo_id"
+                    <app-escudo
+                      [color]="equipo.color"
+                      [foto]="fotos.url(equipo.equipo_id, equipo.foto_version)"
                       [tamano]="44"
                     />
                     <span class="fila-texto">
                       <span class="titular">{{ equipo.equipo_nombre }}</span>
-                      <span class="fila-detalle"
-                        >{{ equipo.mi_nombre }} · {{ nombreRol[equipo.rol] }}</span
-                      >
+                      <span class="fila-detalle">{{ equipo.mi_nombre }} · {{ rol(equipo) }}</span>
                     </span>
                     <app-icono class="chevron" nombre="chevron-derecha" [grosor]="2.5" />
                   </a>
                 } @else {
                   <div class="fila">
-                    <app-avatar
-                      [nombre]="equipo.equipo_nombre"
-                      [semilla]="equipo.equipo_id"
-                      [tamano]="44"
-                    />
+                    <app-escudo [color]="equipo.color" [tamano]="44" />
                     <span class="fila-texto">
                       <span class="titular texto-suave">{{ equipo.equipo_nombre }}</span>
                       <span class="fila-detalle">
-                        {{
-                          equipo.pendiente
-                            ? 'Esperando a que un admin te acepte'
-                            : 'Tu ficha está desactivada'
-                        }}
+                        {{ equipo.pendiente ? t('equipos.esperando') : t('equipos.desactivada') }}
                       </span>
                     </span>
-                    <span class="etiqueta">{{
-                      equipo.pendiente ? 'Pendiente' : 'Desactivado'
-                    }}</span>
+                    <span class="etiqueta">
+                      {{ equipo.pendiente ? t('equipos.pendiente') : t('equipos.desactivado') }}
+                    </span>
                   </div>
                 }
               </li>
@@ -71,32 +65,44 @@ import { UnirseCodigo } from './unirse-codigo';
           </ul>
         }
       } @else {
-        <p class="nota" role="status">Cargando tus equipos…</p>
+        <p class="nota" role="status">{{ t('equipos.cargando') }}</p>
       }
 
       <section class="seccion" aria-labelledby="titulo-unirse">
-        <h2 id="titulo-unirse">Unirme a un equipo</h2>
+        <h2 id="titulo-unirse">{{ t('equipos.unirme') }}</h2>
         <app-unirse-codigo />
       </section>
 
       <section class="seccion" aria-labelledby="titulo-crear">
-        <h2 id="titulo-crear">Crear un equipo</h2>
+        <h2 id="titulo-crear">{{ t('equipos.crear') }}</h2>
         <app-crear-equipo />
       </section>
 
       <footer class="cuenta">
-        <p class="nota">Has entrado como {{ auth.usuario()?.email }}</p>
+        <p class="nota">{{ t('menu.como', { email: auth.usuario()?.email ?? '' }) }}</p>
         <button type="button" class="boton boton-peligro boton-ancho" (click)="cerrarSesion()">
           <app-icono nombre="salir" />
-          Cerrar sesión
+          {{ t('equipos.cerrar-sesion') }}
         </button>
-        <a class="privacidad" routerLink="/privacidad">Privacidad</a>
+        <a class="privacidad" routerLink="/privacidad">{{ t('menu.privacidad') }}</a>
       </footer>
     </main>
   `,
   styles: `
     .lista--equipos {
       --sangria-separador: 72px;
+
+      li {
+        animation: fila-entra 380ms var(--ease-out) both;
+        animation-delay: calc(var(--i, 0) * 50ms);
+      }
+    }
+
+    @keyframes fila-entra {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
     }
 
     .cuenta {
@@ -117,13 +123,19 @@ import { UnirseCodigo } from './unirse-codigo';
 export class Equipos {
   protected readonly auth = inject(AuthService);
   protected readonly equipos = inject(EquiposService);
+  protected readonly fotos = inject(FotosService);
+  private readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   private readonly router = inject(Router);
 
-  protected readonly nombreRol = NOMBRE_ROL;
   protected readonly error = signal<string | null>(null);
 
   constructor() {
     void this.cargar();
+  }
+
+  protected rol(equipo: MiEquipo): string {
+    return this.t(`rol.${equipo.rol}`);
   }
 
   protected async cargar(): Promise<void> {
@@ -131,7 +143,7 @@ export class Equipos {
     try {
       await this.equipos.cargar();
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
     }
   }
 

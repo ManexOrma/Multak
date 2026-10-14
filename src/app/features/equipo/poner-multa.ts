@@ -10,14 +10,15 @@ import {
   viewChild,
 } from '@angular/core';
 import { form, FormField, FormRoot, maxLength, required, validate } from '@angular/forms/signals';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { I18n } from '../../core/i18n/i18n.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { Avatar } from '../../shared/avatar';
+import { Inclinar } from '../../shared/inclinar';
 import { cerrarHoja } from '../../shared/dialogos/dialogos.service';
-import { fechaRelativa, hoyISO } from '../../shared/fechas';
+import { hoyISO } from '../../shared/fechas';
 import { Icono } from '../../shared/icono';
 import { eurosACentimos } from '../../shared/importe';
-import { EurosPipe } from '../../shared/pipes/euros.pipe';
+import { vibrar } from '../../shared/vibrar';
 import { EquipoService, Saldo, TipoActivo } from './equipo.service';
 
 type Paso = 'jugador' | 'tipo' | 'libre' | 'confirmar';
@@ -31,11 +32,13 @@ interface Motivo {
 /** Poner multa en 3 toques: jugador → tipo → confirmar. La acción estrella de Multak. */
 @Component({
   selector: 'app-poner-multa',
-  imports: [FormRoot, FormField, Avatar, Icono, EurosPipe],
+  imports: [FormRoot, FormField, Avatar, Icono, Inclinar],
   templateUrl: './poner-multa.html',
   styleUrl: './poner-multa.scss',
 })
 export class PonerMulta {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   private readonly datos = inject<{ miembroId?: string }>(DIALOG_DATA);
   private readonly ref = inject<DialogRef<boolean>>(DialogRef);
   protected readonly equipo = inject(EquipoService);
@@ -60,12 +63,12 @@ export class PonerMulta {
   protected readonly libreForm = form(
     this.libreModelo,
     (campo) => {
-      required(campo.concepto, { message: 'Escribe el motivo de la multa.' });
-      maxLength(campo.concepto, 60, { message: 'Como mucho 60 caracteres.' });
-      required(campo.importe, { message: 'Pon el importe.' });
+      required(campo.concepto, { message: this.t('multa.motivo-requerido') });
+      maxLength(campo.concepto, 60, { message: this.t('comun.max-caracteres', { n: 60 }) });
+      required(campo.importe, { message: this.t('comun.importe-requerido') });
       validate(campo.importe, ({ value }) =>
         value() && eurosACentimos(value()) === null
-          ? { kind: 'importe', message: 'Pon un importe entre 0,01 y 1.000 €, p. ej. 2,50.' }
+          ? { kind: 'importe', message: this.t('comun.importe-invalido') }
           : undefined,
       );
     },
@@ -84,12 +87,12 @@ export class PonerMulta {
   );
 
   protected readonly detalleModelo = signal({ fecha: hoyISO(), nota: '' });
-  protected readonly fechaTexto = computed(() => fechaRelativa(this.detalleModelo().fecha));
+  protected readonly fechaTexto = computed(() => this.i18n.fecha(this.detalleModelo().fecha));
   protected readonly detalleForm = form(
     this.detalleModelo,
     (campo) => {
-      required(campo.fecha, { message: 'Elige la fecha.' });
-      maxLength(campo.nota, 500, { message: 'Como mucho 500 caracteres.' });
+      required(campo.fecha, { message: this.t('comun.fecha-requerida') });
+      maxLength(campo.nota, 500, { message: this.t('comun.max-caracteres', { n: 500 }) });
     },
     { submission: { action: () => this.poner() } },
   );
@@ -161,11 +164,12 @@ export class PonerMulta {
             },
       );
       await this.lanzarTarjeta();
-      this.avisos.mostrar(`Multa puesta a ${jugador.nombre}.`);
+      vibrar([14, 40, 14]);
+      this.avisos.mostrar(this.i18n.frase('gracia.multa-puesta', { nombre: jugador.nombre ?? '' }));
       await cerrarHoja(this.ref, true);
       this.equipo.resaltar(jugador.miembro_id);
     } catch (e) {
-      this.error.set(mensajeError(e));
+      this.error.set(this.i18n.error(e));
       this.guardando.set(false);
     }
   }

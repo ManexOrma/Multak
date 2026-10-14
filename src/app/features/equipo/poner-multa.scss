@@ -34,8 +34,9 @@
   padding: 12px 4px 10px;
   font: inherit;
   border: 0;
-  border-radius: var(--radio);
+  border-radius: var(--radio-grupo);
   background: var(--celda);
+  box-shadow: var(--sombra-celda);
   color: var(--texto);
   cursor: pointer;
   transition:
@@ -43,8 +44,16 @@
     background-color 140ms var(--ease-out);
 
   &:active {
-    transform: scale(0.96);
+    transform: scale(0.94);
     background: var(--celda-2);
+  }
+
+  &:active app-avatar {
+    transform: rotate(-8deg) scale(1.06);
+  }
+
+  app-avatar {
+    transition: transform 300ms var(--ease-muelle);
   }
 
   .nombre {
@@ -75,19 +84,38 @@
 }
 
 .tarjeta-multa {
-  width: min(100%, 250px);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: min(100%, 260px);
   display: flex;
   flex-direction: column;
   padding: 18px 18px 20px;
-  border-radius: 16px;
-  background: var(--amarillo);
+  border-radius: 26px;
+  background: linear-gradient(150deg, #ffe066 0%, #ffc72c 45%, #ffa81c 100%);
   color: var(--sobre-amarillo);
-  box-shadow:
-    0 14px 30px rgb(0 0 0 / 0.18),
-    0 2px 6px rgb(0 0 0 / 0.1);
+  box-shadow: 0 22px 44px rgb(255 160 0 / 0.42);
   outline: none;
-  animation: tarjeta-entra 380ms var(--ease-out);
+  transform: perspective(700px) rotateX(var(--inclina-x, 0deg)) rotateY(var(--inclina-y, 0deg));
+  transition: transform 500ms var(--ease-muelle);
+  animation: tarjeta-entra 520ms var(--ease-muelle);
   will-change: transform;
+  touch-action: pan-y;
+
+  &.inclinada {
+    transition: transform 80ms linear;
+  }
+
+  // Brillo de la mitad de arriba, como plástico.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: -1;
+    height: 50%;
+    background: linear-gradient(rgb(255 255 255 / 0.35), transparent);
+    pointer-events: none;
+  }
 
   &:focus-visible {
     outline: 3px solid var(--tinte);
@@ -98,7 +126,52 @@
 @keyframes tarjeta-entra {
   from {
     opacity: 0;
-    transform: translateY(18px) rotate(2deg) scale(0.97);
+    transform: perspective(700px) translateY(30px) rotateX(18deg) rotate(4deg) scale(0.92);
+  }
+}
+
+// Cinta del club en la esquina, como el brazalete del capitán. Ondea un poco.
+.cinta {
+  position: absolute;
+  top: 26px;
+  right: -40px;
+  z-index: 1;
+  width: 150px;
+  height: 20px;
+  background: repeating-linear-gradient(90deg, var(--klub) 0 12px, #fff 12px 24px);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
+  rotate: 45deg;
+  animation: cinta-ondea 3.2s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes cinta-ondea {
+  from {
+    background-position: 0 0;
+    transform: skewX(-4deg);
+  }
+
+  to {
+    background-position: 24px 0;
+    transform: skewX(4deg);
+  }
+}
+
+// Brillo que sigue al dedo.
+.tarjeta-brillo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    circle at var(--brillo-x, 50%) var(--brillo-y, 0%),
+    rgb(255 255 255 / 0.55),
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out);
+  pointer-events: none;
+
+  .inclinada & {
+    opacity: 1;
   }
 }
 
@@ -120,7 +193,7 @@
   margin-top: 36px;
   font-size: 26px;
   line-height: 30px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.02em;
   overflow-wrap: anywhere;
 }
@@ -134,12 +207,26 @@
 
 .tarjeta-importe {
   margin-top: 4px;
-  font-size: 40px;
+  font-size: 44px;
   line-height: 1;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .detalles {
   display: grid;
   gap: 6px;
+}
+
+// Entrada escalonada de jugadores y tipos al pasar de paso.
+.jugadores > li,
+.lista > li {
+  animation: opcion-entra 360ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 28ms);
+}
+
+@keyframes opcion-entra {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
 }

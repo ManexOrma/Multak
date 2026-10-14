@@ -9,15 +9,14 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { MetodoPago, NOMBRE_METODO } from '../../core/models/modelos';
-import { mensajeError } from '../../core/supabase/mensaje-error';
+import { I18n } from '../../core/i18n/i18n.service';
+import { MetodoPago } from '../../core/models/modelos';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { Avatar } from '../../shared/avatar';
 import { Cabecera } from '../../shared/cabecera';
 import { DialogosService } from '../../shared/dialogos/dialogos.service';
-import { fechaRelativa } from '../../shared/fechas';
+import { CifraAnimada } from '../../shared/cifra-animada';
 import { Icono } from '../../shared/icono';
-import { EurosPipe } from '../../shared/pipes/euros.pipe';
 import { AccionesEquipo } from './acciones-equipo';
 import { EquipoService, Pago } from './equipo.service';
 import { FilaMulta } from './fila-multa';
@@ -25,11 +24,13 @@ import { FilaMulta } from './fila-multa';
 /** Ficha de un jugador: su saldo, sus multas y sus pagos. Desde aquí se registra un pago. */
 @Component({
   selector: 'app-jugador',
-  imports: [NgTemplateOutlet, Cabecera, Avatar, Icono, EurosPipe, FilaMulta],
+  imports: [NgTemplateOutlet, Cabecera, Avatar, CifraAnimada, Icono, FilaMulta],
   templateUrl: './jugador.html',
   styleUrl: './jugador.scss',
 })
 export class Jugador {
+  protected readonly i18n = inject(I18n);
+  protected readonly t = this.i18n.t;
   protected readonly equipo = inject(EquipoService);
   private readonly acciones = inject(AccionesEquipo);
   private readonly dialogos = inject(DialogosService);
@@ -47,6 +48,8 @@ export class Jugador {
     this.equipo.multas().filter((m) => m.miembro_id === this.miembroId()),
   );
 
+  protected readonly fraseSinMultas = this.i18n.frase('gracia.sin-multas-jugador-ficha');
+
   constructor() {
     effect(() => this.acciones.jugadorEnPantalla.set(this.miembroId()));
     inject(DestroyRef).onDestroy(() => this.acciones.jugadorEnPantalla.set(null));
@@ -59,11 +62,11 @@ export class Jugador {
   }
 
   protected textoMetodo(metodo: MetodoPago): string {
-    return NOMBRE_METODO[metodo];
+    return this.t(`metodo.${metodo}`);
   }
 
   protected fecha(fechaISO: string): string {
-    return fechaRelativa(fechaISO);
+    return this.i18n.fecha(fechaISO);
   }
 
   protected registrarPago(): void {
@@ -72,17 +75,20 @@ export class Jugador {
 
   protected async anularPago(pago: Pago): Promise<void> {
     const confirmado = await this.dialogos.confirmar({
-      titulo: '¿Anular este pago?',
-      mensaje: `${(pago.importe_centimos / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' })} del ${this.fecha(pago.fecha).toLowerCase()}. Volverá a contar como deuda y quedará tachado.`,
-      aceptar: 'Anular',
+      titulo: this.t('jugador.anular-pago-titulo'),
+      mensaje: this.t('jugador.anular-pago-texto', {
+        importe: this.i18n.euros(pago.importe_centimos),
+        fecha: this.fecha(pago.fecha).toLowerCase(),
+      }),
+      aceptar: this.t('comun.anular'),
       peligro: true,
     });
     if (!confirmado) return;
     try {
       await this.equipo.anularPago(pago.id);
-      this.avisos.mostrar('Pago anulado.');
+      this.avisos.mostrar(this.t('jugador.pago-anulado'));
     } catch (e) {
-      this.avisos.mostrar(mensajeError(e));
+      this.avisos.mostrar(this.i18n.error(e));
     }
   }
 
@@ -90,7 +96,7 @@ export class Jugador {
     try {
       this.pagos.set(await this.equipo.pagosDe(miembroId));
     } catch (e) {
-      this.avisos.mostrar(mensajeError(e));
+      this.avisos.mostrar(this.i18n.error(e));
     }
   }
 }

@@ -1,83 +1,169 @@
 <main class="privacidad">
-  <p><a class="volver" routerLink="/login">‹ Volver</a></p>
+  @if (idioma === 'eu') {
+    <p><a class="volver" routerLink="/">‹ Atzera</a></p>
 
-  <h1>Política de privacidad</h1>
-  <p class="actualizada">Última actualización: {{ actualizada }}</p>
+    <h1>Pribatutasun-politika</h1>
+    <p class="actualizada">Azken eguneratzea: 2026ko urriaren 15a</p>
 
-  <p>
-    Multak es una app para llevar las multas internas de un equipo o grupo. Solo lleva la cuenta:
-    nunca mueve dinero. Aquí te contamos qué datos usa, para qué y qué puedes hacer con ellos.
-  </p>
+    <p>
+      Multak talde edo kuadrilla baten barne-multak eramateko aplikazioa da. Kontua bakarrik
+      eramaten du: ez du inoiz dirurik mugitzen. Hemen azaltzen dizugu zer datu erabiltzen dituen,
+      zertarako eta zer egin dezakezun haiekin.
+    </p>
 
-  <h2>Quién es el responsable</h2>
-  <p>
-    {{ responsable }}. Para cualquier tema de privacidad, escribe a
-    <a [href]="'mailto:' + email">{{ email }}</a
-    >.
-  </p>
+    <h2>Nor da arduraduna</h2>
+    <p>
+      {{ responsable }}. Pribatutasunari buruzko edozein gairako, idatzi helbide honetara:
+      <a [href]="'mailto:' + email">{{ email }}</a
+      >.
+    </p>
 
-  <h2>Qué datos usamos</h2>
-  <ul>
-    <li><strong>Tu email</strong>, para que puedas entrar con un código o con Google.</li>
-    <li>
-      <strong>Si entras con Google</strong>, los datos básicos que Google comparte: nombre, email y
-      foto de perfil. No accedemos a nada más de tu cuenta de Google.
-    </li>
-    <li><strong>Tu nombre en cada equipo</strong>, el que pones tú o el admin del equipo.</li>
-    <li>
-      <strong>La actividad del equipo</strong>: multas, pagos y gastos, con su importe, fecha y
-      notas, y quién los registró.
-    </li>
-  </ul>
+    <h2>Zer datu erabiltzen ditugun</h2>
+    <ul>
+      <li><strong>Zure emaila</strong>, kode batekin edo Googlerekin sartu ahal izateko.</li>
+      <li>
+        <strong>Googlerekin sartzen bazara</strong>, Googlek partekatzen dituen oinarrizko datuak:
+        izena, emaila eta profileko argazkia. Ez dugu zure Google kontuko beste ezer ikusten.
+      </li>
+      <li><strong>Zure izena talde bakoitzean</strong>, zuk edo taldeko adminak jarritakoa.</li>
+      <li>
+        <strong>Taldearen jarduera</strong>: multak, ordainketak eta gastuak, haien zenbateko, data
+        eta oharrekin, eta nork erregistratu zituen.
+      </li>
+      <li><strong>Taldearen argazkia</strong>, adminak jartzen badu.</li>
+    </ul>
 
-  <h2>Para qué</h2>
-  <p>
-    Solo para que la app funcione: identificarte y llevar la cuenta de las multas y del bote de tus
-    equipos. No hay publicidad ni analítica de terceros, y no vendemos ni cedemos tus datos.
-  </p>
-  <p>
-    La base legal es que nos pides usar el servicio (art. 6.1.b del RGPD): sin estos datos la app no
-    puede funcionar.
-  </p>
+    <h2>Zertarako</h2>
+    <p>
+      Aplikazioak funtziona dezan bakarrik: zu identifikatzeko eta zure taldeen multen eta poltsaren
+      kontua eramateko. Ez dago publizitaterik ez hirugarrenen analitikarik, eta ez ditugu zure
+      datuak saltzen ez lagatzen.
+    </p>
+    <p>
+      Oinarri juridikoa zerbitzua erabiltzeko eskatzen diguzula da (DBEO, 6.1.b art.): datu horiek
+      gabe aplikazioak ezin du funtzionatu.
+    </p>
 
-  <h2>Quién los ve</h2>
-  <p>
-    Los miembros de tu equipo ven las multas, pagos, saldos y gastos de ese equipo: la transparencia
-    es parte de la gracia. Nadie de fuera del equipo puede verlos. Si estás en varios equipos, cada
-    uno solo ve lo suyo.
-  </p>
+    <h2>Nork ikusten dituen</h2>
+    <p>
+      Zure taldeko kideek talde horretako multak, ordainketak, saldoak, gastuak eta argazkia ikusten
+      dituzte: gardentasuna da gakoa. Taldetik kanpoko inork ezin ditu ikusi. Hainbat taldetan
+      bazaude, bakoitzak berea bakarrik ikusten du.
+    </p>
 
-  <h2>Dónde se guardan</h2>
-  <ul>
-    <li>
-      Los datos están en <strong>Supabase</strong>, en servidores de la Unión Europea (París).
-    </li>
-    <li>
-      La web se sirve desde <strong>Vercel</strong>, que puede registrar datos técnicos de las
-      visitas (como la IP) para servir la página y por seguridad.
-    </li>
-    <li>Los correos con el código los envía un proveedor de envío de correo electrónico.</li>
-  </ul>
-  <p>Estos proveedores solo tratan los datos para prestarnos su servicio.</p>
+    <h2>Non gordetzen diren</h2>
+    <ul>
+      <li>Datuak <strong>Supabasen</strong> daude, Europar Batasuneko zerbitzarietan (Paris).</li>
+      <li>
+        Webgunea <strong>Vercel</strong>etik zerbitzatzen da, eta bisiten datu teknikoak (IPa,
+        adibidez) erregistra ditzake orria zerbitzatzeko eta segurtasunagatik.
+      </li>
+      <li>Kodea duten mezuak posta elektronikoko hornitzaile batek bidaltzen ditu.</li>
+    </ul>
+    <p>Hornitzaile horiek beren zerbitzua emateko bakarrik tratatzen dituzte datuak.</p>
 
-  <h2>En tu dispositivo</h2>
-  <p>
-    La app guarda tu sesión en el almacenamiento de tu navegador para que no tengas que entrar cada
-    vez. No usamos cookies de seguimiento.
-  </p>
+    <h2>Zure gailuan</h2>
+    <p>
+      Aplikazioak zure saioa, hizkuntza eta itxura nabigatzailearen biltegian gordetzen ditu, aldi
+      bakoitzean sartu behar ez izateko. Ez dugu jarraipen-cookierik erabiltzen.
+    </p>
 
-  <h2>Cuánto tiempo</h2>
-  <p>
-    Mientras tengas cuenta. Si la borras, se elimina tu cuenta y tu email; las multas y pagos del
-    equipo se conservan con tu nombre, sin vínculo a tu cuenta, para que las cuentas del equipo
-    sigan cuadrando.
-  </p>
+    <h2>Zenbat denboran</h2>
+    <p>
+      Kontua duzun bitartean. Ezabatzen baduzu, zure kontua eta emaila ezabatzen dira; taldeko
+      multak eta ordainketak zure izenarekin gordetzen dira, zure kontuarekin loturarik gabe,
+      taldeko kontuek bat egiten jarrai dezaten.
+    </p>
 
-  <h2>Tus derechos</h2>
-  <p>
-    Puedes pedir ver, corregir o borrar tus datos, oponerte a su uso o llevártelos, escribiendo a
-    <a [href]="'mailto:' + email">{{ email }}</a
-    >. Si crees que no los tratamos bien, puedes reclamar ante la Agencia Española de Protección de
-    Datos (<a href="https://www.aepd.es" rel="noopener">aepd.es</a>).
-  </p>
+    <h2>Zure eskubideak</h2>
+    <p>
+      Zure datuak ikusteko, zuzentzeko edo ezabatzeko eska dezakezu, haien erabilerari aurka egin
+      edo eraman, helbide honetara idatzita: <a [href]="'mailto:' + email">{{ email }}</a
+      >. Ondo tratatzen ez ditugula uste baduzu, Datuak Babesteko Espainiako Agentzian erreklama
+      dezakezu (<a href="https://www.aepd.es" rel="noopener">aepd.es</a>).
+    </p>
+  } @else {
+    <p><a class="volver" routerLink="/">‹ Volver</a></p>
+
+    <h1>Política de privacidad</h1>
+    <p class="actualizada">Última actualización: 15 de octubre de 2026</p>
+
+    <p>
+      Multak es una app para llevar las multas internas de un equipo o grupo. Solo lleva la cuenta:
+      nunca mueve dinero. Aquí te contamos qué datos usa, para qué y qué puedes hacer con ellos.
+    </p>
+
+    <h2>Quién es el responsable</h2>
+    <p>
+      {{ responsable }}. Para cualquier tema de privacidad, escribe a
+      <a [href]="'mailto:' + email">{{ email }}</a
+      >.
+    </p>
+
+    <h2>Qué datos usamos</h2>
+    <ul>
+      <li><strong>Tu email</strong>, para que puedas entrar con un código o con Google.</li>
+      <li>
+        <strong>Si entras con Google</strong>, los datos básicos que Google comparte: nombre, email
+        y foto de perfil. No accedemos a nada más de tu cuenta de Google.
+      </li>
+      <li><strong>Tu nombre en cada equipo</strong>, el que pones tú o el admin del equipo.</li>
+      <li>
+        <strong>La actividad del equipo</strong>: multas, pagos y gastos, con su importe, fecha y
+        notas, y quién los registró.
+      </li>
+      <li><strong>La foto del equipo</strong>, si el admin pone una.</li>
+    </ul>
+
+    <h2>Para qué</h2>
+    <p>
+      Solo para que la app funcione: identificarte y llevar la cuenta de las multas y del bote de
+      tus equipos. No hay publicidad ni analítica de terceros, y no vendemos ni cedemos tus datos.
+    </p>
+    <p>
+      La base legal es que nos pides usar el servicio (art. 6.1.b del RGPD): sin estos datos la app
+      no puede funcionar.
+    </p>
+
+    <h2>Quién los ve</h2>
+    <p>
+      Los miembros de tu equipo ven las multas, pagos, saldos, gastos y la foto de ese equipo: la
+      transparencia es parte de la gracia. Nadie de fuera del equipo puede verlos. Si estás en
+      varios equipos, cada uno solo ve lo suyo.
+    </p>
+
+    <h2>Dónde se guardan</h2>
+    <ul>
+      <li>
+        Los datos están en <strong>Supabase</strong>, en servidores de la Unión Europea (París).
+      </li>
+      <li>
+        La web se sirve desde <strong>Vercel</strong>, que puede registrar datos técnicos de las
+        visitas (como la IP) para servir la página y por seguridad.
+      </li>
+      <li>Los correos con el código los envía un proveedor de envío de correo electrónico.</li>
+    </ul>
+    <p>Estos proveedores solo tratan los datos para prestarnos su servicio.</p>
+
+    <h2>En tu dispositivo</h2>
+    <p>
+      La app guarda tu sesión, el idioma y la apariencia en el almacenamiento de tu navegador para
+      que no tengas que entrar cada vez. No usamos cookies de seguimiento.
+    </p>
+
+    <h2>Cuánto tiempo</h2>
+    <p>
+      Mientras tengas cuenta. Si la borras, se elimina tu cuenta y tu email; las multas y pagos del
+      equipo se conservan con tu nombre, sin vínculo a tu cuenta, para que las cuentas del equipo
+      sigan cuadrando.
+    </p>
+
+    <h2>Tus derechos</h2>
+    <p>
+      Puedes pedir ver, corregir o borrar tus datos, oponerte a su uso o llevártelos, escribiendo a
+      <a [href]="'mailto:' + email">{{ email }}</a
+      >. Si crees que no los tratamos bien, puedes reclamar ante la Agencia Española de Protección
+      de Datos (<a href="https://www.aepd.es" rel="noopener">aepd.es</a>).
+    </p>
+  }
 </main>
