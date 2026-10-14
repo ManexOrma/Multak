@@ -2,8 +2,8 @@ import { NgOptimizedImage } from '@angular/common';
 import { Component, input } from '@angular/core';
 
 /**
- * Logotipo de Multak: el icono de la app y el nombre. El icono beige va en el tema
- * claro y el negro en el oscuro (lo decide styles.scss, que sabe el tema elegido).
+ * Logotipo de Multak: el icono de la app y el nombre. Va a contraste: el icono negro en
+ * el tema claro y el beige en el oscuro (lo decide styles.scss, que sabe el tema elegido).
  */
 @Component({
   selector: 'app-marca',
@@ -11,7 +11,7 @@ import { Component, input } from '@angular/core';
   template: `
     <img
       class="icono-marca marca-claro"
-      ngSrc="icons/marca-claro.png"
+      ngSrc="icons/marca-oscuro.png"
       alt=""
       [width]="tamano()"
       [height]="tamano()"
@@ -19,7 +19,7 @@ import { Component, input } from '@angular/core';
     />
     <img
       class="icono-marca marca-oscuro"
-      ngSrc="icons/marca-oscuro.png"
+      ngSrc="icons/marca-claro.png"
       alt=""
       [width]="tamano()"
       [height]="tamano()"
