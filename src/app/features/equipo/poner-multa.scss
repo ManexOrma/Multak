@@ -36,7 +36,7 @@
   border: 0;
   border-radius: var(--radio-grupo);
   background: var(--celda);
-  box-shadow: var(--sombra-celda);
+  box-shadow: 0 1px 2px rgb(80 40 20 / 0.06); // sombra barata: hay muchas casillas
   color: var(--texto);
   cursor: pointer;
   transition:
@@ -138,7 +138,7 @@
   z-index: 1;
   width: 150px;
   height: 20px;
-  background: repeating-linear-gradient(90deg, var(--klub) 0 12px, #fff 12px 24px);
+  background: repeating-linear-gradient(90deg, var(--klub) 0 12px, var(--klub-2) 12px 24px);
   box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
   rotate: 45deg;
   animation: cinta-ondea 3.2s var(--ease-in-out) infinite alternate;
@@ -218,7 +218,8 @@
 }
 
 // Entrada escalonada de jugadores y tipos al pasar de paso.
-.jugadores > li,
+// Los jugadores no se animan uno a uno: ya entran con la hoja (animar las dos cosas
+// a la vez daba tirones en el móvil). Los tipos sí, porque aparecen con la hoja abierta.
 .lista > li {
   animation: opcion-entra 360ms var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * 28ms);

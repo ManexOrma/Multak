@@ -14,7 +14,7 @@ export class AjustesService {
 
   readonly equipo = signal<Pick<
     Equipo,
-    'id' | 'nombre' | 'codigo_invitacion' | 'foto_version' | 'color'
+    'id' | 'nombre' | 'codigo_invitacion' | 'foto_version' | 'color' | 'color_secundario'
   > | null>(null);
   readonly miembros = signal<Miembro[]>([]);
   readonly tipos = signal<TipoMulta[]>([]);
@@ -41,9 +41,13 @@ export class AjustesService {
     await this.cargarEquipo();
   }
 
-  async cambiarColor(color: string): Promise<void> {
+  async cambiarColores(color: string, secundario: string): Promise<void> {
     exigirFila(
-      await this.supabase.from('equipos').update({ color }).eq('id', this.equipoId).select('id'),
+      await this.supabase
+        .from('equipos')
+        .update({ color, color_secundario: secundario })
+        .eq('id', this.equipoId)
+        .select('id'),
     );
     await this.cargarEquipo();
   }
@@ -131,7 +135,7 @@ export class AjustesService {
       exigir(
         await this.supabase
           .from('equipos')
-          .select('id, nombre, codigo_invitacion, foto_version, color')
+          .select('id, nombre, codigo_invitacion, foto_version, color, color_secundario')
           .eq('id', this.equipoId)
           .single(),
       ),

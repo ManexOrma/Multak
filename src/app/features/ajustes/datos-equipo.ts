@@ -1,9 +1,18 @@
-import { Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  linkedSignal,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { form, FormField, FormRoot, maxLength, required } from '@angular/forms/signals';
 import { I18n } from '../../core/i18n/i18n.service';
 import { FotosService } from '../../core/supabase/fotos.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
-import { colorKlub, ColorKlub } from '../../core/tema/klub';
+import { ColoresKlub, normalizarColores } from '../../core/tema/klub';
 import { TemaService } from '../../core/tema/tema.service';
 import { Escudo } from '../../shared/escudo';
 import { SelectorColor } from '../../shared/selector-color';
@@ -11,7 +20,7 @@ import { Icono } from '../../shared/icono';
 import { EquiposService } from '../equipos/equipos.service';
 import { AjustesService } from './ajustes.service';
 
-/** Nombre, foto y color del club (solo admin). */
+/** Nombre, foto y colores del club (solo admin). */
 @Component({
   selector: 'app-datos-equipo',
   imports: [FormRoot, FormField, Escudo, Icono, SelectorColor],
@@ -21,7 +30,8 @@ import { AjustesService } from './ajustes.service';
 
       <div class="foto">
         <app-escudo
-          [color]="color()"
+          [color]="colores().color"
+          [secundario]="colores().secundario"
           [foto]="urlFoto()"
           [tamano]="88"
           [class.subiendo]="subiendo()"
@@ -57,9 +67,8 @@ import { AjustesService } from './ajustes.service';
         <app-selector-color
           nombre="color-ajustes"
           ayudaId="color-ayuda"
-          [valor]="color()"
-          [desactivado]="guardandoColor()"
-          (valorChange)="cambiarColor($event)"
+          [valor]="colores()"
+          (valorChange)="cambiarColores($event)"
         />
         <p id="color-ayuda" class="pie-grupo">{{ t('color.ayuda') }}</p>
       </div>
@@ -154,8 +163,12 @@ export class DatosEquipo {
   protected readonly error = signal<string | null>(null);
   protected readonly subiendo = signal(false);
   private readonly tema = inject(TemaService);
-  protected readonly guardandoColor = signal(false);
-  protected readonly color = computed(() => colorKlub(this.ajustes.equipo()?.color));
+  /** Colores en pantalla: los guardados, o los que se están eligiendo. */
+  protected readonly colores = linkedSignal(() => {
+    const equipo = this.ajustes.equipo();
+    return normalizarColores(equipo?.color, equipo?.color_secundario);
+  });
+  private guardadoPendiente: ReturnType<typeof setTimeout> | undefined;
   protected readonly version = computed(() => this.ajustes.equipo()?.foto_version ?? null);
   protected readonly urlFoto = computed(() => {
     const equipo = this.ajustes.equipo();
@@ -171,6 +184,16 @@ export class DatosEquipo {
     },
     { submission: { action: () => this.guardar() } },
   );
+
+  constructor() {
+    // Si sales de Ajustes justo después de elegir, se guarda igual.
+    inject(DestroyRef).onDestroy(() => {
+      if (this.guardadoPendiente) {
+        clearTimeout(this.guardadoPendiente);
+        void this.guardarColores();
+      }
+    });
+  }
 
   protected elegirFoto(): void {
     this.selector().nativeElement.click();
@@ -208,22 +231,30 @@ export class DatosEquipo {
     }
   }
 
-  protected async cambiarColor(color: ColorKlub): Promise<void> {
-    const anterior = this.color();
-    if (color === anterior) return;
-    // Se ve al momento; si falla, vuelve atrás.
-    this.tema.ponerKlub(color);
-    this.guardandoColor.set(true);
+  /** Se ve al momento; se guarda cuando dejas de tocar colores (sin un aviso por toque). */
+  protected cambiarColores(colores: ColoresKlub): void {
+    this.colores.set(colores);
+    this.tema.ponerKlub(colores.color, colores.secundario);
+    clearTimeout(this.guardadoPendiente);
+    this.guardadoPendiente = setTimeout(() => void this.guardarColores(), 800);
+  }
+
+  private async guardarColores(): Promise<void> {
+    this.guardadoPendiente = undefined;
+    const { color, secundario } = this.colores();
+    const equipo = this.ajustes.equipo();
+    if (equipo?.color === color && equipo.color_secundario === secundario) return;
     this.error.set(null);
     try {
-      await this.ajustes.cambiarColor(color);
+      await this.ajustes.cambiarColores(color, secundario);
       await this.equipos.cargar();
       this.avisos.mostrar(this.t('color.guardado'));
     } catch (e) {
-      this.tema.ponerKlub(anterior);
+      // Vuelve a los colores guardados.
+      const guardados = normalizarColores(equipo?.color, equipo?.color_secundario);
+      this.colores.set(guardados);
+      this.tema.ponerKlub(guardados.color, guardados.secundario);
       this.error.set(this.i18n.error(e));
-    } finally {
-      this.guardandoColor.set(false);
     }
   }
 

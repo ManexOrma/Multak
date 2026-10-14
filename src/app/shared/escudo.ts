@@ -1,17 +1,18 @@
 import { Component, computed, input } from '@angular/core';
-import { colorKlub } from '../core/tema/klub';
+import { normalizarColores } from '../core/tema/klub';
 
 /**
- * Escudo del equipo: su foto o, si no tiene, las rayas de la camiseta en el color
- * del club. Decorativo (el nombre del equipo siempre va al lado).
+ * Escudo del equipo: su foto o, si no tiene, las rayas de la camiseta con sus dos
+ * colores. Decorativo (el nombre del equipo siempre va al lado).
  */
 @Component({
   selector: 'app-escudo',
   host: {
     class: 'escudo',
     'aria-hidden': 'true',
-    '[attr.data-klub]': 'klub()',
     '[class.con-foto]': '!!foto()',
+    '[style.--escudo-1]': 'colores().color',
+    '[style.--escudo-2]': 'colores().secundario',
     '[style.width.px]': 'tamano()',
     '[style.height.px]': 'tamano()',
     '[style.border-radius.px]': 'tamano() * 0.34',
@@ -27,10 +28,10 @@ import { colorKlub } from '../core/tema/klub';
       flex-shrink: 0;
       display: block;
       overflow: hidden;
-      background: repeating-linear-gradient(90deg, var(--klub) 0 20%, #fff 20% 40%);
+      background: repeating-linear-gradient(90deg, var(--escudo-1) 0 20%, var(--escudo-2) 20% 40%);
       box-shadow:
-        inset 0 0 0 2px var(--klub),
-        0 6px 14px color-mix(in srgb, var(--klub) 30%, transparent);
+        inset 0 0 0 2px var(--escudo-1),
+        0 6px 14px color-mix(in srgb, var(--escudo-1) 30%, transparent);
       transition: transform 260ms var(--ease-muelle);
     }
 
@@ -45,7 +46,7 @@ import { colorKlub } from '../core/tema/klub';
     }
 
     :host(.con-foto) {
-      background: var(--klub);
+      background: var(--escudo-1);
     }
 
     img {
@@ -65,8 +66,9 @@ import { colorKlub } from '../core/tema/klub';
 })
 export class Escudo {
   readonly color = input<string | null | undefined>();
+  readonly secundario = input<string | null | undefined>();
   readonly foto = input<string | null | undefined>();
   readonly tamano = input(40);
 
-  protected readonly klub = computed(() => colorKlub(this.color()));
+  protected readonly colores = computed(() => normalizarColores(this.color(), this.secundario()));
 }

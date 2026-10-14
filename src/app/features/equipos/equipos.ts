@@ -37,6 +37,7 @@ import { UnirseCodigo } from './unirse-codigo';
                   <a class="fila" [routerLink]="['/e', equipo.equipo_id]">
                     <app-escudo
                       [color]="equipo.color"
+                      [secundario]="equipo.color_secundario"
                       [foto]="fotos.url(equipo.equipo_id, equipo.foto_version)"
                       [tamano]="44"
                     />
@@ -48,7 +49,11 @@ import { UnirseCodigo } from './unirse-codigo';
                   </a>
                 } @else {
                   <div class="fila">
-                    <app-escudo [color]="equipo.color" [tamano]="44" />
+                    <app-escudo
+                      [color]="equipo.color"
+                      [secundario]="equipo.color_secundario"
+                      [tamano]="44"
+                    />
                     <span class="fila-texto">
                       <span class="titular texto-suave">{{ equipo.equipo_nombre }}</span>
                       <span class="fila-detalle">

@@ -7,6 +7,7 @@ export type Database = {
         Row: {
           codigo_invitacion: string;
           color: string;
+          color_secundario: string;
           creado_en: string;
           creado_por: string | null;
           foto_version: number | null;
@@ -17,6 +18,7 @@ export type Database = {
         Insert: {
           codigo_invitacion: string;
           color?: string;
+          color_secundario?: string;
           creado_en?: string;
           creado_por?: string | null;
           foto_version?: number | null;
@@ -26,6 +28,7 @@ export type Database = {
         Update: {
           codigo_invitacion?: string;
           color?: string;
+          color_secundario?: string;
           creado_en?: string;
           creado_por?: string | null;
           foto_version?: number | null;
@@ -407,6 +410,7 @@ export type Database = {
       crear_equipo: {
         Args: {
           color?: string;
+          color_secundario?: string;
           con_catalogo_ejemplo?: boolean;
           idioma?: string;
           mi_nombre: string;
@@ -435,6 +439,7 @@ export type Database = {
         Returns: {
           activo: boolean;
           color: string;
+          color_secundario: string;
           equipo_id: string;
           equipo_nombre: string;
           foto_version: number;

@@ -22,6 +22,7 @@
             >
               <app-escudo
                 [color]="equipo.color"
+                [secundario]="equipo.color_secundario"
                 [foto]="fotos.url(equipo.equipo_id, equipo.foto_version)"
                 [tamano]="40"
               />
@@ -35,7 +36,11 @@
             </button>
           } @else {
             <div class="fila inactivo">
-              <app-escudo [color]="equipo.color" [tamano]="40" />
+              <app-escudo
+                [color]="equipo.color"
+                [secundario]="equipo.color_secundario"
+                [tamano]="40"
+              />
               <span class="fila-texto">
                 <span class="titular">{{ equipo.equipo_nombre }}</span>
               </span>

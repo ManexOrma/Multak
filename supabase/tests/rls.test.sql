@@ -232,16 +232,16 @@ select lives_ok($$ insert into storage.objects (bucket_id, name) values ('equipo
   'foto: un admin sube la foto de su equipo');
 select lives_ok($$ update equipos set foto_version = 1 where id = 'e0000000-0000-4000-a000-000000000001' $$,
   'foto: el admin marca la versión de la foto');
-select lives_ok($$ update equipos set color = 'gorri' where id = 'e0000000-0000-4000-a000-000000000001' $$,
-  'color: el admin cambia el color del equipo');
+select lives_ok($$ update equipos set color = '#c8102e', color_secundario = '#ffcc00' where id = 'e0000000-0000-4000-a000-000000000001' $$,
+  'color: el admin cambia los colores del equipo');
 select throws_ok($$ update equipos set color = 'arrosa' where id = 'e0000000-0000-4000-a000-000000000001' $$,
-  '23514', null, 'color: solo colores de la paleta');
+  '23514', null, 'color: solo colores hex');
 
 set local request.jwt.claims = '{"sub":"a0000000-0000-4000-a000-000000000002","role":"authenticated"}';
 select throws_ok($$ insert into storage.objects (bucket_id, name) values ('equipos', 'e0000000-0000-4000-a000-000000000001/otra.jpg') $$,
   '42501', null, 'foto: un tesorero no sube fotos');
-update equipos set color = 'berde' where id = 'e0000000-0000-4000-a000-000000000001';
-select is((select color from equipos where id = 'e0000000-0000-4000-a000-000000000001'), 'gorri',
+update equipos set color = '#0f6b3a' where id = 'e0000000-0000-4000-a000-000000000001';
+select is((select color from equipos where id = 'e0000000-0000-4000-a000-000000000001'), '#c8102e',
   'color: un tesorero no cambia el color');
 select is((select count(*)::int from storage.objects where bucket_id = 'equipos'), 1, 'foto: un miembro ve la foto');
 

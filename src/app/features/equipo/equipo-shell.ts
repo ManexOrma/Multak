@@ -76,7 +76,10 @@ export class EquipoShell {
     });
     // La app se viste con el color del club mientras estás en el equipo.
     const tema = inject(TemaService);
-    effect(() => tema.ponerKlub(this.equipo.miFicha()?.color));
+    effect(() => {
+      const ficha = this.equipo.miFicha();
+      tema.ponerKlub(ficha?.color, ficha?.color_secundario);
+    });
     inject(DestroyRef).onDestroy(() => tema.ponerKlub(null));
     effect(() => {
       const id = this.equipoId();

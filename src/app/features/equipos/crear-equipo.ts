@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { I18n } from '../../core/i18n/i18n.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
-import { COLOR_KLUB_INICIAL, ColorKlub } from '../../core/tema/klub';
+import { COLORES_INICIALES, ColoresKlub } from '../../core/tema/klub';
 import { SelectorColor } from '../../shared/selector-color';
 import { EquiposService } from './equipos.service';
 
@@ -41,7 +41,7 @@ import { EquiposService } from './equipos.service';
         }
       </p>
 
-      <app-selector-color nombre="color-crear" [(valor)]="color" />
+      <app-selector-color nombre="color-crear" [(valor)]="colores" />
 
       <label class="casilla">
         <input type="checkbox" [formField]="formulario.conCatalogo" />
@@ -77,7 +77,7 @@ export class CrearEquipo {
   private readonly router = inject(Router);
 
   protected readonly error = signal<string | null>(null);
-  protected readonly color = signal<ColorKlub>(COLOR_KLUB_INICIAL);
+  protected readonly colores = signal<ColoresKlub>(COLORES_INICIALES);
   protected readonly modelo = signal({
     nombreEquipo: '',
     miNombre: inject(AuthService).nombreSugerido(),
@@ -106,7 +106,7 @@ export class CrearEquipo {
         nombreEquipo.trim(),
         miNombre.trim(),
         conCatalogo,
-        this.color(),
+        this.colores(),
       );
       this.avisos.mostrar(this.t('equipos.creado'));
       await this.router.navigate(['/e', id, 'ajustes']);

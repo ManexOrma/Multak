@@ -183,17 +183,18 @@ Se rechazan la rejilla de tarjetas SaaS iguales, el disfraz de fútbol (céspede
 
 ### Primary: el color del club
 
-Hay ocho colores, en una paleta cerrada que también admite la BD (`equipos.color`): urdin, zeru, berde, gorri, granate, more, laranja y beltz.
+Cada equipo guarda dos colores en hex: el principal (`equipos.color`) y el de las rayas (`equipos.color_secundario`). Se eligen entre 8 combinaciones hechas (el color con rayas blancas) o en «Personalizado», libremente de una paleta de 16 colores (`PALETA` en `core/tema/klub.ts`).
 
-Cada uno define tres tokens:
+A partir del color principal, `tokensKlub()` calcula:
 
 - `--klub`: el color;
 - `--klub-sakon`: su tono profundo, para degradados;
-- `--klub-tinta`: el color usado como texto sobre el fondo.
+- `--klub-tinta`: el color usado como texto sobre el fondo, oscurecido (o aclarado en oscuro) hasta tener AA;
+- `--sobre-klub`: el texto encima del color: blanco si llega a 4,5:1, o tinta oscura si no (con amarillo o blanco, el texto del pase es oscuro).
 
-En oscuro, el color se apaga y la tinta se aclara. Todos dan blanco ≥ 4,5:1 sobre `--klub` y `--klub-sakon`.
+`--klub-2` es el secundario y solo se usa para las rayas (escudo, cinta y rayas del pase). En oscuro, el color se apaga un poco y la tinta se aclara.
 
-Se aplica con `data-klub` en `<html>`: lo pone el shell del equipo, y fuera de un equipo se usa urdin. Un elemento con su propio `data-klub` (el escudo de cada equipo en un listado) usa el suyo.
+`TemaService.ponerKlub()` los pone como variables en `<html>` (`--klub-*-l` / `--klub-*-d` para claro y oscuro). Lo llama el shell del equipo; fuera de un equipo se usan los iniciales (azul y blanco). El escudo de cada equipo en un listado lleva sus propios colores inline. Un test (`klub.spec.ts`) comprueba el AA con todos los colores de la paleta.
 
 **Usos:**
 
@@ -229,7 +230,7 @@ Se aplica con `data-klub` en `<html>`: lo pone el shell del equipo, y fuera de u
 
 ### Named Rules
 
-**The Dos Colores Con Trabajo Rule.** El color del club identifica (de quién es esta app, qué es tuyo, dónde estás). El amarillo actúa (poner una multa). Ninguno de los dos se usa como decoración suelta.
+**The Dos Colores Con Trabajo Rule.** El color del club (y sus rayas) identifica (de quién es esta app, qué es tuyo, dónde estás). El amarillo actúa (poner una multa). Ninguno de los dos se usa como decoración suelta.
 
 **The La Deuda No Se Tiñe Rule.** Lo que debes siempre va en rojo sobre una superficie clara (la pastilla), nunca en blanco sobre el color del club. Así un club rojo no confunde.
 
@@ -309,7 +310,7 @@ Avatares redondos; chips y el botón flotante, en pastilla.
 
 ### Escudo
 
-`app-escudo`: la foto del equipo, o si no hay, las rayas del club con un brillo de tela. Se usa en el botón del menú (con un distintivo de menú), la barra lateral, el menú lateral, Mis equipos y Ajustes. Al pulsar, gira −8°.
+`app-escudo`: la foto del equipo, o si no hay, las rayas del club con un brillo de tela. Se usa en el botón del menú (una pastilla con las tres líneas y el escudo al lado, nunca encima), la barra lateral, el menú lateral, Mis equipos y Ajustes. Al pulsar, gira −8°.
 
 ### Tarjeta del árbitro (componente firma)
 
@@ -338,10 +339,10 @@ Avatares redondos; chips y el botón flotante, en pastilla.
 
 ### Selector de color
 
-`app-selector-color`: ocho muestras rayadas en una rejilla de 4×2, con su nombre debajo. Es un grupo de radios accesible: la muestra elegida crece, gira un poco y muestra un check con rebote.
+`app-selector-color`: las 8 combinaciones rayadas y una muestra arcoíris «Personalizado» con su nombre debajo, en una rejilla de 3 columnas (5 desde 420px). Es un grupo de radios accesible: la muestra elegida crece, gira un poco y muestra un check con rebote. «Personalizado» abre una tarjeta con la vista previa del escudo y dos paletas de 16 círculos («Color principal» y «Color de las rayas»); el elegido crece con un anillo.
 
 - **En Crear equipo:** se elige el color al crear el equipo.
-- **En Ajustes (solo admin):** el cambio se aplica al momento y se guarda. Si falla, vuelve al color anterior.
+- **En Ajustes (solo admin):** el cambio se ve al momento en toda la app y se guarda cuando dejas de tocar colores (0,8 s, con un solo aviso). Si falla, vuelve a los colores guardados.
 
 ### Avatar
 
@@ -368,7 +369,7 @@ Con movimiento reducido no sale nada.
 
 ### Don't:
 
-- **Don't** añadir colores de club fuera de la paleta: la paleta garantiza el contraste del texto blanco.
+- **Don't** poner texto fijo en blanco sobre el color del club: usa `--sobre-klub`, que se calcula para cada color.
 - **Don't** poner texto blanco sobre amarillo, ni usar el amarillo como estado o enlace.
 - **Don't** abusar del movimiento ambiental: solo las rayas del pase, la cinta, el punto que late y el destello del botón amarillo se mueven solos.
 - **Don't** cargar fuentes desde Google ni ningún CDN: Figtree va autoalojada.

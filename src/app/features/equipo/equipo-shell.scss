@@ -262,16 +262,3 @@
     background: color-mix(in srgb, var(--relleno) 60%, transparent);
   }
 }
-
-// Las barras se quedan quietas en las transiciones entre pantallas.
-.pestanas {
-  view-transition-name: pestanas;
-}
-
-.lateral {
-  view-transition-name: lateral;
-}
-
-.flotante {
-  view-transition-name: poner-multa;
-}

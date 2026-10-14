@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { inject, Service, signal } from '@angular/core';
-import { colorKlub } from './klub';
+import { normalizarColores, tokensKlub } from './klub';
 
 export type Tema = 'sistema' | 'claro' | 'oscuro';
 
@@ -9,8 +9,8 @@ const COLOR_BARRA = { claro: '#F7F1EC', oscuro: '#14100E' };
 
 /**
  * Tema claro, oscuro o el del sistema. Se aplica con `data-tema` en <html>
- * (styles.scss redefine los tokens) y se recuerda en este dispositivo. El color del
- * club del equipo abierto se aplica con `data-klub`.
+ * (styles.scss redefine los tokens) y se recuerda en este dispositivo. Los colores
+ * del club del equipo abierto se aplican como variables CSS en <html>.
  */
 @Service()
 export class TemaService {
@@ -33,9 +33,21 @@ export class TemaService {
     this.aplicar(tema);
   }
 
-  /** Viste la app con el color del club del equipo abierto (o el inicial, fuera de un equipo). */
-  ponerKlub(color: string | null | undefined): void {
-    this.document.documentElement.dataset['klub'] = colorKlub(color);
+  /** Viste la app con los colores del club del equipo abierto (o los iniciales, fuera de un equipo). */
+  ponerKlub(color?: string | null, secundario?: string | null): void {
+    const colores = normalizarColores(color, secundario);
+    const { claro, oscuro } = tokensKlub(colores.color);
+    const estilo = this.document.documentElement.style;
+    for (const [sufijo, t] of [
+      ['l', claro],
+      ['d', oscuro],
+    ] as const) {
+      estilo.setProperty(`--klub-${sufijo}`, t.klub);
+      estilo.setProperty(`--klub-sakon-${sufijo}`, t.sakon);
+      estilo.setProperty(`--klub-tinta-${sufijo}`, t.tinta);
+      estilo.setProperty(`--sobre-klub-${sufijo}`, t.sobre);
+    }
+    estilo.setProperty('--klub-2-l', colores.secundario);
   }
 
   private aplicar(tema: Tema): void {

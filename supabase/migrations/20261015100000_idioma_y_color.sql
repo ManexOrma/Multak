@@ -1,11 +1,12 @@
--- Color del club: lo elige quien crea el equipo y lo cambia el admin. Viste la app
--- (tarjeta del inicio, escudo, cinta de la tarjeta amarilla). Paleta cerrada para
--- garantizar el contraste del texto blanco sobre el color.
+-- Colores del club: el principal y el secundario (rayas del escudo y de la cinta).
+-- Los elige quien crea el equipo y los cambia el admin. Viste la app (tarjeta del
+-- inicio, escudo, enlaces…). Son hex; la app calcula el contraste del texto.
 alter table public.equipos
-  add column color text not null default 'urdin'
-  check (color in ('urdin', 'zeru', 'berde', 'gorri', 'granate', 'more', 'laranja', 'beltz'));
+  add column color text not null default '#0b5cad' check (color ~ '^#[0-9a-f]{6}$'),
+  add column color_secundario text not null default '#ffffff'
+    check (color_secundario ~ '^#[0-9a-f]{6}$');
 
-grant update (color) on public.equipos to authenticated;
+grant update (color, color_secundario) on public.equipos to authenticated;
 
 -- mis_equipos devuelve también el color (cambia el tipo de retorno).
 drop function public.mis_equipos();
@@ -20,14 +21,16 @@ returns table (
   activo boolean,
   pendiente boolean,
   foto_version integer,
-  color text
+  color text,
+  color_secundario text
 )
 language sql
 stable
 security definer
 set search_path = ''
 as $$
-  select e.id, e.nombre, m.id, m.nombre, m.rol, m.activo, m.pendiente, e.foto_version, e.color
+  select e.id, e.nombre, m.id, m.nombre, m.rol, m.activo, m.pendiente, e.foto_version, e.color,
+    e.color_secundario
   from public.miembros m
   join public.equipos e on e.id = m.equipo_id
   where m.usuario_id = (select auth.uid())
@@ -38,7 +41,7 @@ revoke all on function public.mis_equipos() from public, anon;
 grant execute on function public.mis_equipos() to authenticated;
 
 -- crear_equipo: el catálogo de ejemplo de un equipo nuevo, en el idioma de quien lo crea
--- (euskera por defecto; 'es' para castellano) y con su color.
+-- (euskera por defecto; 'es' para castellano) y con sus colores.
 drop function public.crear_equipo(text, text, boolean);
 
 create function public.crear_equipo(
@@ -46,7 +49,8 @@ create function public.crear_equipo(
   mi_nombre text,
   con_catalogo_ejemplo boolean default true,
   idioma text default 'eu',
-  color text default 'urdin'
+  color text default '#0b5cad',
+  color_secundario text default '#ffffff'
 )
 returns uuid
 language plpgsql
@@ -61,8 +65,13 @@ begin
     raise exception 'Tienes que iniciar sesión.' using errcode = '42501';
   end if;
 
-  insert into public.equipos (nombre, codigo_invitacion, color)
-  values (btrim(crear_equipo.nombre_equipo), private.generar_codigo(), crear_equipo.color)
+  insert into public.equipos (nombre, codigo_invitacion, color, color_secundario)
+  values (
+    btrim(crear_equipo.nombre_equipo),
+    private.generar_codigo(),
+    crear_equipo.color,
+    crear_equipo.color_secundario
+  )
   returning id into v_equipo_id;
 
   insert into public.miembros (equipo_id, usuario_id, nombre, rol)
@@ -96,5 +105,5 @@ begin
 end;
 $$;
 
-revoke all on function public.crear_equipo(text, text, boolean, text, text) from public, anon;
-grant execute on function public.crear_equipo(text, text, boolean, text, text) to authenticated;
+revoke all on function public.crear_equipo(text, text, boolean, text, text, text) from public, anon;
+grant execute on function public.crear_equipo(text, text, boolean, text, text, text) to authenticated;

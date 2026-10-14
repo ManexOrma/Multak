@@ -6,7 +6,12 @@
       [attr.aria-label]="t('menu.abrir')"
       (click)="abrirMenu()"
     >
-      <app-escudo [color]="equipo.miFicha()?.color" [foto]="foto()" [tamano]="40" />
+      <app-escudo
+        [color]="equipo.miFicha()?.color"
+        [secundario]="equipo.miFicha()?.color_secundario"
+        [foto]="foto()"
+        [tamano]="40"
+      />
       <span class="nombre-equipo">{{ equipo.miFicha()?.equipo_nombre }}</span>
       <app-icono class="abrir" nombre="menu" [grosor]="2.2" />
     </button>

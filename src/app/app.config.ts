@@ -15,7 +15,6 @@ import {
   TitleStrategy,
   withComponentInputBinding,
   withRouterConfig,
-  withViewTransitions,
 } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app.routes';
@@ -35,7 +34,6 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding(),
       withRouterConfig({ paramsInheritanceStrategy: 'always' }),
       // Transiciones suaves entre pantallas (styles.scss las ajusta y respeta el movimiento reducido).
-      withViewTransitions({ skipInitialTransition: true }),
     ),
     { provide: TitleStrategy, useClass: TituloTraducido },
     // El idioma se fija al arrancar: fechas y euros salen en euskera o castellano.

@@ -9,7 +9,7 @@
   margin: 0 0 14px;
   padding: 10px 10px 16px;
   border-radius: 28px;
-  color: #fff;
+  color: var(--sobre-klub);
   background:
     radial-gradient(circle at 92% -10%, rgb(255 255 255 / 0.3), transparent 46%),
     linear-gradient(140deg, var(--klub) 0%, var(--klub-sakon) 100%);
@@ -28,7 +28,7 @@
     background: repeating-linear-gradient(
       90deg,
       rgb(255 255 255 / 0) 0 26px,
-      rgb(255 255 255 / 0.07) 26px 52px
+      color-mix(in srgb, var(--klub-2) 12%, transparent) 26px 52px
     );
     animation: rayas-viento 9s var(--ease-in-out) infinite alternate;
   }
@@ -113,7 +113,7 @@
 .pase .explicacion {
   max-width: none;
   margin: 0 8px;
-  color: #fff;
+  color: var(--sobre-klub);
 }
 
 // La fila del jugador recién multado se ilumina un instante: «aquí ha caído».

@@ -5,6 +5,7 @@
   padding: 2px 16px 6px;
   overflow-x: auto;
   scroll-snap-type: x proximity;
+  scroll-padding-inline: 16px; // el imán respeta el margen: el primer botón no se pega al borde
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
@@ -36,7 +37,7 @@
 
   &[aria-pressed='true'] {
     background: linear-gradient(140deg, var(--klub), var(--klub-sakon));
-    color: #fff;
+    color: var(--sobre-klub);
     box-shadow: 0 6px 14px color-mix(in srgb, var(--klub) 30%, transparent);
   }
 }
@@ -202,7 +203,7 @@
 
   &.es-hoy {
     background: var(--klub);
-    color: #fff;
+    color: var(--sobre-klub);
     font-weight: 700;
   }
 }

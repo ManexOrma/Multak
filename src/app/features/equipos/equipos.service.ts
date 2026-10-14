@@ -1,3 +1,4 @@
+import { ColoresKlub } from '../../core/tema/klub';
 import { computed, inject, Service, signal } from '@angular/core';
 import { AuthService } from '../../core/auth/auth.service';
 import { I18n } from '../../core/i18n/i18n.service';
@@ -63,7 +64,7 @@ export class EquiposService {
     nombreEquipo: string,
     miNombre: string,
     conCatalogo: boolean,
-    color: string,
+    colores: ColoresKlub,
   ): Promise<string> {
     const id = exigir(
       await this.supabase.rpc('crear_equipo', {
@@ -71,7 +72,8 @@ export class EquiposService {
         mi_nombre: miNombre,
         con_catalogo_ejemplo: conCatalogo,
         idioma: this.i18n.idioma(),
-        color,
+        color: colores.color,
+        color_secundario: colores.secundario,
       }),
     );
     await this.cargar();

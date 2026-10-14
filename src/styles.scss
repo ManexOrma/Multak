@@ -1,7 +1,6 @@
 // Multak — sistema de diseño «Bero klub». Listón de las apps de Apple, con calor:
 // suelo crema, sombras cálidas y radios grandes. Dos notas de color: el color del
 // club (pase de temporada, escudo, enlaces) y la tarjeta amarilla («Poner multa»).
-@use 'sass:list';
 @use '@angular/cdk/overlay-prebuilt.css';
 @use '@fontsource-variable/figtree/wght.css';
 
@@ -112,105 +111,44 @@
   color-scheme: light;
 }
 
-// --- Colores de club ------------------------------------------------------------
-// klub: el color; klub-sakon: su tono profundo (degradados); klub-tinta: como texto
-// sobre el fondo. En oscuro el color se apaga y la tinta se aclara. Blanco sobre
-// klub y klub-sakon ≥ 4,5:1 en todos.
+// --- Colores del club --------------------------------------------------------------
+// Los calcula la app (core/tema/klub.ts) a partir de los dos colores del equipo y los
+// pone en <html> como --klub-*-l (claro) y --klub-*-d (oscuro). klub: el color;
+// klub-sakon: su tono profundo (degradados); klub-tinta: como texto sobre el fondo;
+// sobre-klub: texto encima del color; klub-2: el secundario (rayas).
 
-$klubak: (
-  urdin: (
-    #0b5cad,
-    #084a8c,
-    #0b5cad,
-    #0a4c90,
-    #073a6f,
-    #7db6ff,
-  ),
-  zeru: (
-    #0369a1,
-    #075985,
-    #0369a1,
-    #075985,
-    #0c4a6e,
-    #7dd3fc,
-  ),
-  berde: (
-    #0f6b3a,
-    #0a5229,
-    #0f6b3a,
-    #0d5a31,
-    #083f22,
-    #6fd99a,
-  ),
-  gorri: (
-    #c8102e,
-    #9e0c24,
-    #b00e28,
-    #9a0d24,
-    #730a1b,
-    #ff8a9a,
-  ),
-  granate: (
-    #7a1f3d,
-    #5c142c,
-    #7a1f3d,
-    #6a1a35,
-    #4a1024,
-    #f2a0b8,
-  ),
-  more: (
-    #5b2a86,
-    #43196a,
-    #5b2a86,
-    #4c2373,
-    #351651,
-    #c9a7f0,
-  ),
-  laranja: (
-    #c2410c,
-    #9a3412,
-    #b23a0b,
-    #9a3412,
-    #7c2d12,
-    #fdba74,
-  ),
-  beltz: (
-    #2a2421,
-    #0e0c0b,
-    #2a2421,
-    #2e2724,
-    #171311,
-    #e8ded6,
-  ),
-);
+:root {
+  --klub: var(--klub-l, #0b5cad);
+  --klub-sakon: var(--klub-sakon-l, #084a8c);
+  --klub-tinta: var(--klub-tinta-l, #0b5cad);
+  --sobre-klub: var(--sobre-klub-l, #ffffff);
+  --klub-2: var(--klub-2-l, #ffffff);
+}
 
-@each $izena, $c in $klubak {
-  [data-klub='#{$izena}'] {
-    --klub: #{list.nth($c, 1)};
-    --klub-sakon: #{list.nth($c, 2)};
-    --klub-tinta: #{list.nth($c, 3)};
+@mixin klub-oscuro {
+  --klub: var(--klub-d, #0a4c90);
+  --klub-sakon: var(--klub-sakon-d, #073a6f);
+  --klub-tinta: var(--klub-tinta-d, #7db6ff);
+  --sobre-klub: var(--sobre-klub-d, #ffffff);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema='claro']) {
+    @include klub-oscuro;
   }
+}
 
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-tema='claro'])[data-klub='#{$izena}'],
-    :root:not([data-tema='claro']) [data-klub='#{$izena}'] {
-      --klub: #{list.nth($c, 4)};
-      --klub-sakon: #{list.nth($c, 5)};
-      --klub-tinta: #{list.nth($c, 6)};
-    }
-  }
-
-  :root[data-tema='oscuro'][data-klub='#{$izena}'],
-  :root[data-tema='oscuro'] [data-klub='#{$izena}'] {
-    --klub: #{list.nth($c, 4)};
-    --klub-sakon: #{list.nth($c, 5)};
-    --klub-tinta: #{list.nth($c, 6)};
-  }
+:root[data-tema='oscuro'] {
+  @include klub-oscuro;
 }
 
 // Rayas de camiseta con el color del club (escudo, cinta de la tarjeta).
 @mixin rayas-klub($ancho: 8px, $angulo: 90deg) {
-  background: repeating-linear-gradient($angulo, var(--klub) 0 $ancho, #fff $ancho ($ancho * 2));
+  background: repeating-linear-gradient(
+    $angulo,
+    var(--klub) 0 $ancho,
+    var(--klub-2) $ancho ($ancho * 2)
+  );
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -528,7 +466,7 @@ button.fila {
 
 // Tu avatar va con el color del club: «este soy yo».
 .avatar--klub {
-  color: #fff;
+  color: var(--sobre-klub);
   background: linear-gradient(140deg, var(--klub), var(--klub-sakon));
 }
 
@@ -797,6 +735,8 @@ input[type='checkbox'] {
   overflow: auto;
   overscroll-behavior: contain;
   animation: hoja-entra 420ms var(--ease-hoja);
+  will-change: transform;
+  contain: layout paint;
 
   &::before {
     // Asa de la hoja.
@@ -973,33 +913,27 @@ input[type='checkbox'] {
   }
 }
 
-// --- Transiciones entre pantallas (View Transitions) ---------------------------------------
-
-::view-transition-old(root) {
-  animation: 160ms var(--ease-out) both pantalla-sale;
+// Con una hoja, diálogo o menú abierto, las animaciones de fondo (que no se ven) se
+// paran: el móvil dedica todo a la hoja. (CDK pone cdk-global-scrollblock en <html>
+// mientras hay una hoja abierta; es más barato que un :has sobre todo el documento.)
+.cdk-global-scrollblock :is(.pase, .estado)::before,
+.cdk-global-scrollblock .flotante::after {
+  animation-play-state: paused;
 }
 
-::view-transition-new(root) {
-  animation: 260ms var(--ease-out) both pantalla-entra;
-}
+// --- Entrada de cada pantalla -------------------------------------------------------------
+// La pantalla nueva aparece subiendo un poco. Es una animación CSS normal (no View
+// Transitions): no bloquea los toques mientras dura. Las barras no se mueven porque
+// viven fuera del router-outlet.
 
-@keyframes pantalla-sale {
-  to {
-    opacity: 0;
-  }
+router-outlet + * {
+  display: block;
+  animation: pantalla-entra 260ms var(--ease-out);
 }
 
 @keyframes pantalla-entra {
   from {
     opacity: 0;
     transform: translateY(6px);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
   }
 }
