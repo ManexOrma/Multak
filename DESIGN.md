@@ -318,7 +318,7 @@ El escudo del club al fondo, fijo y centrado (hasta 420px), en escala de grises 
 
 ### Escudo
 
-`app-escudo`: la foto del equipo, o si no hay, las rayas del club con un brillo de tela. Se usa en el botón del menú (una pastilla con las tres líneas y el escudo al lado, nunca encima), la barra lateral, el menú lateral, Mis equipos y Ajustes. Al pulsar, gira −8°.
+`app-escudo`: la foto del equipo, o si no hay, las rayas del club con un brillo de tela. Se usa en el botón del menú (las tres líneas en su propio círculo y el escudo suelto al lado), la barra lateral, el menú lateral, Mis equipos y Ajustes. Al pulsar, gira −8°.
 
 ### Tarjeta del árbitro (componente firma)
 
