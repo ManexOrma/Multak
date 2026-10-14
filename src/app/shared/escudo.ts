@@ -35,13 +35,13 @@ import { normalizarColores } from '../core/tema/klub';
       transition: transform 260ms var(--ease-muelle);
     }
 
-    // Brillo de tela arriba a la izquierda.
+    // Brillo de tela muy suave: los dos colores se tienen que ver tal cual.
     :host::after {
       content: '';
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: linear-gradient(150deg, rgb(255 255 255 / 0.28), transparent 55%);
+      background: linear-gradient(150deg, rgb(255 255 255 / 0.12), transparent 45%);
       pointer-events: none;
     }
 

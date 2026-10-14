@@ -93,6 +93,7 @@ export const eu: Diccionario = {
   'error.foto': 'Ezin izan da argazkia igo. Saiatu beste irudi batekin.',
 
   // --- Sartu ---
+  'login.email-ejemplo': 'izena@posta.eus',
   'login.lema': 'Taldeko multak, guztientzat argi.',
   'login.email': 'Zure emaila',
   'login.email-requerido': 'Idatzi zure emaila.',

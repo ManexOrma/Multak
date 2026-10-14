@@ -1,6 +1,6 @@
 <main class="login">
   <header class="cabeza">
-    <h1><app-marca /></h1>
+    <h1><app-marca [prioridad]="true" /></h1>
     <p class="lema">{{ t('login.lema') }}</p>
   </header>
 
@@ -16,7 +16,7 @@
           autocapitalize="off"
           spellcheck="false"
           enterkeyhint="send"
-          placeholder="nombre@correo.com"
+          [placeholder]="t('login.email-ejemplo')"
           [formField]="emailForm.email"
           [attr.aria-invalid]="emailForm.email().touched() && emailForm.email().invalid()"
           aria-describedby="login-email-ayuda login-email-error"

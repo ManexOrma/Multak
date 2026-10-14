@@ -906,6 +906,21 @@ input[type='checkbox'] {
   }
 }
 
+// Icono de la marca: beige en claro, negro en oscuro (según el tema elegido).
+.marca-oscuro {
+  display: none;
+
+  @include en-oscuro {
+    display: block;
+  }
+}
+
+.marca-claro {
+  @include en-oscuro {
+    display: none;
+  }
+}
+
 // Solo en el móvil (en pantallas anchas lo hace la barra lateral).
 @media (min-width: 768px) {
   .solo-movil {

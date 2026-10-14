@@ -1,10 +1,30 @@
+import { NgOptimizedImage } from '@angular/common';
 import { Component, input } from '@angular/core';
 
-/** Logotipo de Multak: la tarjeta amarilla y el nombre. */
+/**
+ * Logotipo de Multak: el icono de la app y el nombre. El icono beige va en el tema
+ * claro y el negro en el oscuro (lo decide styles.scss, que sabe el tema elegido).
+ */
 @Component({
   selector: 'app-marca',
+  imports: [NgOptimizedImage],
   template: `
-    <span class="tarjeta" aria-hidden="true"></span>
+    <img
+      class="icono-marca marca-claro"
+      ngSrc="icons/marca-claro.png"
+      alt=""
+      [width]="tamano()"
+      [height]="tamano()"
+      [priority]="prioridad()"
+    />
+    <img
+      class="icono-marca marca-oscuro"
+      ngSrc="icons/marca-oscuro.png"
+      alt=""
+      [width]="tamano()"
+      [height]="tamano()"
+      [priority]="prioridad()"
+    />
     @if (conNombre()) {
       <span class="nombre">Multak</span>
     }
@@ -13,18 +33,14 @@ import { Component, input } from '@angular/core';
     :host {
       display: inline-flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .tarjeta {
-      width: 30px;
-      height: 40px;
-      border-radius: 6px;
-      background: var(--amarillo);
+    .icono-marca {
+      border-radius: 22%;
       box-shadow:
-        0 6px 14px rgb(0 0 0 / 0.16),
+        0 6px 14px rgb(0 0 0 / 0.14),
         0 1px 2px rgb(0 0 0 / 0.1);
-      rotate: -9deg;
     }
 
     .nombre {
@@ -37,4 +53,7 @@ import { Component, input } from '@angular/core';
 })
 export class Marca {
   readonly conNombre = input(true);
+  readonly tamano = input(44);
+  /** En la pantalla de login es lo más grande: se carga con prioridad. */
+  readonly prioridad = input(false);
 }

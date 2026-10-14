@@ -7,13 +7,16 @@
   isolation: isolate;
   overflow: hidden;
   margin: 0 0 14px;
-  padding: 10px 10px 16px;
+  padding: 10px 10px 30px;
   border-radius: 28px;
   color: var(--sobre-klub);
   background:
     radial-gradient(circle at 92% -10%, rgb(255 255 255 / 0.3), transparent 46%),
     linear-gradient(140deg, var(--klub) 0%, var(--klub-sakon) 100%);
-  box-shadow: 0 16px 34px color-mix(in srgb, var(--klub) 34%, transparent);
+  // Ribete del segundo color abajo, macizo, como el bajo de la camiseta.
+  box-shadow:
+    inset 0 -14px 0 var(--klub-2),
+    0 16px 34px color-mix(in srgb, var(--klub) 34%, transparent);
   transform: perspective(900px) rotateX(var(--inclina-x, 0deg)) rotateY(var(--inclina-y, 0deg));
   transition: transform 500ms var(--ease-muelle);
   animation: pase-entra 620ms var(--ease-muelle) both;

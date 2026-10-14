@@ -3,7 +3,7 @@ import { exigir } from './mensaje-error';
 import { SupabaseService } from './supabase.service';
 
 const BUCKET = 'equipos';
-const LADO = 512;
+const LADO = 1080; // nítida a todo lo ancho en la portada (pantallas 3x)
 const VALIDEZ_S = 60 * 60;
 
 const ruta = (equipoId: string) => `${equipoId}/foto.jpg`;
@@ -30,7 +30,7 @@ export class FotosService {
     return url ?? null;
   }
 
-  /** Reduce la imagen a 512×512 (recorte centrado, JPEG) y la sube. Devuelve la nueva versión. */
+  /** Reduce la imagen a 1080×1080 (recorte centrado, JPEG) y la sube. Devuelve la nueva versión. */
   async subir(equipoId: string, archivo: File, versionActual: number | null): Promise<number> {
     const imagen = await reducir(archivo);
     exigir(
@@ -94,7 +94,7 @@ async function reducir(archivo: File): Promise<Blob> {
     lienzo.toBlob(
       (blob) => (blob ? resolver(blob) : rechazar(new Error('toBlob'))),
       'image/jpeg',
-      0.85,
+      0.82,
     ),
   );
 }

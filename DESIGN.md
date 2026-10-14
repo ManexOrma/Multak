@@ -297,9 +297,19 @@ Avatares redondos; chips y el botón flotante, en pastilla.
 
 ## Components
 
+### Portada (Inicio)
+
+La foto del club a todo lo ancho, por debajo de la barra (que flota transparente hasta que se pliega), con esquinas inferiores de 32px y el nombre del equipo en 38px/800 abajo a la izquierda (`app-cabecera` con `portada`).
+
+- **Con foto:** velo oscuro arriba y abajo para que se lean el nombre (blanco con sombra suave) y el botón del menú. Al entrar, la foto se acerca un poco; al hacer scroll, se queda atrás (paralaje con `animation-timeline: scroll()` donde existe).
+- **Sin foto:** degradado del club con rayas anchas del segundo color a la derecha, que se desvanecen hacia el nombre.
+- **Tablet y PC:** tarjeta de 260px con todas las esquinas redondeadas.
+- **Resolución:** la foto se sube recortada a 1080×1080 (JPEG al 82 %) para que se vea nítida en pantallas 3x.
+
 ### Pase de temporada (Inicio)
 
-- **Fondo:** degradado del club, brillo radial arriba a la derecha y rayas que se mecen despacio (9s, ida y vuelta).
+- **Fondo:** degradado del club, brillo radial arriba a la derecha y rayas del segundo color (al 12 %) que se mecen despacio (9s, ida y vuelta).
+- **Ribete:** abajo, una franja maciza de 14px del segundo color, como el bajo de la camiseta, para que los dos colores se vean siempre.
 - **Contenido:**
   - una pastilla con el estado («Zor duzu / Debes» en rojo, o «No debes nada» en verde) y un punto que late;
   - la cifra grande (o «Al día»);

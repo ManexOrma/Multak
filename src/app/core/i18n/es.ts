@@ -92,6 +92,7 @@ export const es = {
   'error.foto': 'No se ha podido subir la foto. Prueba con otra imagen.',
 
   // --- Login ---
+  'login.email-ejemplo': 'nombre@correo.com',
   'login.lema': 'Las multas del equipo, claras para todos.',
   'login.email': 'Tu email',
   'login.email-requerido': 'Escribe tu email.',

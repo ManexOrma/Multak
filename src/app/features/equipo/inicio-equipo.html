@@ -1,6 +1,6 @@
 <main class="pagina">
-  <app-cabecera [titulo]="titulo()">
-    <app-boton-menu junto-titulo class="solo-movil" [tamano]="36" />
+  <app-cabecera [titulo]="titulo()" [portada]="true" [fotoPortada]="foto()">
+    <app-boton-menu inicio class="solo-movil" />
   </app-cabecera>
 
   @if (equipo.cargado()) {

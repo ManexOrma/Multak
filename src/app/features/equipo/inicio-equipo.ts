@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { I18n } from '../../core/i18n/i18n.service';
+import { FotosService } from '../../core/supabase/fotos.service';
 import { Avatar } from '../../shared/avatar';
 import { Cabecera } from '../../shared/cabecera';
 import { CifraAnimada } from '../../shared/cifra-animada';
@@ -34,6 +35,11 @@ export class InicioEquipo {
   protected readonly i18n = inject(I18n);
   protected readonly t = this.i18n.t;
 
+  private readonly fotos = inject(FotosService);
+  protected readonly foto = computed(() => {
+    const ficha = this.equipo.miFicha();
+    return ficha ? this.fotos.url(ficha.equipo_id, ficha.foto_version) : null;
+  });
   protected readonly titulo = computed(
     () => this.equipo.miFicha()?.equipo_nombre ?? this.t('titulo.equipo'),
   );
