@@ -1,0 +1,105 @@
+<main class="pagina">
+  <app-cabecera [titulo]="titulo()" atras="/equipos" atrasTexto="Equipos" [atrasSoloMovil]="true" />
+
+  @if (equipo.cargado()) {
+    <div class="columnas">
+      <div class="columna">
+        <section class="lo-mio" aria-labelledby="lo-mio-titulo">
+          <h2 id="lo-mio-titulo" class="solo-lector">Lo tuyo</h2>
+          @if ((yo()?.saldo_centimos ?? 0) > 0) {
+            <p class="cifra-grande cifra debe">{{ yo()?.saldo_centimos | euros }}</p>
+            <p class="explicacion">
+              {{ equipo.miFicha()?.mi_nombre }}, debes
+              {{ multasPendientes() === 1 ? 'una multa' : multasPendientes() + ' multas' }}. Paga
+              por Bizum o en efectivo y que el tesorero lo apunte.
+            </p>
+          } @else {
+            <p class="cifra-grande al-dia">Al día</p>
+            <p class="explicacion">
+              {{ equipo.miFicha()?.mi_nombre }}, no debes nada. Así da gusto.
+            </p>
+          }
+        </section>
+
+        <ul class="lista">
+          <li>
+            <a class="fila" routerLink="gastos">
+              <span class="icono-fila"><app-icono nombre="euro" /></span>
+              <span class="fila-texto">
+                <span>Bote</span>
+                <span class="fila-detalle">
+                  Faltan por cobrar {{ equipo.resumen()?.pendiente_cobro_centimos ?? 0 | euros }}
+                </span>
+              </span>
+              <span class="fila-valor bote">{{
+                equipo.resumen()?.bote_centimos ?? 0 | euros
+              }}</span>
+              <app-icono class="chevron" nombre="chevron-derecha" [grosor]="2.5" />
+            </a>
+          </li>
+        </ul>
+
+        <section class="seccion" aria-labelledby="saldos-titulo">
+          <h2 id="saldos-titulo">Saldos</h2>
+          <ul class="lista lista--avatares">
+            @for (saldo of equipo.saldos(); track saldo.miembro_id) {
+              <li>
+                <a
+                  class="fila"
+                  [class.recien-multado]="saldo.miembro_id === equipo.ultimoMultado()"
+                  [routerLink]="['jugador', saldo.miembro_id]"
+                >
+                  <app-avatar [nombre]="saldo.nombre ?? ''" [semilla]="saldo.miembro_id" />
+                  <span class="fila-texto">
+                    <span>
+                      {{ saldo.nombre }}
+                      @if (saldo.miembro_id === equipo.miFicha()?.miembro_id) {
+                        <span class="texto-suave">(tú)</span>
+                      }
+                    </span>
+                    @if (!saldo.activo) {
+                      <span class="fila-detalle">Desactivado</span>
+                    } @else if (!saldo.usuario_id) {
+                      <span class="fila-detalle">Sin cuenta</span>
+                    }
+                  </span>
+                  @if ((saldo.saldo_centimos ?? 0) > 0) {
+                    <span class="fila-valor debe">{{ saldo.saldo_centimos | euros }}</span>
+                  } @else {
+                    <span class="fila-valor al-dia">Al día</span>
+                  }
+                  <app-icono class="chevron" nombre="chevron-derecha" [grosor]="2.5" />
+                </a>
+              </li>
+            }
+          </ul>
+        </section>
+      </div>
+
+      <section class="columna seccion ultimas" aria-labelledby="ultimas-titulo">
+        <h2 id="ultimas-titulo">Últimas multas</h2>
+        @if (ultimas().length === 0) {
+          <p class="estado-vacio">
+            Aún no hay multas.
+            @if (equipo.puedeGestionar()) {
+              Pon la primera con el botón amarillo.
+            } @else {
+              Ni una. Qué equipo más formal.
+            }
+          </p>
+        } @else {
+          <ul class="lista lista--avatares">
+            @for (multa of ultimas(); track multa.id) {
+              <li><app-fila-multa [multa]="multa" /></li>
+            }
+          </ul>
+          @if (hayMas()) {
+            <a class="ver-todas boton-enlace" routerLink="multas">Ver todas las multas</a>
+          }
+        }
+      </section>
+    </div>
+  } @else {
+    <p class="nota" role="status">Cargando el equipo…</p>
+  }
+</main>

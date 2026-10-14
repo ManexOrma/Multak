@@ -1,0 +1,131 @@
+{
+  "title": "Multak · Elige el mundo visual",
+  "question": "La tirada ha asignado «Álbum de cromos». Quédatela, elige una alternativa o vuelve a tirar.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Álbum de cromos",
+      "kicker": "THE ROLL",
+      "lineage": "Álbumes de cromos de la Liga (años 70-80), versión adulta y sobria",
+      "thesis": "Cada jugador es un cromo con su saldo; el equipo es la página del álbum.",
+      "palette": ["#13213C", "#F4F2EC", "#D7392B", "#1E8A57", "#C9A13B"],
+      "materials": ["cartulina mate de álbum", "tinta plana a dos colores", "un solo brillo: el bote"],
+      "viewport": "Arriba tu cromo grande (debes 1,50 € o «al día») junto al bote como cromo brillante; debajo la plantilla en rejilla de cromos con su saldo; «Poner multa» fijo abajo.",
+      "risk": "Si se ilustra de más, cae en lo infantil o el disfraz de fútbol: los cromos son tipografía y color, sin dibujos.",
+      "raised": [
+        { "from": "challenger-lexicon", "raise": "Corrección tachada: anular tacha y deja ver lo anulado; nunca borra." },
+        { "from": "challenger-streaming", "raise": "En «Poner multa», el cromo elegido se eleva y el resto de la plantilla se atenúa." },
+        { "from": "challenger-timetable", "raise": "En las listas de saldos el rango lo dan peso y caja, no el tamaño." },
+        { "from": "challenger-exposure", "raise": "Todas las cifras en números tabulares alineados a la derecha." },
+        { "from": "challenger-zoo", "raise": "Color plano sin degradados; el único brillo es el del bote." },
+        { "from": "challenger-monochrome", "raise": "Cada cifra lleva su desglose a un toque." }
+      ],
+      "html": ".impeccable/mocks/decision/assigned.html",
+      "htmlFrame": "390x844"
+    },
+    {
+      "id": "model-pick",
+      "label": "Acta del partido",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "Actas arbitrales de la federación: casillas, tinta azul y sello",
+      "thesis": "Lo que consta en acta no se discute: multas como incidencias con sello.",
+      "palette": ["#FBFBF7", "#1B2A6B", "#C8312A", "#0F1115"],
+      "materials": ["impreso con casillas", "tinta azul de bolígrafo", "sello de goma"],
+      "viewport": "Cabecera del acta con equipo y fecha; casillas «Lo tuyo» y «Bote»; tabla de plantilla con nº, nombre y saldo; «Incidencias» recientes.",
+      "risk": "Es la dirección más previsible para este brief y puede sentirse burocrática si las casillas pesan.",
+      "html": ".impeccable/mocks/decision/model-pick.html",
+      "htmlFrame": "390x844"
+    },
+    {
+      "id": "challenger-timetable",
+      "label": "Horario en placas de cristal",
+      "verdict": "declined",
+      "lineage": "Horarios de bolsillo de aerolínea (1971)",
+      "thesis": "Un solo tamaño de letra; el rango lo dan peso, caja y filetes.",
+      "palette": ["#E2A93B", "#2F3B45", "#F3EEDC", "#D9432B", "#1F6B4A"],
+      "materials": ["cristal tintado", "mesa de luz"],
+      "viewport": "Una fila continua de placas inclinadas que se recorre en lateral.",
+      "case": "Nadie del vestuario se reconoce en un horario de aerolínea.",
+      "risk": "Inclinar contenedores estorba la lectura rápida en el móvil.",
+      "kept": "Rango por peso y caja en las listas de saldos."
+    },
+    {
+      "id": "challenger-streaming",
+      "label": "Muro de streaming",
+      "verdict": "declined",
+      "lineage": "Catálogos de plataformas de vídeo",
+      "thesis": "Filas de pósters; el elegido crece y el resto se apaga.",
+      "palette": ["#0E0F12", "#E50914", "#FFFFFF"],
+      "materials": ["pósters a sangre", "fondo oscuro"],
+      "viewport": "Filas horizontales de fichas de jugadores.",
+      "case": "Las filas horizontales esconden saldos que todos deben ver de un vistazo.",
+      "risk": "Parece un catálogo de ocio, no unas cuentas claras.",
+      "kept": "El cromo elegido se eleva y el resto se atenúa al poner multa."
+    },
+    {
+      "id": "challenger-monochrome",
+      "label": "Producto monocromo",
+      "verdict": "declined",
+      "lineage": "Webs de producto SaaS en escala de grises",
+      "thesis": "Casi sin color; cada afirmación con su prueba.",
+      "palette": ["#FAFAFA", "#111111", "#5B5BD6"],
+      "materials": ["escala neutra", "capturas enmarcadas"],
+      "viewport": "Afirmación y prueba alternadas.",
+      "case": "Es justo el «demasiado minimalista» que quieres evitar.",
+      "risk": "Indistinguible de cualquier app.",
+      "kept": "Cada cifra lleva su desglose a un toque."
+    },
+    {
+      "id": "challenger-zoo",
+      "label": "Mapa de zoo",
+      "verdict": "declined",
+      "lineage": "Mapas-guía de parques y zoos",
+      "thesis": "Lóbulos de color plano que dividen la pantalla.",
+      "palette": ["#8ED462", "#F5F1E4", "#FF705D", "#2BA0FF"],
+      "materials": ["color plano", "costas en SVG"],
+      "viewport": "Un lóbulo de color domina cada pantalla.",
+      "case": "Cae de lleno en lo infantil.",
+      "risk": "Juguetón donde hay dinero de por medio.",
+      "kept": "Color plano y comprometido, sin degradados."
+    },
+    {
+      "id": "challenger-lexicon",
+      "label": "Página de diccionario",
+      "verdict": "declined",
+      "lineage": "Léxicos del siglo XIX",
+      "thesis": "Texto negro a medida fija; el color solo en láminas.",
+      "palette": ["#14110E", "#F2EAD8", "#C8372D", "#2C5FA8"],
+      "materials": ["papel crema", "láminas cromolitografiadas"],
+      "viewport": "Columna de entradas con palabras guía arriba.",
+      "case": "Demasiado de lectura para un vistazo en el bar.",
+      "risk": "Académico y lento.",
+      "kept": "Anular tacha y sustituye: la corrección se ve, nunca se borra."
+    },
+    {
+      "id": "challenger-exposure",
+      "label": "Ficha de positivado",
+      "verdict": "declined",
+      "lineage": "Fichas de exposición de laboratorio fotográfico",
+      "thesis": "Hojas translúcidas con densidades y cifras tabulares.",
+      "palette": ["#1A1A1A", "#BFBFBF", "#E040A0"],
+      "materials": ["papel vegetal", "rampa de zonas"],
+      "viewport": "Hojas superpuestas sobre una rampa de grises.",
+      "case": "Ajeno al vestuario y difícil de leer con prisa.",
+      "risk": "Técnico y frío.",
+      "kept": "Cifras tabulares alineadas en todas partes."
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "canon": true,
+  "canonCard": {
+    "label": "El estándar de la categoría",
+    "thesis": "Una app de cuentas compartidas limpia, bien hecha y sin sorpresas.",
+    "palette": ["#FFFFFF", "#111827", "#2563EB", "#16A34A"],
+    "materials": ["tarjetas blancas", "fuente del sistema"],
+    "viewport": "Resumen con saldo y bote en tarjetas, lista de miembros y botón azul flotante.",
+    "risk": "Se parece a cualquier app; justo lo que pediste evitar.",
+    "html": ".impeccable/mocks/decision/canon.html",
+    "htmlFrame": "390x844"
+  },
+  "steer": true
+}

@@ -11,7 +11,9 @@ import { Router } from '@angular/router';
       <label for="unirse-codigo">Código de invitación</label>
       <input
         id="unirse-codigo"
-        class="codigo"
+        class="codigo cifra"
+        placeholder="VESTUAR2"
+        enterkeyhint="go"
         autocomplete="off"
         autocapitalize="characters"
         spellcheck="false"
@@ -19,23 +21,26 @@ import { Router } from '@angular/router';
         [attr.aria-invalid]="formulario.codigo().touched() && formulario.codigo().invalid()"
         aria-describedby="unirse-codigo-ayuda unirse-codigo-error"
       />
-      <p id="unirse-codigo-ayuda" class="texto-suave">Son 8 letras y números, p. ej. VESTUAR2.</p>
       <p id="unirse-codigo-error" class="error-campo">
         @if (formulario.codigo().touched() && formulario.codigo().invalid()) {
           {{ formulario.codigo().errors()[0].message }}
         }
       </p>
       <button type="submit" class="boton boton-secundario">Unirme</button>
+      <p id="unirse-codigo-ayuda" class="pie-grupo">
+        Son 8 letras y números. Si tienes el enlace, ábrelo y listo.
+      </p>
     </form>
   `,
   styles: `
     .codigo {
       text-transform: uppercase;
       letter-spacing: 0.2em;
+      font-weight: 600;
     }
 
-    .texto-suave {
-      margin: 0;
+    .pie-grupo {
+      margin-top: 2px;
     }
   `,
 })

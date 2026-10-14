@@ -1,23 +1,44 @@
 .privacidad {
   max-width: 40rem;
   margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
+  padding: calc(16px + var(--seguro-arriba)) 20px calc(48px + var(--seguro-abajo));
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.volver {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
 }
 
 h1 {
-  margin: 0.5rem 0 0;
+  margin-top: 8px;
+  font-size: 34px;
+  line-height: 41px;
+  font-weight: 700;
+  letter-spacing: -0.022em;
 }
 
 h2 {
-  margin: 2rem 0 0.5rem;
-  font-size: 1.25rem;
+  margin: 32px 0 8px;
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+p,
+ul {
+  margin: 0 0 12px;
+}
+
+li + li {
+  margin-top: 6px;
 }
 
 .actualizada {
-  margin-top: 0.25rem;
-  opacity: 0.8;
-}
-
-a {
-  color: inherit;
+  margin-top: 4px;
+  font-size: 15px;
+  color: var(--texto-2);
 }

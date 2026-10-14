@@ -1,0 +1,170 @@
+// Móvil: contenido + botón «Poner multa» flotante + pestañas translúcidas abajo.
+.contenido {
+  min-height: 100dvh;
+  padding-bottom: calc(56px + var(--seguro-abajo));
+}
+
+.con-accion .contenido {
+  padding-bottom: calc(56px + 72px + var(--seguro-abajo));
+}
+
+.lateral {
+  display: none;
+}
+
+.pestanas {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 30;
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 8px calc(4px + var(--seguro-abajo));
+  background: var(--barra);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 -0.5px 0 var(--separador);
+
+  a {
+    flex: 1;
+    max-width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-height: 46px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--texto-2);
+    transition: color 140ms var(--ease-out);
+
+    app-icono {
+      width: 26px;
+      height: 26px;
+    }
+
+    &.activa {
+      color: var(--texto);
+    }
+
+    &:active app-icono {
+      transform: scale(0.92);
+    }
+  }
+}
+
+.flotante {
+  position: fixed;
+  left: 50%;
+  bottom: calc(64px + var(--seguro-abajo));
+  z-index: 25;
+  min-height: 52px;
+  padding: 0 26px 0 22px;
+  border-radius: 26px;
+  font-size: 17px;
+  box-shadow:
+    0 6px 20px rgb(0 0 0 / 0.18),
+    0 1px 3px rgb(0 0 0 / 0.12);
+  translate: -50% 0;
+
+  app-icono {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+// Tablet, portátil y PC: barra lateral como en iPadOS.
+@media (min-width: 768px) {
+  .shell {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+
+  .lateral {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    height: 100dvh;
+    padding: calc(16px + var(--seguro-arriba)) 12px 24px;
+    background: var(--celda);
+    box-shadow: 0.5px 0 0 var(--separador);
+    overflow-y: auto;
+
+    ul {
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: 10px;
+      color: var(--texto);
+      transition: background-color 120ms var(--ease-out);
+
+      app-icono {
+        width: 22px;
+        height: 22px;
+        color: var(--texto-2);
+      }
+
+      &.activa {
+        background: var(--relleno);
+        font-weight: 600;
+
+        app-icono {
+          color: var(--texto);
+        }
+      }
+    }
+  }
+
+  .volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    min-height: 44px;
+    margin-left: -4px;
+    color: var(--tinte);
+
+    app-icono {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .nombre-equipo {
+    margin: 4px 12px 16px;
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 700;
+    letter-spacing: -0.017em;
+    overflow-wrap: anywhere;
+  }
+
+  .poner {
+    margin: 0 4px;
+  }
+
+  .contenido,
+  .con-accion .contenido {
+    padding-bottom: 0;
+  }
+
+  .flotante,
+  .pestanas {
+    display: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lateral li a:not(.activa):hover {
+    background: color-mix(in srgb, var(--relleno) 60%, transparent);
+  }
+}

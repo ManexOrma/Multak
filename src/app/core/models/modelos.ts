@@ -3,6 +3,7 @@ import { Database, Enums, Tables } from './database.types';
 type Funciones = Database['public']['Functions'];
 
 export type Rol = Enums<'rol_miembro'>;
+export type MetodoPago = Enums<'metodo_pago'>;
 export type Equipo = Tables<'equipos'>;
 export type Miembro = Tables<'miembros'>;
 export type TipoMulta = Tables<'tipos_multa'>;
@@ -16,4 +17,10 @@ export const NOMBRE_ROL: Record<Rol, string> = {
   admin: 'Admin',
   tesorero: 'Tesorero',
   jugador: 'Jugador',
+};
+
+export const NOMBRE_METODO: Record<MetodoPago, string> = {
+  bizum: 'Bizum',
+  efectivo: 'Efectivo',
+  otro: 'Otro',
 };

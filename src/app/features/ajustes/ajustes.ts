@@ -1,6 +1,7 @@
 import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { mensajeError } from '../../core/supabase/mensaje-error';
+import { Cabecera } from '../../shared/cabecera';
 import { EquiposService } from '../equipos/equipos.service';
 import { AjustesService } from './ajustes.service';
 import { Catalogo } from './catalogo';
@@ -12,14 +13,11 @@ import { Solicitudes } from './solicitudes';
 /** /e/:equipoId/ajustes — admin: todo; tesorero: solo el catálogo. */
 @Component({
   selector: 'app-ajustes',
-  imports: [RouterLink, Invitacion, Solicitudes, Miembros, Catalogo, DatosEquipo],
+  imports: [Cabecera, Invitacion, Solicitudes, Miembros, Catalogo, DatosEquipo],
   providers: [AjustesService],
   template: `
     <main class="pagina">
-      <p>
-        <a [routerLink]="['/e', equipoId()]">‹ {{ ajustes.equipo()?.nombre ?? 'Volver' }}</a>
-      </p>
-      <h1>Ajustes</h1>
+      <app-cabecera titulo="Ajustes" />
 
       @if (error()) {
         <p class="error" role="alert">{{ error() }}</p>
@@ -35,7 +33,7 @@ import { Solicitudes } from './solicitudes';
           <app-datos-equipo />
         }
       } @else {
-        <p role="status">Cargando…</p>
+        <p class="nota" role="status">Cargando…</p>
       }
     </main>
   `,

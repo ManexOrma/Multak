@@ -5,53 +5,49 @@ import { Miembro, NOMBRE_ROL } from '../../core/models/modelos';
 import { mensajeError } from '../../core/supabase/mensaje-error';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { DialogosService } from '../../shared/dialogos/dialogos.service';
+import { Avatar } from '../../shared/avatar';
+import { Icono } from '../../shared/icono';
 import { AjustesService } from './ajustes.service';
 import { DatosMiembroDialogo, MiembroDialogo } from './miembro-dialogo';
 
 @Component({
   selector: 'app-miembros',
-  imports: [FormRoot, FormField],
+  imports: [FormRoot, FormField, Avatar, Icono],
   template: `
     <section class="seccion" aria-labelledby="titulo-miembros">
       <h2 id="titulo-miembros">Miembros</h2>
 
-      <ul class="lista">
+      <ul class="lista lista--avatares">
         @for (miembro of ajustes.fichas(); track miembro.id) {
           <li>
             <button type="button" class="fila" (click)="gestionar(miembro)">
-              <span>
-                <strong>{{ miembro.nombre }}</strong>
-                @if (miembro.usuario_id === yoId) {
-                  (tú)
-                }
+              <app-avatar [nombre]="miembro.nombre" [semilla]="miembro.id" />
+              <span class="fila-texto" [class.inactivo]="!miembro.activo">
+                <span>
+                  {{ miembro.nombre }}
+                  @if (miembro.usuario_id === yoId) {
+                    <span class="texto-suave">(tú)</span>
+                  }
+                </span>
+                <span class="fila-detalle">{{ detalle(miembro) }}</span>
               </span>
-              <span class="etiquetas">
-                @if (miembro.rol !== 'jugador') {
-                  <span class="etiqueta">{{ nombreRol[miembro.rol] }}</span>
-                }
-                @if (!miembro.usuario_id) {
-                  <span class="etiqueta">Sin cuenta</span>
-                }
-                @if (!miembro.activo) {
-                  <span class="etiqueta">Desactivado</span>
-                }
-                <span aria-hidden="true">›</span>
-              </span>
+              @if (miembro.rol !== 'jugador') {
+                <span class="etiqueta">{{ nombreRol[miembro.rol] }}</span>
+              }
+              <app-icono class="chevron" nombre="chevron-derecha" [grosor]="2.5" />
             </button>
           </li>
         }
       </ul>
 
-      <form [formRoot]="formulario" class="pila alta">
+      <form [formRoot]="formulario" class="alta">
         <label for="alta-nombre">Añadir jugador sin cuenta</label>
-        <p id="alta-ayuda" class="texto-suave">
-          Para poder multarle aunque aún no use la app. Con el enlace podrá reclamar su ficha.
-        </p>
         <div class="en-linea">
           <input
             id="alta-nombre"
             autocomplete="off"
             placeholder="Nombre"
+            enterkeyhint="done"
             [formField]="formulario.nombre"
             [attr.aria-invalid]="formulario.nombre().touched() && formulario.nombre().invalid()"
             aria-describedby="alta-ayuda alta-error"
@@ -61,6 +57,7 @@ import { DatosMiembroDialogo, MiembroDialogo } from './miembro-dialogo';
             class="boton boton-secundario"
             [disabled]="formulario().submitting()"
           >
+            <app-icono nombre="persona-mas" />
             Añadir
           </button>
         </div>
@@ -69,35 +66,36 @@ import { DatosMiembroDialogo, MiembroDialogo } from './miembro-dialogo';
             {{ formulario.nombre().errors()[0].message }}
           }
         </p>
+        <p id="alta-ayuda" class="pie-grupo">
+          Para poder multarle aunque aún no use la app. Con el enlace podrá reclamar su ficha.
+        </p>
       </form>
       <p class="error" role="alert">{{ error() }}</p>
     </section>
   `,
   styles: `
-    .etiquetas {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 0.375rem;
+    .inactivo > :first-child {
+      color: var(--texto-2);
     }
 
     .alta {
-      margin-top: 1.5rem;
-    }
-
-    .alta .texto-suave {
-      margin: 0 0 0.25rem;
+      display: grid;
+      gap: 6px;
+      margin-top: 20px;
     }
 
     .en-linea {
       display: flex;
-      gap: 0.5rem;
+      gap: 8px;
 
       input {
         flex: 1;
         min-width: 0;
       }
+    }
+
+    .pie-grupo {
+      margin-top: 0;
     }
   `,
 })
@@ -121,8 +119,13 @@ export class Miembros {
     { submission: { action: () => this.alta() } },
   );
 
+  protected detalle(miembro: Miembro): string {
+    if (!miembro.activo) return 'Desactivado';
+    return miembro.usuario_id ? 'Con cuenta' : 'Sin cuenta: aún no ha reclamado su ficha';
+  }
+
   protected gestionar(miembro: Miembro): void {
-    void this.dialogos.abrir<void, DatosMiembroDialogo>(
+    void this.dialogos.abrirHoja<void, DatosMiembroDialogo>(
       MiembroDialogo,
       { miembro, esYo: miembro.usuario_id === this.yoId },
       'miembro-dialogo-titulo',

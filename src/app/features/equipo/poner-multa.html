@@ -1,0 +1,146 @@
+<div class="hoja-cabecera">
+  @if (puedeVolver()) {
+    <button type="button" class="boton-enlace" (click)="volver()">
+      <app-icono nombre="chevron-izquierda" [grosor]="2.5" />
+      Atrás
+    </button>
+  } @else {
+    <span></span>
+  }
+  <h2 id="poner-multa-titulo">Poner multa</h2>
+  <button type="button" class="boton-enlace" (click)="cancelar()">Cancelar</button>
+</div>
+
+@switch (paso()) {
+  @case ('jugador') {
+    <p class="paso" data-paso tabindex="-1">¿A quién?</p>
+    @if (equipo.multables().length === 0) {
+      <p class="estado-vacio">Aún no hay nadie en el equipo. Añade jugadores en Ajustes.</p>
+    } @else {
+      <ul class="jugadores">
+        @for (miembro of equipo.multables(); track miembro.miembro_id) {
+          <li>
+            <button type="button" class="jugador" (click)="elegirJugador(miembro)">
+              <app-avatar
+                [nombre]="miembro.nombre ?? ''"
+                [semilla]="miembro.miembro_id"
+                [tamano]="52"
+              />
+              <span class="nombre">{{ miembro.nombre }}</span>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  }
+
+  @case ('tipo') {
+    @if (jugador(); as j) {
+      <p class="paso" data-paso tabindex="-1">
+        <app-avatar [nombre]="j.nombre ?? ''" [semilla]="j.miembro_id" [tamano]="28" />
+        ¿Por qué a {{ j.nombre }}?
+      </p>
+    }
+    <ul class="lista">
+      @for (tipo of equipo.tipos(); track tipo.id) {
+        <li>
+          <button type="button" class="fila" (click)="elegirTipo(tipo)">
+            <span class="fila-texto">{{ tipo.nombre }}</span>
+            <span class="fila-valor">{{ tipo.importe_centimos | euros }}</span>
+          </button>
+        </li>
+      }
+      <li>
+        <button type="button" class="fila libre" (click)="otraMulta()">
+          <app-icono nombre="mas" />
+          <span class="fila-texto">Otra multa (escribe motivo e importe)</span>
+        </button>
+      </li>
+    </ul>
+    @if (equipo.tipos().length === 0) {
+      <p class="pie-grupo">
+        El catálogo está vacío: puedes poner una multa libre o crear tipos en Ajustes.
+      </p>
+    }
+  }
+
+  @case ('libre') {
+    <p class="paso" data-paso tabindex="-1">Otra multa a {{ jugador()?.nombre }}</p>
+    <form [formRoot]="libreForm" class="pila">
+      <label for="libre-concepto">Motivo</label>
+      <input
+        id="libre-concepto"
+        autocomplete="off"
+        placeholder="p. ej. Perder las llaves del vestuario"
+        enterkeyhint="next"
+        [formField]="libreForm.concepto"
+        [attr.aria-invalid]="libreForm.concepto().touched() && libreForm.concepto().invalid()"
+        aria-describedby="libre-concepto-error"
+      />
+      <p id="libre-concepto-error" class="error-campo">
+        @if (libreForm.concepto().touched() && libreForm.concepto().invalid()) {
+          {{ libreForm.concepto().errors()[0].message }}
+        }
+      </p>
+      <label for="libre-importe">Importe (€)</label>
+      <input
+        id="libre-importe"
+        inputmode="decimal"
+        autocomplete="off"
+        placeholder="2,50"
+        enterkeyhint="done"
+        [formField]="libreForm.importe"
+        [attr.aria-invalid]="libreForm.importe().touched() && libreForm.importe().invalid()"
+        aria-describedby="libre-importe-error"
+      />
+      <p id="libre-importe-error" class="error-campo">
+        @if (libreForm.importe().touched() && libreForm.importe().invalid()) {
+          {{ libreForm.importe().errors()[0].message }}
+        }
+      </p>
+      <button type="submit" class="boton boton-principal">Continuar</button>
+    </form>
+  }
+
+  @case ('confirmar') {
+    @if (jugador(); as j) {
+      @if (motivo(); as m) {
+        <div class="escenario">
+          <article
+            #tarjeta
+            class="tarjeta-multa"
+            data-paso
+            tabindex="-1"
+            aria-label="Multa a {{ j.nombre }}: {{ m.concepto }}, {{ m.importeCentimos | euros }}"
+          >
+            <div class="tarjeta-quien">
+              <app-avatar [nombre]="j.nombre ?? ''" [semilla]="j.miembro_id" [tamano]="32" />
+              <span>{{ j.nombre }}</span>
+            </div>
+            <p class="tarjeta-motivo">{{ m.concepto }}</p>
+            <p class="tarjeta-importe cifra">{{ m.importeCentimos | euros }}</p>
+            <p class="tarjeta-fecha">{{ equipo.miFicha()?.equipo_nombre }} · {{ fechaTexto() }}</p>
+          </article>
+        </div>
+
+        <form [formRoot]="detalleForm" class="pila">
+          <div class="detalles">
+            <label for="multa-fecha">Fecha</label>
+            <input id="multa-fecha" type="date" [formField]="detalleForm.fecha" />
+            <label for="multa-nota">Nota (opcional)</label>
+            <input
+              id="multa-nota"
+              autocomplete="off"
+              placeholder="p. ej. Llegó en el minuto 20"
+              [formField]="detalleForm.nota"
+            />
+          </div>
+          <p class="error" role="alert">{{ error() }}</p>
+          <button type="submit" class="boton boton-tarjeta boton-ancho" [disabled]="guardando()">
+            {{ guardando() ? 'Poniendo…' : 'Poner multa' }}
+          </button>
+        </form>
+      }
+    }
+  }
+}

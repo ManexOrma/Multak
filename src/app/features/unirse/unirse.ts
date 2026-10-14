@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { FichaReclamable, InfoInvitacion, MiEquipo } from '../../core/models/modelos';
 import { mensajeError } from '../../core/supabase/mensaje-error';
+import { Avatar } from '../../shared/avatar';
 import { InstalarNota } from '../../shared/instalar-nota';
 import { EquiposService } from '../equipos/equipos.service';
 
@@ -20,7 +21,7 @@ type Estado =
 /** /unirse/:codigo — llega por WhatsApp. El guard ya ha pedido login si hacía falta. */
 @Component({
   selector: 'app-unirse',
-  imports: [FormRoot, FormField, RouterLink, InstalarNota],
+  imports: [FormRoot, FormField, RouterLink, InstalarNota, Avatar],
   templateUrl: './unirse.html',
   styleUrl: './unirse.scss',
 })

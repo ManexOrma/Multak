@@ -1,43 +1,74 @@
-// Estilos provisionales: el diseño definitivo llega con el plan visual de la fase 4.
 .login {
-  max-width: 26rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 24rem;
+  min-height: 100dvh;
   margin: 0 auto;
-  padding: 3rem 1rem 2rem;
+  padding: calc(56px + var(--seguro-arriba)) 20px calc(20px + var(--seguro-abajo));
 }
 
-h1 {
-  margin: 0 0 0.5rem;
-  font-size: 2.25rem;
+.cabeza {
+  margin-bottom: 36px;
+
+  h1 {
+    margin-bottom: 10px;
+  }
+}
+
+.lema {
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--texto-2);
 }
 
 .intro {
-  margin: 0 0 1.5rem;
+  margin: 0 4px 20px;
+  font-size: 17px;
+  line-height: 23px;
+}
+
+.pila .pie-grupo {
+  margin-top: 4px;
 }
 
 .codigo {
-  font-size: 1.75rem;
-  letter-spacing: 0.4em;
-  font-variant-numeric: tabular-nums;
-}
-
-.boton-secundario {
-  width: 100%;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-align: center;
 }
 
 .separador {
-  margin: 1.25rem 0;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+  font-size: 13px;
+  color: var(--texto-2);
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--separador);
+  }
 }
 
 .acciones {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 0 4px;
 }
 
 .aviso {
-  margin: 1rem 0 0;
+  margin: 16px 4px 0;
+  font-size: 15px;
+  color: var(--texto-2);
 
   // Vacío no ocupa sitio, pero sigue en el DOM para que el lector de pantalla lo anuncie.
   &:empty {
@@ -46,12 +77,14 @@ h1 {
 }
 
 .pie {
-  margin-top: 3rem;
+  margin-top: auto;
+  padding-top: 40px;
   text-align: center;
 
   a {
     display: inline-block;
-    padding: 0.5rem;
-    color: inherit;
+    padding: 12px;
+    font-size: 13px;
+    color: var(--texto-2);
   }
 }

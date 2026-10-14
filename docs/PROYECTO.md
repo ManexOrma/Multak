@@ -185,3 +185,5 @@ Invariantes:
 - **Orden de entrada por enlace:** enlace en el navegador → login → reclamar ficha o pedir entrar → pantalla de instalar → abrir la app instalada y volver a entrar (en iPhone la app instalada no comparte sesión con Safari).
 - **`info_invitacion(codigo)`:** RPC extra (solo usuarios con sesión) que devuelve id y nombre del equipo de un código, para que `/unirse` muestre «Te unes a X» y distinga un código inexistente.
 - **Ajustes:** el admin ve todo; el tesorero entra en ajustes pero solo ve el catálogo.
+- **Diseño (fase 4):** tras dos tiradas de direcciones «de objeto» (cromos, acta, carnet, pizarra) que el autor rechazó, se eligió el estándar de la categoría con el listón de las apps de Apple (Wallet, Fitness, Salud): listas agrupadas de iOS, cifras redondeadas, claro y oscuro según el sistema. Un solo elemento memorable: la tarjeta amarilla del árbitro, reservada a «Poner multa». El sistema está documentado en `DESIGN.md`; el contexto de producto, en `PRODUCT.md`.
+- **Nombre:** la app se llama **Multak** (antes «Multas»).

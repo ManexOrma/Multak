@@ -12,23 +12,39 @@ import { AvisosService } from './avisos.service';
     </div>
   `,
   styles: `
+    // Arriba, como las notificaciones de iOS: no tapa el botón amarillo ni las pestañas.
     .avisos {
       position: fixed;
-      inset-inline: 1rem;
-      bottom: calc(1rem + env(safe-area-inset-bottom));
+      inset-inline: 16px;
+      top: calc(8px + var(--seguro-arriba));
+      z-index: 1100;
       display: flex;
       justify-content: center;
       pointer-events: none;
-      z-index: 1100;
     }
 
     .aviso {
+      max-width: 26rem;
       margin: 0;
-      padding: 0.75rem 1rem;
-      border-radius: 0.5rem;
-      background: CanvasText;
-      color: Canvas;
+      padding: 12px 18px;
+      border-radius: 16px;
+      background: var(--barra);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      backdrop-filter: blur(24px) saturate(180%);
+      color: var(--texto);
+      font-size: 15px;
+      line-height: 20px;
       font-weight: 600;
+      text-align: center;
+      box-shadow: var(--sombra-flotante);
+      transition:
+        opacity 260ms var(--ease-out),
+        transform 260ms var(--ease-out);
+
+      @starting-style {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.97);
+      }
     }
   `,
 })

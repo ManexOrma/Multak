@@ -9,6 +9,7 @@ export interface OpcionesConfirmar {
   peligro?: boolean;
 }
 
+/** Alerta de confirmación, como las de iOS: título, mensaje y dos acciones. */
 @Component({
   selector: 'app-confirmar',
   template: `

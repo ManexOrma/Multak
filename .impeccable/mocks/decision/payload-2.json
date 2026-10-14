@@ -1,0 +1,131 @@
+{
+  "title": "Multak · Elige el mundo visual (2ª tirada)",
+  "question": "Nueva tirada: «Carnet de socio». Quédatela, elige una alternativa o vuelve a tirar.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Carnet de socio",
+      "kicker": "THE ROLL",
+      "lineage": "Carnés de cartulina de club o peña, con sello de cuota en tinta violeta",
+      "thesis": "Cada miembro tiene su carnet; pagar es que te sellen, deber es tener la casilla vacía.",
+      "palette": ["#1A1D29", "#F4C4AE", "#5A3E9E", "#C9372C", "#FAFAF8"],
+      "materials": ["cartulina de color de temporada", "datos a máquina de escribir", "sello de tampón violeta"],
+      "viewport": "Arriba tu carnet (nº, nombre, rol y lo que debes) con sus últimos sellos de pago; al lado, el bote; debajo la plantilla con «AL DÍA» sellado en violeta o la deuda en rojo; «Poner multa» fijo abajo.",
+      "risk": "Si la cartulina y la máquina de escribir se exageran, se vuelve un disfraz retro; deben quedarse en color, cifras y un solo sello.",
+      "raised": [
+        { "from": "challenger-orienteering", "raise": "El violeta del sello se reserva para una sola cosa: lo pagado y lo tuyo." },
+        { "from": "challenger-emission", "raise": "El estado se lee también en la forma: tachado es anulado, sello es pagado, no solo el color." },
+        { "from": "challenger-feed", "raise": "«Poner multa» paso a paso: cada paso llena la hoja y el siguiente está a un toque." },
+        { "from": "challenger-transit", "raise": "Al abrir un jugador, su carnet se enfoca sin perder la plantilla de contexto." },
+        { "from": "challenger-jcard", "raise": "Cifras tabulares pegadas al margen derecho, siempre a la misma escala." },
+        { "from": "challenger-botanical", "raise": "Las multas de un jugador se leen como una tira de estados fija: puesta, pagada, anulada." }
+      ],
+      "html": ".impeccable/mocks/decision/assigned-2.html",
+      "htmlFrame": "390x844"
+    },
+    {
+      "id": "model-pick",
+      "label": "Pizarra del bar",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "La pizarra de tiza del bar donde se apunta la cuenta de la cuadrilla",
+      "thesis": "Lo que se apunta en la pizarra se paga: palotes por multa, tachón al pagar.",
+      "palette": ["#1F2A26", "#F2F0E8", "#F2C14E", "#E06A4E"],
+      "materials": ["pizarra verde oscura", "tiza blanca", "palotes"],
+      "viewport": "La pizarra del equipo: tu cuenta y el bote arriba en tiza; la lista de jugadores con palotes por multa y lo que debe cada uno.",
+      "risk": "Es la más previsible después del acta; la letra de tiza puede quedar de restaurante si se abusa.",
+      "html": ".impeccable/mocks/decision/model-pick-2.html",
+      "htmlFrame": "390x844"
+    },
+    {
+      "id": "challenger-botanical",
+      "label": "Folio botánico",
+      "verdict": "declined",
+      "lineage": "Láminas botánicas por estaciones",
+      "thesis": "Una planta a escala fija en cinco estados.",
+      "palette": ["#F3EBD8", "#5C4A32", "#3E7B3A", "#C2312A"],
+      "materials": ["láminas", "filetes sepia"],
+      "viewport": "Cinco láminas alineadas en una misma base.",
+      "case": "Ningún jugador se reconoce en un herbario.",
+      "risk": "Delicado y lento para el vestuario.",
+      "kept": "Los estados de una multa como tira fija: puesta, pagada, anulada."
+    },
+    {
+      "id": "challenger-orienteering",
+      "label": "Mapa de orientación",
+      "verdict": "declined",
+      "lineage": "Mapas ISOM de carreras de orientación",
+      "thesis": "Un color reservado solo para el recorrido activo.",
+      "palette": ["#FFFFFF", "#9C3FA0", "#E9D33B", "#8A5A2B"],
+      "materials": ["curvas de nivel", "tinta púrpura"],
+      "viewport": "Terreno fijo y el recorrido encima.",
+      "case": "Un mapa no explica deudas ni bote.",
+      "risk": "Ruido de textura en pantallas pequeñas.",
+      "kept": "Un color reservado para una sola cosa."
+    },
+    {
+      "id": "challenger-jcard",
+      "label": "Carátula de casete",
+      "verdict": "declined",
+      "lineage": "Cintas grabadas a mano",
+      "thesis": "Cara A y cara B a bolígrafo, tiempos a la derecha.",
+      "palette": ["#FFFFFF", "#1F3A8A", "#C21F2B"],
+      "materials": ["cartulina rayada", "bolígrafo"],
+      "viewport": "Lista de canciones en una carátula plegada.",
+      "case": "Nostalgia ajena al fútbol y al dinero.",
+      "risk": "Letra manuscrita difícil de leer con prisa.",
+      "kept": "Cifras pegadas al margen derecho."
+    },
+    {
+      "id": "challenger-transit",
+      "label": "Plano de metro",
+      "verdict": "declined",
+      "lineage": "Diagramas de transporte esmaltados",
+      "thesis": "Líneas de color a 45° sobre azul noche.",
+      "palette": ["#0E1A3A", "#E2372B", "#2D6CDF", "#F2B233"],
+      "materials": ["esmalte", "porcelana"],
+      "viewport": "Red de líneas con correspondencias.",
+      "case": "No hay recorridos que trazar en unas cuentas.",
+      "risk": "Forzado y decorativo.",
+      "kept": "Enfocar lo elegido sin perder el contexto."
+    },
+    {
+      "id": "challenger-feed",
+      "label": "Feed vertical",
+      "verdict": "declined",
+      "lineage": "Vídeo vertical a pantalla completa",
+      "thesis": "Un elemento por pantalla, acciones a la derecha.",
+      "palette": ["#000000", "#FFFFFF", "#FE2C55"],
+      "materials": ["pantalla completa", "glifos blancos"],
+      "viewport": "Una multa por pantalla.",
+      "case": "Esconde los saldos que todos deben ver de golpe.",
+      "risk": "Parece una red social.",
+      "kept": "Poner multa paso a paso, a un toque del siguiente."
+    },
+    {
+      "id": "challenger-emission",
+      "label": "Espectrograma",
+      "verdict": "declined",
+      "lineage": "Placas de espectros de laboratorio",
+      "thesis": "El estado es forma de línea, no color.",
+      "palette": ["#2B2B2B", "#E8E4DA", "#F2C230"],
+      "materials": ["continuo gris", "líneas finas"],
+      "viewport": "Un riel con marcas finas.",
+      "case": "Frío y técnico.",
+      "risk": "Ilegible en el bar.",
+      "kept": "El estado se lee en la forma, no solo en el color."
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "canon": true,
+  "canonCard": {
+    "label": "El estándar de la categoría",
+    "thesis": "Una app de cuentas compartidas limpia, bien hecha y sin sorpresas.",
+    "palette": ["#FFFFFF", "#111827", "#2563EB", "#16A34A"],
+    "materials": ["tarjetas blancas", "fuente del sistema"],
+    "viewport": "Resumen con saldo y bote en tarjetas, lista de miembros y botón azul flotante.",
+    "risk": "Se parece a cualquier app; justo lo que pediste evitar.",
+    "html": ".impeccable/mocks/decision/canon-2.html",
+    "htmlFrame": "390x844"
+  },
+  "steer": true
+}

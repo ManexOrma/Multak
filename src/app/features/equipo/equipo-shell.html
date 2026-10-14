@@ -1,0 +1,61 @@
+<div class="shell" [class.con-accion]="conAccion()">
+  <nav class="lateral" aria-label="Secciones del equipo">
+    <a class="volver" routerLink="/equipos">
+      <app-icono nombre="chevron-izquierda" [grosor]="2.5" />
+      Mis equipos
+    </a>
+    <p class="nombre-equipo">{{ equipo.miFicha()?.equipo_nombre }}</p>
+
+    @if (equipo.puedeGestionar()) {
+      <button type="button" class="boton boton-tarjeta poner" (click)="ponerMulta()">
+        <app-icono nombre="tarjeta" />
+        Poner multa
+      </button>
+    }
+
+    <ul>
+      @for (seccion of secciones; track seccion.ruta) {
+        @if (visible(seccion)) {
+          <li>
+            <a
+              [routerLink]="seccion.ruta"
+              routerLinkActive="activa"
+              ariaCurrentWhenActive="page"
+              [routerLinkActiveOptions]="{ exact: seccion.ruta === '.' }"
+            >
+              <app-icono [nombre]="seccion.icono" />
+              {{ seccion.texto }}
+            </a>
+          </li>
+        }
+      }
+    </ul>
+  </nav>
+
+  <div class="contenido">
+    <router-outlet />
+  </div>
+
+  @if (conAccion()) {
+    <button type="button" class="boton boton-tarjeta flotante" (click)="ponerMulta()">
+      <app-icono nombre="tarjeta" />
+      Poner multa
+    </button>
+  }
+
+  <nav class="pestanas" aria-label="Secciones del equipo">
+    @for (seccion of secciones; track seccion.ruta) {
+      @if (visible(seccion)) {
+        <a
+          [routerLink]="seccion.ruta"
+          routerLinkActive="activa"
+          ariaCurrentWhenActive="page"
+          [routerLinkActiveOptions]="{ exact: seccion.ruta === '.' }"
+        >
+          <app-icono [nombre]="seccion.icono" />
+          <span>{{ seccion.texto }}</span>
+        </a>
+      }
+    }
+  </nav>
+</div>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+  :root{--tinta:#13213C;--papel:#F4F2EC;--hoja:#FFFFFF;--rojo:#D7392B;--verde:#1E8A57;--oro:#C9A13B;--linea:#D9D5CA}
+  *{box-sizing:border-box;margin:0}
+  body{width:390px;height:844px;overflow:hidden;background:var(--papel);color:var(--tinta);font-family:Archivo,sans-serif;font-variant-numeric:tabular-nums;position:relative}
+  header{display:flex;align-items:center;justify-content:space-between;padding:52px 20px 14px}
+  .equipo{font-stretch:68%;font-weight:850;font-size:26px;letter-spacing:.01em;text-transform:uppercase;line-height:1}
+  .sub{font-size:13px;color:#5B6377;margin-top:4px}
+  .icono{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--linea);display:grid;place-items:center;font-weight:700}
+  .portada{display:grid;grid-template-columns:1.25fr 1fr;gap:12px;padding:6px 20px 0}
+  .cromo{background:var(--hoja);border-radius:10px;box-shadow:0 1px 0 var(--linea),0 0 0 1px var(--linea);overflow:hidden;display:flex;flex-direction:column}
+  .cromo .cab{display:flex;justify-content:space-between;align-items:center;background:var(--tinta);color:#fff;padding:8px 10px;font-weight:700;font-size:12px;letter-spacing:.08em}
+  .cromo .num{font-stretch:62%;font-weight:900;font-size:20px;letter-spacing:0}
+  .yo .nombre{font-stretch:66%;font-weight:900;font-size:44px;line-height:.9;padding:16px 12px 10px;text-transform:uppercase}
+  .yo .rol{padding:0 12px 14px;font-size:13px;color:#5B6377}
+  .banda{margin-top:auto;padding:10px 12px;color:#fff;font-weight:800}
+  .banda small{display:block;font-size:11px;letter-spacing:.1em;font-weight:700;opacity:.85}
+  .banda b{font-stretch:75%;font-size:30px;font-weight:900;line-height:1}
+  .debe{background:var(--rojo)}
+  .bote{background:linear-gradient(135deg,#E9D18A 0%,#C9A13B 38%,#F3E3AE 52%,#B88F2E 70%,#D9B860 100%);color:#2B2104}
+  .bote .cab{background:transparent;color:#2B2104;border-bottom:1px solid rgba(43,33,4,.25)}
+  .bote .cifra{font-stretch:70%;font-weight:900;font-size:46px;line-height:1;padding:18px 12px 4px}
+  .bote .nota{padding:0 12px 14px;font-size:13px;font-weight:600}
+  h2{display:flex;justify-content:space-between;align-items:baseline;padding:26px 20px 10px;font-stretch:70%;font-weight:850;font-size:20px;text-transform:uppercase;letter-spacing:.02em}
+  h2 span{font-family:Archivo;font-stretch:100%;font-size:13px;font-weight:600;text-transform:none;color:#5B6377}
+  .plantilla{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px}
+  .mini{background:var(--hoja);border-radius:8px;box-shadow:0 0 0 1px var(--linea);padding:8px 8px 0;display:flex;flex-direction:column;height:104px;overflow:hidden}
+  .mini .n{font-size:11px;font-weight:700;color:#5B6377}
+  .mini .nom{font-stretch:66%;font-weight:900;font-size:22px;text-transform:uppercase;line-height:1;margin-top:6px}
+  .mini .s{margin:auto -8px 0;padding:6px 8px;font-weight:800;font-size:15px;color:#fff}
+  .s.rojo{background:var(--rojo)} .s.verde{background:var(--verde)}
+  .hueco{background:transparent;box-shadow:none;border:2px dashed #B9B3A4;color:#7A7465}
+  .hueco .s{background:transparent;color:#7A7465;font-size:12px;font-weight:700}
+  .accion{position:absolute;left:20px;right:20px;bottom:96px;height:60px;border-radius:14px;background:var(--rojo);color:#fff;display:flex;align-items:center;justify-content:center;gap:12px;font-stretch:80%;font-weight:900;font-size:22px;text-transform:uppercase;letter-spacing:.02em;box-shadow:0 10px 24px rgba(215,57,43,.35)}
+  .tarjeta{width:16px;height:22px;border-radius:3px;background:#FFD43B;transform:rotate(-8deg)}
+  nav{position:absolute;left:0;right:0;bottom:0;height:84px;background:var(--hoja);border-top:1px solid var(--linea);display:grid;grid-template-columns:repeat(4,1fr);padding:10px 8px 26px;font-size:12px;font-weight:700;text-align:center;color:#5B6377}
+  nav .on{color:var(--tinta)} nav i{display:block;width:22px;height:22px;margin:0 auto 4px;border-radius:6px;border:2px solid currentColor}
+</style>
+</head>
+<body>
+  <header>
+    <div><div class="equipo">CD Vestuario</div><div class="sub">7 en la plantilla</div></div>
+    <div class="icono">⚙</div>
+  </header>
+
+  <section class="portada">
+    <article class="cromo yo">
+      <div class="cab"><span>TU CROMO</span><span class="num">01</span></div>
+      <div class="nombre">Iker</div>
+      <div class="rol">Admin · 1 multa</div>
+      <div class="banda debe"><small>DEBES</small><b>2,00 €</b></div>
+    </article>
+    <article class="cromo bote">
+      <div class="cab"><span>BOTE</span><span>★</span></div>
+      <div class="cifra">8,00 €</div>
+      <div class="nota">Faltan por cobrar 15,00 €</div>
+    </article>
+  </section>
+
+  <h2>La plantilla <span>Quién debe qué</span></h2>
+  <section class="plantilla">
+    <div class="mini"><span class="n">04</span><span class="nom">Mikel</span><span class="s rojo">10,00 €</span></div>
+    <div class="mini"><span class="n">05</span><span class="nom">Asier</span><span class="s rojo">3,00 €</span></div>
+    <div class="mini"><span class="n">01</span><span class="nom">Iker</span><span class="s rojo">2,00 €</span></div>
+    <div class="mini"><span class="n">02</span><span class="nom">Ane</span><span class="s verde">Al día</span></div>
+    <div class="mini"><span class="n">03</span><span class="nom">Unai</span><span class="s verde">Al día</span></div>
+    <div class="mini hueco"><span class="n">08</span><span class="nom">Jon</span><span class="s">Sin pegar</span></div>
+  </section>
+
+  <div class="accion"><span class="tarjeta"></span>Poner multa</div>
+
+  <nav>
+    <div class="on"><i></i>Inicio</div><div><i></i>Multas</div><div><i></i>Gastos</div><div><i></i>Ajustes</div>
+  </nav>
+</body>
+</html>

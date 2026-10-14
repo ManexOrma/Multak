@@ -3,22 +3,28 @@ import { Miembro } from '../../core/models/modelos';
 import { mensajeError } from '../../core/supabase/mensaje-error';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { DialogosService } from '../../shared/dialogos/dialogos.service';
+import { Avatar } from '../../shared/avatar';
 import { AjustesService } from './ajustes.service';
 
 @Component({
   selector: 'app-solicitudes',
+  imports: [Avatar],
   template: `
     @if (ajustes.solicitudes().length > 0) {
       <section class="seccion" aria-labelledby="titulo-solicitudes">
         <h2 id="titulo-solicitudes">Quieren entrar ({{ ajustes.solicitudes().length }})</h2>
-        <ul class="lista">
+        <ul class="lista lista--avatares">
           @for (solicitud of ajustes.solicitudes(); track solicitud.id) {
             <li class="fila">
-              <strong>{{ solicitud.nombre }}</strong>
+              <app-avatar [nombre]="solicitud.nombre" [semilla]="solicitud.id" />
+              <span class="fila-texto">
+                <span>{{ solicitud.nombre }}</span>
+                <span class="fila-detalle">Quiere entrar como nuevo</span>
+              </span>
               <span class="acciones">
                 <button
                   type="button"
-                  class="boton boton-secundario"
+                  class="boton boton-secundario pequeno"
                   [attr.aria-label]="'Rechazar a ' + solicitud.nombre"
                   (click)="rechazar(solicitud)"
                 >
@@ -26,7 +32,7 @@ import { AjustesService } from './ajustes.service';
                 </button>
                 <button
                   type="button"
-                  class="boton boton-principal"
+                  class="boton boton-principal pequeno"
                   [attr.aria-label]="'Aceptar a ' + solicitud.nombre"
                   (click)="aceptar(solicitud)"
                 >
@@ -43,7 +49,14 @@ import { AjustesService } from './ajustes.service';
   styles: `
     .acciones {
       display: flex;
-      gap: 0.5rem;
+      gap: 8px;
+    }
+
+    .pequeno {
+      min-height: 36px;
+      padding: 0 14px;
+      border-radius: 18px;
+      font-size: 15px;
     }
   `,
 })

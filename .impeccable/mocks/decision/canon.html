@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0}
+  body{width:390px;height:844px;overflow:hidden;background:#F5F6F8;color:#111827;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums;position:relative}
+  header{padding:56px 20px 12px}
+  h1{font-size:28px;font-weight:700}
+  .sub{color:#6B7280;font-size:14px;margin-top:2px}
+  .tarjetas{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px 20px}
+  .t{background:#fff;border-radius:16px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .t small{color:#6B7280;font-size:13px}
+  .t b{display:block;font-size:28px;margin-top:6px}
+  .t .r{color:#DC2626}
+  h2{padding:22px 20px 10px;font-size:17px}
+  ul{list-style:none;margin:0 20px;padding:0;background:#fff;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  li{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #EEF0F3;font-size:16px}
+  li:last-child{border-bottom:0}
+  .av{width:34px;height:34px;border-radius:50%;background:#E0E7FF;color:#3730A3;display:inline-grid;place-items:center;font-weight:700;margin-right:12px;font-size:14px}
+  .ok{color:#16A34A;font-weight:600} .mal{color:#DC2626;font-weight:600}
+  .fab{position:absolute;right:20px;bottom:104px;height:56px;padding:0 22px;border-radius:28px;background:#2563EB;color:#fff;display:flex;align-items:center;font-weight:600;font-size:16px;box-shadow:0 8px 20px rgba(37,99,235,.35)}
+  nav{position:absolute;left:0;right:0;bottom:0;height:84px;background:#fff;border-top:1px solid #E5E7EB;display:grid;grid-template-columns:repeat(4,1fr);padding:12px 8px 26px;font-size:12px;text-align:center;color:#6B7280}
+  nav .on{color:#2563EB;font-weight:600}
+</style>
+</head>
+<body>
+  <header><h1>CD Vestuario</h1><div class="sub">7 miembros</div></header>
+  <div class="tarjetas">
+    <div class="t"><small>Tu saldo</small><b class="r">2,00 €</b></div>
+    <div class="t"><small>Bote</small><b>8,00 €</b></div>
+  </div>
+  <h2>Miembros</h2>
+  <ul>
+    <li><span><span class="av">MI</span>Mikel</span><span class="mal">10,00 €</span></li>
+    <li><span><span class="av">AS</span>Asier</span><span class="mal">3,00 €</span></li>
+    <li><span><span class="av">IK</span>Iker</span><span class="mal">2,00 €</span></li>
+    <li><span><span class="av">AN</span>Ane</span><span class="ok">Al día</span></li>
+    <li><span><span class="av">UN</span>Unai</span><span class="ok">Al día</span></li>
+  </ul>
+  <div class="fab">+ Poner multa</div>
+  <nav><div class="on">Inicio</div><div>Multas</div><div>Gastos</div><div>Ajustes</div></nav>
+</body>
+</html>

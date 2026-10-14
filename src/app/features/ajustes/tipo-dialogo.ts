@@ -4,6 +4,7 @@ import { form, FormField, FormRoot, maxLength, required, validate } from '@angul
 import { TipoMulta } from '../../core/models/modelos';
 import { mensajeError } from '../../core/supabase/mensaje-error';
 import { AvisosService } from '../../shared/avisos/avisos.service';
+import { cerrarHoja } from '../../shared/dialogos/dialogos.service';
 import { centimosATexto, eurosACentimos } from '../../shared/importe';
 import { AjustesService } from './ajustes.service';
 
@@ -12,7 +13,11 @@ import { AjustesService } from './ajustes.service';
   selector: 'app-tipo-dialogo',
   imports: [FormRoot, FormField],
   template: `
-    <h2 id="tipo-dialogo-titulo">{{ tipo ? 'Editar tipo de multa' : 'Nuevo tipo de multa' }}</h2>
+    <div class="hoja-cabecera">
+      <button type="button" class="boton-enlace" (click)="cancelar()">Cancelar</button>
+      <h2 id="tipo-dialogo-titulo">{{ tipo ? 'Editar tipo de multa' : 'Nuevo tipo de multa' }}</h2>
+      <span></span>
+    </div>
 
     <form [formRoot]="formulario" class="pila">
       <label for="tipo-nombre">Nombre</label>
@@ -60,12 +65,9 @@ import { AjustesService } from './ajustes.service';
 
       <p class="error" role="alert">{{ error() }}</p>
 
-      <div class="dialogo-acciones">
-        <button type="button" class="boton boton-secundario" (click)="ref.close()">Cancelar</button>
-        <button type="submit" class="boton boton-principal" [disabled]="formulario().submitting()">
-          {{ tipo ? 'Guardar' : 'Añadir' }}
-        </button>
-      </div>
+      <button type="submit" class="boton boton-principal" [disabled]="formulario().submitting()">
+        {{ tipo ? 'Guardar' : 'Añadir al catálogo' }}
+      </button>
     </form>
   `,
   styles: `
@@ -76,7 +78,7 @@ import { AjustesService } from './ajustes.service';
 })
 export class TipoDialogo {
   protected readonly tipo = inject<TipoMulta | null>(DIALOG_DATA);
-  protected readonly ref = inject<DialogRef<void>>(DialogRef);
+  private readonly ref = inject<DialogRef<void>>(DialogRef);
   private readonly ajustes = inject(AjustesService);
   private readonly avisos = inject(AvisosService);
 
@@ -101,6 +103,10 @@ export class TipoDialogo {
     { submission: { action: () => this.guardar() } },
   );
 
+  protected cancelar(): void {
+    void cerrarHoja(this.ref);
+  }
+
   private async guardar(): Promise<void> {
     this.error.set(null);
     const { nombre, importe, activo } = this.modelo();
@@ -117,7 +123,7 @@ export class TipoDialogo {
         await this.ajustes.crearTipo(nombre.trim(), importeCentimos);
         this.avisos.mostrar('Tipo de multa añadido.');
       }
-      this.ref.close();
+      await cerrarHoja(this.ref);
     } catch (e) {
       this.error.set(mensajeError(e));
     }

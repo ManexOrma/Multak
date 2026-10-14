@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--tinta:#1A1D29;--carton:#F4C4AE;--violeta:#5A3E9E;--rojo:#C9372C;--fondo:#FAFAF8;--linea:#E3E0D8}
+  *{box-sizing:border-box;margin:0}
+  body{width:390px;height:844px;overflow:hidden;background:var(--fondo);color:var(--tinta);font-family:Archivo,sans-serif;position:relative}
+  .maq{font-family:"Courier Prime",monospace}
+  header{display:flex;align-items:center;justify-content:space-between;padding:52px 20px 16px}
+  .eq{font-stretch:70%;font-weight:850;font-size:26px;text-transform:uppercase;line-height:1}
+  .sub{font-size:13px;color:#646878;margin-top:4px}
+  .ic{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--linea);display:grid;place-items:center}
+  .carnet{margin:0 20px;background:var(--carton);border-radius:16px;padding:16px 16px 14px;position:relative;overflow:hidden}
+  .carnet .top{display:flex;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+  .fila{display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px}
+  .campo small{display:block;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.65}
+  .campo .v{font-size:24px;font-weight:700;letter-spacing:.02em}
+  .debe{text-align:right}
+  .debe .v{font-family:Archivo;font-stretch:75%;font-weight:900;font-size:40px;color:var(--rojo);line-height:1}
+  .sellos{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1.5px dashed rgba(26,29,41,.35)}
+  .sello{width:58px;height:58px;border-radius:50%;border:2.5px solid var(--violeta);color:var(--violeta);display:grid;place-items:center;text-align:center;font-size:10px;font-weight:800;line-height:1.1;letter-spacing:.06em;transform:rotate(-12deg);opacity:.9}
+  .sello:nth-child(2){transform:rotate(7deg)}
+  .vacio{border:2px dashed rgba(26,29,41,.3);color:rgba(26,29,41,.45);transform:none}
+  .bote{margin:12px 20px 0;display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:14px;background:var(--tinta);color:#fff}
+  .bote small{font-size:11px;font-weight:800;letter-spacing:.14em;opacity:.7}
+  .bote b{display:block;font-stretch:75%;font-size:32px;font-weight:900;line-height:1}
+  .bote span{font-size:13px;opacity:.8;text-align:right}
+  h2{padding:22px 20px 8px;font-stretch:72%;font-weight:850;font-size:19px;text-transform:uppercase}
+  ul{list-style:none;padding:0;margin:0 20px;border-top:1px solid var(--linea)}
+  li{display:flex;align-items:center;gap:12px;height:52px;border-bottom:1px solid var(--linea)}
+  li .n{width:26px;color:#646878;font-size:14px}
+  li .nom{flex:1;font-size:17px;font-weight:600}
+  li .s{font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}
+  .s.r{color:var(--rojo)}
+  .aldia{border:2px solid var(--violeta);color:var(--violeta);border-radius:6px;padding:1px 6px;font-size:11px;font-weight:800;letter-spacing:.1em;transform:rotate(-4deg)}
+  .accion{position:absolute;left:20px;right:20px;bottom:96px;height:58px;border-radius:14px;background:var(--rojo);color:#fff;display:flex;align-items:center;justify-content:center;font-stretch:80%;font-weight:900;font-size:21px;text-transform:uppercase;letter-spacing:.03em}
+  nav{position:absolute;left:0;right:0;bottom:0;height:84px;background:#fff;border-top:1px solid var(--linea);display:grid;grid-template-columns:repeat(4,1fr);padding:10px 8px 26px;font-size:12px;font-weight:700;text-align:center;color:#646878}
+  nav .on{color:var(--tinta)} nav i{display:block;width:22px;height:22px;margin:0 auto 4px;border-radius:6px;border:2px solid currentColor}
+</style>
+</head>
+<body>
+  <header>
+    <div><div class="eq">CD Vestuario</div><div class="sub">7 socios</div></div>
+    <div class="ic">⚙</div>
+  </header>
+
+  <section class="carnet">
+    <div class="top"><span>Carnet · Multak</span><span class="maq">Nº 01</span></div>
+    <div class="fila">
+      <div class="campo"><small>Socio</small><div class="v maq">IKER</div><small style="margin-top:4px">Admin</small></div>
+      <div class="debe campo"><small>Debes</small><div class="v">2,00 €</div></div>
+    </div>
+    <div class="sellos">
+      <div class="sello">PAGADO<br>5,00<br>04/10</div>
+      <div class="sello">PAGADO<br>3,00<br>27/09</div>
+      <div class="sello vacio">2,00</div>
+    </div>
+  </section>
+
+  <div class="bote"><div><small>BOTE</small><b>8,00 €</b></div><span>Por cobrar<br><b style="font-size:18px">15,00 €</b></span></div>
+
+  <h2>Plantilla</h2>
+  <ul>
+    <li><span class="n maq">04</span><span class="nom">Mikel</span><span class="s r">10,00 €</span></li>
+    <li><span class="n maq">05</span><span class="nom">Asier</span><span class="s r">3,00 €</span></li>
+    <li><span class="n maq">02</span><span class="nom">Ane</span><span class="aldia">AL DÍA</span></li>
+    <li><span class="n maq">03</span><span class="nom">Unai</span><span class="aldia">AL DÍA</span></li>
+  </ul>
+
+  <div class="accion">Poner multa</div>
+  <nav><div class="on"><i></i>Inicio</div><div><i></i>Multas</div><div><i></i>Gastos</div><div><i></i>Ajustes</div></nav>
+</body>
+</html>

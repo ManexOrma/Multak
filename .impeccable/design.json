@@ -1,0 +1,544 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-14T18:22:52+00:00",
+  "title": "Design System: Multak",
+  "extensions": {
+    "colorMeta": {
+      "fondo": {
+        "role": "neutral",
+        "displayName": "Gris agrupado",
+        "canonical": "#f2f2f7 / oscuro #000000",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "celda": {
+        "role": "neutral",
+        "displayName": "Celda",
+        "canonical": "#ffffff / oscuro #1c1c1e (#2c2c2e dentro de hojas)",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "celda-2": {
+        "role": "neutral",
+        "displayName": "Celda interior",
+        "canonical": "#f2f2f7 / oscuro #2c2c2e",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "fondo-hoja": {
+        "role": "neutral",
+        "displayName": "Fondo de hoja",
+        "canonical": "#f2f2f7 / oscuro #1c1c1e",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "barra": {
+        "role": "neutral",
+        "displayName": "Barra translúcida",
+        "canonical": "rgb(249 249 249 / 0.78) / oscuro rgb(22 22 23 / 0.78)",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "texto": {
+        "role": "neutral",
+        "displayName": "Texto",
+        "canonical": "#000000 / oscuro #ffffff",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "texto-2": {
+        "role": "neutral",
+        "displayName": "Texto secundario",
+        "canonical": "rgb(60 60 67 / 0.78) / oscuro rgb(235 235 245 / 0.68)",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "texto-3": {
+        "role": "neutral",
+        "displayName": "Texto terciario",
+        "canonical": "rgb(60 60 67 / 0.45) / oscuro rgb(235 235 245 / 0.35)",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "separador": {
+        "role": "neutral",
+        "displayName": "Separador",
+        "canonical": "rgb(60 60 67 / 0.2) / oscuro rgb(84 84 88 / 0.65)",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "relleno": {
+        "role": "neutral",
+        "displayName": "Relleno",
+        "canonical": "rgb(118 118 128 / 0.12) / oscuro 0.24",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "relleno-2": {
+        "role": "neutral",
+        "displayName": "Relleno fuerte",
+        "canonical": "rgb(118 118 128 / 0.2) / oscuro 0.36",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      },
+      "tinte": {
+        "role": "secondary",
+        "displayName": "Azul de sistema",
+        "canonical": "#0066cc / oscuro #4da3ff",
+        "tonalRamp": [
+          "#001a33",
+          "#00284d",
+          "#003d73",
+          "#00519a",
+          "#0066cc",
+          "#4da3ff",
+          "#99c9ff",
+          "#e0efff"
+        ]
+      },
+      "rojo": {
+        "role": "tertiary",
+        "displayName": "Rojo de sistema",
+        "canonical": "#ff3b30 / oscuro #ff453a",
+        "tonalRamp": [
+          "#3d0005",
+          "#5c0008",
+          "#8a000e",
+          "#b30012",
+          "#d70015",
+          "#ff3b30",
+          "#ff9d97",
+          "#ffe3e1"
+        ]
+      },
+      "rojo-texto": {
+        "role": "tertiary",
+        "displayName": "Rojo legible",
+        "canonical": "#d70015 / oscuro #ff6961",
+        "tonalRamp": [
+          "#3d0005",
+          "#5c0008",
+          "#8a000e",
+          "#b30012",
+          "#d70015",
+          "#ff6961",
+          "#ffa8a3",
+          "#ffe3e1"
+        ]
+      },
+      "verde": {
+        "role": "tertiary",
+        "displayName": "Verde de sistema",
+        "canonical": "#34c759 / oscuro #30d158",
+        "tonalRamp": [
+          "#062b10",
+          "#0b4019",
+          "#135c26",
+          "#1f7a35",
+          "#28a745",
+          "#34c759",
+          "#8fe3a3",
+          "#e2f8e7"
+        ]
+      },
+      "verde-texto": {
+        "role": "tertiary",
+        "displayName": "Verde legible",
+        "canonical": "#1f7a35 / oscuro #30d158",
+        "tonalRamp": [
+          "#062b10",
+          "#0b4019",
+          "#135c26",
+          "#1f7a35",
+          "#28a745",
+          "#30d158",
+          "#8fe3a3",
+          "#e2f8e7"
+        ]
+      },
+      "amarillo": {
+        "role": "primary",
+        "displayName": "Amarillo tarjeta",
+        "canonical": "#ffcc00 / oscuro #ffd60a",
+        "tonalRamp": [
+          "#3d2f00",
+          "#5c4800",
+          "#7d6200",
+          "#a07e00",
+          "#c79d00",
+          "#ffcc00",
+          "#ffe066",
+          "#fff5cc"
+        ]
+      },
+      "sobre-amarillo": {
+        "role": "primary",
+        "displayName": "Grafito sobre amarillo",
+        "canonical": "#1c1c1e",
+        "tonalRamp": [
+          "#000000",
+          "#1c1c1e",
+          "#2c2c2e",
+          "#48484a",
+          "#8e8e93",
+          "#c7c7cc",
+          "#f2f2f7",
+          "#ffffff"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Cifra grande",
+        "purpose": "La cifra «lo tuyo» en Inicio y el bote en Gastos (40px en la ficha del jugador)."
+      },
+      "headline": {
+        "displayName": "Título grande",
+        "purpose": "Título de cada pantalla; se pliega en la barra a 17px semibold."
+      },
+      "title": {
+        "displayName": "Título de sección",
+        "purpose": "Secciones sobre listas, pasos de la hoja, nombre del equipo en la barra lateral."
+      },
+      "headline-row": {
+        "displayName": "Titular",
+        "purpose": "Títulos de hoja y diálogo, botones, barra plegada."
+      },
+      "body": {
+        "displayName": "Cuerpo",
+        "purpose": "Filas y campos; nunca menos de 16px en campos."
+      },
+      "subhead": {
+        "displayName": "Subtitular",
+        "purpose": "Detalle de filas, explicaciones, chips, avisos."
+      },
+      "label": {
+        "displayName": "Nota",
+        "purpose": "Etiquetas de campo, pies de grupo, notas y errores."
+      },
+      "numeral": {
+        "displayName": "Cifra de fila",
+        "purpose": "Importes a la derecha de las filas, redondeados y tabulares."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sombra-hoja",
+        "value": "0 -8px 40px rgb(0 0 0 / 0.12)",
+        "purpose": "Hoja que sube desde abajo en móvil (0.6 en oscuro)."
+      },
+      {
+        "name": "sombra-flotante",
+        "value": "0 8px 24px rgb(0 0 0 / 0.14), 0 2px 6px rgb(0 0 0 / 0.08)",
+        "purpose": "Diálogos, hoja en pantalla ancha y avisos (0 8px 24px rgb(0 0 0 / 0.55) en oscuro)."
+      },
+      {
+        "name": "sombra-tarjeta",
+        "value": "0 14px 30px rgb(0 0 0 / 0.18), 0 2px 6px rgb(0 0 0 / 0.1)",
+        "purpose": "Solo la tarjeta amarilla de la multa."
+      },
+      {
+        "name": "sombra-segmento",
+        "value": "0 3px 8px rgb(0 0 0 / 0.12), 0 1px 1px rgb(0 0 0 / 0.04)",
+        "purpose": "Pieza activa del control segmentado."
+      },
+      {
+        "name": "filo-oscuro",
+        "value": "inset 0 0 0 0.5px rgb(84 84 88 / 0.6)",
+        "purpose": "Filo interior de hojas y diálogos en oscuro, sumado a la sombra flotante."
+      },
+      {
+        "name": "cristal",
+        "value": "backdrop-filter: blur(20px) saturate(180%)",
+        "purpose": "Barra plegada, pestañas (y avisos con blur 24px); opaco con prefers-reduced-transparency."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Estados: pulsado (140ms), hover de fila (120ms), barra plegada (200ms), avisos (260ms), destello de fila (1600ms)."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.77, 0, 0.175, 1)",
+        "purpose": "Vuelo de la tarjeta amarilla al confirmar (620ms)."
+      },
+      {
+        "name": "ease-hoja",
+        "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Entrada de la hoja desde abajo (420ms)."
+      },
+      {
+        "name": "pulsado",
+        "value": "scale(0.97) / 140ms",
+        "purpose": "Botones; chips y celdas de jugador a 0.96, iconos de pestaña a 0.92."
+      },
+      {
+        "name": "tarjeta-entra",
+        "value": "translateY(18px) rotate(2deg) scale(0.97) → none, 380ms",
+        "purpose": "Aparición de la tarjeta en el paso de confirmar."
+      },
+      {
+        "name": "tarjeta-vuela",
+        "value": "translateY(-14px) rotate(-3deg) scale(1.03) @35% → translateY(-110vh) rotate(-12deg), 620ms",
+        "purpose": "Multa puesta: la tarjeta sale volando. Se omite con prefers-reduced-motion."
+      },
+      {
+        "name": "dialogo-entra",
+        "value": "opacity 0, scale(0.96) → none, 220ms",
+        "purpose": "Diálogos centrados y hoja en pantalla ancha (240ms)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "hoja-panel",
+        "value": "700px"
+      },
+      {
+        "name": "barra-lateral",
+        "value": "768px"
+      },
+      {
+        "name": "dos-columnas",
+        "value": "1100px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón tarjeta («Poner multa»)",
+      "kind": "button",
+      "refersTo": "boton-tarjeta",
+      "description": "La acción estrella; el único botón amarillo.",
+      "html": "<button class=\"ds-btn-tarjeta\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"6\" y=\"3\" width=\"12\" height=\"18\" rx=\"2.5\" transform=\"rotate(-8 12 12)\"/></svg>Poner multa</button>",
+      "css": ".ds-btn-tarjeta{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;font:600 17px/1.35 system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;letter-spacing:-0.01em;border:0;border-radius:12px;cursor:pointer;transition:transform 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)),opacity 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));background:var(--amarillo, #ffcc00);color:var(--sobre-amarillo, #1c1c1e);} .ds-btn-tarjeta:active{transform:scale(0.97);} .ds-btn-tarjeta:focus-visible{outline:3px solid var(--tinte, #0066cc);outline-offset:2px;}"
+    },
+    {
+      "name": "Botón tarjeta flotante",
+      "kind": "button",
+      "refersTo": "boton-tarjeta-flotante",
+      "description": "En móvil, «Poner multa» flota en pastilla sobre la barra de pestañas.",
+      "html": "<button class=\"ds-btn-flotante\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"6\" y=\"3\" width=\"12\" height=\"18\" rx=\"2.5\" transform=\"rotate(-8 12 12)\"/></svg>Poner multa</button>",
+      "css": ".ds-btn-flotante{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;font:600 17px/1.35 system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;letter-spacing:-0.01em;border:0;border-radius:12px;cursor:pointer;transition:transform 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)),opacity 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));min-height:52px;padding:0 26px 0 22px;border-radius:26px;background:var(--amarillo, #ffcc00);color:var(--sobre-amarillo, #1c1c1e);box-shadow:0 6px 20px rgb(0 0 0 / 0.18),0 1px 3px rgb(0 0 0 / 0.12);} .ds-btn-flotante:active{transform:scale(0.97);} .ds-btn-flotante:focus-visible{outline:3px solid var(--tinte, #0066cc);outline-offset:2px;}"
+    },
+    {
+      "name": "Botón principal",
+      "kind": "button",
+      "refersTo": "boton-principal",
+      "description": "Tinta sobre fondo: continuar, guardar, entrar.",
+      "html": "<button class=\"ds-btn-principal\">Continuar</button>",
+      "css": ".ds-btn-principal{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;font:600 17px/1.35 system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;letter-spacing:-0.01em;border:0;border-radius:12px;cursor:pointer;transition:transform 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)),opacity 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));background:var(--texto, #000000);color:var(--fondo, #f2f2f7);} .ds-btn-principal:active{transform:scale(0.97);} .ds-btn-principal:focus-visible{outline:3px solid var(--tinte, #0066cc);outline-offset:2px;} .ds-btn-principal:disabled{opacity:0.4;cursor:default;}"
+    },
+    {
+      "name": "Botón secundario",
+      "kind": "button",
+      "refersTo": "boton-secundario",
+      "description": "Relleno gris para acciones de apoyo; versión de peligro con texto rojo legible.",
+      "html": "<button class=\"ds-btn-secundario\">Compartir enlace</button>",
+      "css": ".ds-btn-secundario{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;font:600 17px/1.35 system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;letter-spacing:-0.01em;border:0;border-radius:12px;cursor:pointer;transition:transform 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)),opacity 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));background:var(--relleno, rgb(118 118 128 / 0.12));color:var(--texto, #000000);} .ds-btn-secundario:active{transform:scale(0.97);} .ds-btn-secundario:focus-visible{outline:3px solid var(--tinte, #0066cc);outline-offset:2px;}"
+    },
+    {
+      "name": "Botón enlace",
+      "kind": "button",
+      "refersTo": "boton-enlace",
+      "description": "Acción de texto en azul de sistema.",
+      "html": "<button class=\"ds-btn-enlace\">Cancelar</button>",
+      "css": ".ds-btn-enlace{display:inline-flex;align-items:center;min-height:44px;padding:0;font:17px/1.35 system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;border:0;background:none;color:var(--tinte, #0066cc);cursor:pointer;} .ds-btn-enlace:active{opacity:0.5;} .ds-btn-enlace:focus-visible{outline:3px solid var(--tinte, #0066cc);outline-offset:2px;border-radius:6px;}"
+    },
+    {
+      "name": "Lista agrupada de saldos",
+      "kind": "card",
+      "refersTo": "lista",
+      "description": "Celdas inset grouped con avatar gris, cifra redondeada a la derecha y chevron.",
+      "html": "<ul class=\"ds-lista\"><li><a class=\"ds-fila\" href=\"#\"><span class=\"ds-avatar\">IK</span><span class=\"ds-fila-texto\">Iker</span><span class=\"ds-valor ds-debe\">7,50 €</span><span class=\"ds-chev\"><svg width=\"8\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 5.5 6.5 6.5L9 18.5\"/></svg></span></a></li><li><a class=\"ds-fila\" href=\"#\"><span class=\"ds-avatar\">PG</span><span class=\"ds-fila-texto\">Patxi García<small>Sin cuenta</small></span><span class=\"ds-valor ds-al-dia\">Al día</span><span class=\"ds-chev\"><svg width=\"8\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 5.5 6.5 6.5L9 18.5\"/></svg></span></a></li></ul>",
+      "css": ".ds-lista{margin:0;padding:0;list-style:none;border-radius:12px;background:var(--celda, #ffffff);overflow:hidden;font:17px/1.35 system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;} .ds-lista li+li{position:relative;} .ds-lista li+li::before{content:'';position:absolute;top:0;right:0;left:64px;height:0.5px;background:var(--separador, rgb(60 60 67 / 0.2));} .ds-fila{display:flex;align-items:center;gap:12px;min-height:52px;padding:10px 16px;color:var(--texto, #000000);text-decoration:none;transition:background-color 120ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));} .ds-fila:hover{background:color-mix(in srgb,var(--relleno, rgb(118 118 128 / 0.12)) 60%,transparent);} .ds-fila:active{background:var(--relleno, rgb(118 118 128 / 0.12));} .ds-fila:focus-visible{outline:3px solid var(--tinte, #0066cc);outline-offset:2px;} .ds-fila-texto{flex:1;min-width:0;display:flex;flex-direction:column;} .ds-fila-texto small{font-size:15px;line-height:20px;color:var(--texto-2, rgb(60 60 67 / 0.78));} .ds-avatar{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(180deg,#6e6e73,#545458);} .ds-valor{font-family:ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, sans-serif;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap;} .ds-debe{color:var(--rojo-texto, #d70015);} .ds-al-dia{color:var(--verde-texto, #1f7a35);} .ds-chev{display:flex;color:var(--texto-3, rgb(60 60 67 / 0.45));}"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "campo",
+      "description": "Celda sin borde con etiqueta encima; foco con borde interior azul.",
+      "html": "<label class=\"ds-campo\"><span>Motivo</span><input placeholder=\"p. ej. Perder las llaves del vestuario\"></label>",
+      "css": ".ds-campo{display:grid;gap:8px;font-family:system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;} .ds-campo span{margin:0 4px;font-size:13px;line-height:18px;color:var(--texto-2, rgb(60 60 67 / 0.78));} .ds-campo input{min-height:50px;padding:0 16px;font:17px system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;border:0;border-radius:12px;background:var(--celda, #ffffff);color:var(--texto, #000000);outline:none;box-shadow:inset 0 0 0 1px transparent;transition:box-shadow 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));} .ds-campo input::placeholder{color:var(--texto-3, rgb(60 60 67 / 0.45));} .ds-campo input:focus-visible{box-shadow:inset 0 0 0 2px var(--tinte, #0066cc);}"
+    },
+    {
+      "name": "Chip de filtro",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Filtro por jugador del historial; el activo se invierte a tinta.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">Todos</button><button class=\"ds-chip\" aria-pressed=\"false\">Iker</button><button class=\"ds-chip\" aria-pressed=\"false\">Patxi</button></div>",
+      "css": ".ds-chips{display:flex;gap:8px;} .ds-chip{min-height:36px;padding:0 14px;font:500 15px system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;border:0;border-radius:18px;background:var(--celda, #ffffff);color:var(--texto, #000000);cursor:pointer;transition:background-color 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)),color 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1)),transform 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));} .ds-chip:active{transform:scale(0.96);} .ds-chip[aria-pressed='true']{background:var(--texto, #000000);color:var(--fondo, #f2f2f7);} .ds-chip:focus-visible{outline:3px solid var(--tinte, #0066cc);outline-offset:2px;}"
+    },
+    {
+      "name": "Barra de pestañas",
+      "kind": "nav",
+      "refersTo": "barra-pestanas",
+      "description": "Cristal fijo abajo en móvil; activa en tinta, inactivas en secundario.",
+      "html": "<nav class=\"ds-pestanas\"><a href=\"#\" class=\"ds-activa\" aria-current=\"page\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3.5 10.2 12 3.5l8.5 6.7V19a1.5 1.5 0 0 1-1.5 1.5h-4.5v-6h-5v6H5A1.5 1.5 0 0 1 3.5 19z\"/></svg>Inicio</a><a href=\"#\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"5\" y=\"3\" width=\"14\" height=\"18\" rx=\"2.5\"/><path d=\"M9 8h6M9 12h6M9 16h3.5\"/></svg>Multas</a><a href=\"#\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M6 3h12v18l-2.5-1.6L13 21l-2.5-1.6L8 21l-2-1.4z\"/><path d=\"M9.5 8h5M9.5 12h5\"/></svg>Gastos</a><a href=\"#\"><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1\"/><circle cx=\"15\" cy=\"6\" r=\"2\"/><circle cx=\"9\" cy=\"12\" r=\"2\"/><circle cx=\"17\" cy=\"18\" r=\"2\"/></svg>Ajustes</a></nav>",
+      "css": ".ds-pestanas{display:flex;justify-content:space-around;padding:6px 8px 4px;background:var(--barra, rgb(249 249 249 / 0.78));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);box-shadow:0 -0.5px 0 var(--separador, rgb(60 60 67 / 0.2));font-family:system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;} .ds-pestanas a{flex:1;max-width:120px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:46px;font-size:11px;font-weight:500;letter-spacing:0.01em;color:var(--texto-2, rgb(60 60 67 / 0.78));text-decoration:none;transition:color 140ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));} .ds-pestanas a.ds-activa{color:var(--texto, #000000);} .ds-pestanas a:active svg{transform:scale(0.92);} .ds-pestanas a:focus-visible{outline:3px solid var(--tinte, #0066cc);outline-offset:2px;border-radius:6px;}"
+    },
+    {
+      "name": "Tarjeta del árbitro",
+      "kind": "custom",
+      "refersTo": "tarjeta-multa",
+      "description": "La firma de Multak: la multa por confirmar como tarjeta amarilla que se levanta y sale volando.",
+      "html": "<article class=\"ds-tarjeta\" tabindex=\"-1\"><div class=\"ds-tarjeta-quien\"><span class=\"ds-tarjeta-av\">IK</span>Iker</div><p class=\"ds-tarjeta-motivo\">Llegar tarde</p><p class=\"ds-tarjeta-importe\">2,50 €</p><p class=\"ds-tarjeta-fecha\">CD Vestuario · Hoy</p></article>",
+      "css": ".ds-tarjeta{width:min(100%,250px);display:flex;flex-direction:column;padding:18px 18px 20px;border-radius:16px;background:var(--amarillo, #ffcc00);color:var(--sobre-amarillo, #1c1c1e);box-shadow:0 14px 30px rgb(0 0 0 / 0.18),0 2px 6px rgb(0 0 0 / 0.1);font-family:system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;animation:ds-tarjeta-entra 380ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));transition:transform 240ms var(--ease-out, cubic-bezier(0.23, 1, 0.32, 1));} .ds-tarjeta:hover{transform:translateY(-14px) rotate(-3deg) scale(1.03);} .ds-tarjeta:focus-visible{outline:3px solid var(--tinte, #0066cc);outline-offset:3px;} @keyframes ds-tarjeta-entra{from{opacity:0;transform:translateY(18px) rotate(2deg) scale(0.97);}} .ds-tarjeta-quien{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;} .ds-tarjeta-av{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;font-size:13px;color:#fff;background:linear-gradient(180deg,#6e6e73,#545458);} .ds-tarjeta-motivo{margin:36px 0 0;font-size:26px;line-height:30px;font-weight:700;letter-spacing:-0.02em;} .ds-tarjeta-importe{margin:4px 0 0;font-family:ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, sans-serif;font-variant-numeric:tabular-nums;font-size:40px;line-height:1;font-weight:700;} .ds-tarjeta-fecha{margin:8px 0 0;font-size:13px;font-weight:600;opacity:0.7;} @media (prefers-reduced-motion:reduce){.ds-tarjeta{animation:none;transition:none;}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "La tarjeta del árbitro en una app de Apple",
+    "overview": "Multak es el estándar de la categoría ejecutado con el listón de Wallet, Fitness y Salud: fondos agrupados de iOS, celdas limpias, separadores finos, texto del sistema y las cuentas del equipo en cifras redondeadas grandes. Todo es sobrio y nativo; la densidad es la de una lista de Ajustes de iPhone, con objetivos táctiles generosos pensados para una mano y poca atención (vestuario, banda, bar).\n\nSobre esa calma hay una sola nota de color propia: el amarillo de la tarjeta del árbitro. Vive en el botón «Poner multa», en la tarjeta de multa que sale volando al confirmar y en el destello de la fila del jugador recién multado. El rojo y el verde de sistema no son decoración: dicen quién debe y quién está al día. El azul de sistema queda para enlaces y acciones de texto.\n\nSe rechaza explícitamente la rejilla de tarjetas SaaS iguales con sombra gris, el disfraz de fútbol (céspedes, balones, pizarras dibujadas) y lo infantil.",
+    "keyCharacteristics": [
+      "Fondo agrupado gris con celdas blancas en claro; negro puro con celdas grafito en oscuro, y hojas que se elevan un tono.",
+      "Cifras en fuente redondeada y tabular; la cifra de «lo tuyo» es lo más grande de la pantalla.",
+      "Un único acento propio (amarillo tarjeta), escaso y con significado.",
+      "Barras translúcidas con desenfoque arriba y abajo; título grande que se pliega en la barra.",
+      "Animaciones finas con curvas de salida rápidas; todas se anulan con `prefers-reduced-motion`."
+    ],
+    "rules": [
+      {
+        "name": "The Una Sola Tarjeta Rule",
+        "body": "El amarillo es la tarjeta del árbitro y nada más: solo para poner multas y para la multa recién puesta. Si una pantalla no tiene que ver con poner una multa, no lleva amarillo salvo el icono del bote.",
+        "section": "colors"
+      },
+      {
+        "name": "The El Color Es Dinero Rule",
+        "body": "Rojo significa «debe», verde significa «al día». No se usan como decoración ni para categorías; los avatares son grises precisamente para dejar el color al dinero y a la tarjeta.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rojo Que Se Lee Rule",
+        "body": "Todo texto o importe rojo o verde usa la variante `-texto`; el tono vivo de sistema solo pinta bordes y controles.",
+        "section": "colors"
+      },
+      {
+        "name": "The Cifras Redondas Rule",
+        "body": "Todo importe va en la fuente redondeada con `tabular-nums`, sea la cifra grande o el valor a la derecha de una fila (600). Así las columnas de euros se alinean y el dinero se reconoce de un vistazo.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sin Fuentes Ajenas Rule",
+        "body": "No se cargan fuentes web: la app usa la del sistema para sentirse nativa en cada dispositivo.",
+        "section": "typography"
+      },
+      {
+        "name": "The Celdas Planas Rule",
+        "body": "Grupos, filas, chips y campos no llevan sombra: se separan del fondo por tono. Una sombra en una celda es la rejilla SaaS que este sistema rechaza.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Cristal Rule",
+        "body": "Lo que se queda fijo sobre el contenido (barra de navegación plegada, barra de pestañas, avisos) es translúcido con `blur(20px) saturate(180%)` y se vuelve opaco con `prefers-reduced-transparency`.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do poner el amarillo solo donde se pone una multa: botón «Poner multa», tarjeta de multa y destello de la fila recién multada.",
+      "Do escribir todo importe en la fuente redondeada con números tabulares, en rojo legible si se debe y «Al día» en verde legible si no.",
+      "Do construir las pantallas con listas agrupadas: celdas de 12px sobre fondo gris, separadores de 0,5px que empiezan en el texto y valor a la derecha.",
+      "Do abrir cada pantalla con el título grande de 34px que se pliega en la barra de cristal.",
+      "Do mantener objetivos táctiles de al menos 44px (controles de 50px, filas de 52px) y campos de 17px.",
+      "Do animar con las curvas del sistema (`--ease-out` para estados, `--ease-hoja` para hojas) y anular el movimiento con `prefers-reduced-motion`.",
+      "Do tachar lo anulado y marcarlo con la etiqueta «Anulada»; nada desaparece."
+    ],
+    "donts": [
+      "Don't montar rejillas de tarjetas iguales con sombra gris: las celdas son planas y se separan por tono.",
+      "Don't disfrazar la app de fútbol (céspedes, balones, pizarras, texturas) ni hacerla infantil; la única referencia al árbitro es la tarjeta amarilla.",
+      "Don't poner texto blanco sobre amarillo, ni usar el amarillo como color de estado, de enlace o de categoría.",
+      "Don't usar rojo o verde como decoración, ni dar color a los avatares.",
+      "Don't usar el texto terciario para nada que haya que leer; solo para placeholders, chevrons y estados apagados.",
+      "Don't cargar fuentes web ni sustituir la fuente del sistema por otra con personalidad.",
+      "Don't usar el azul #007AFF de iOS sobre blanco para texto: el tinte es #0066CC por contraste."
+    ]
+  }
+}

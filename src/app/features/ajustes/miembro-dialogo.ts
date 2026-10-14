@@ -4,7 +4,8 @@ import { disabled, form, FormField, FormRoot, maxLength, required } from '@angul
 import { Miembro, NOMBRE_ROL, Rol } from '../../core/models/modelos';
 import { mensajeError } from '../../core/supabase/mensaje-error';
 import { AvisosService } from '../../shared/avisos/avisos.service';
-import { DialogosService } from '../../shared/dialogos/dialogos.service';
+import { Avatar } from '../../shared/avatar';
+import { cerrarHoja, DialogosService } from '../../shared/dialogos/dialogos.service';
 import { EquiposService } from '../equipos/equipos.service';
 import { AjustesService } from './ajustes.service';
 
@@ -17,15 +18,24 @@ const ROLES: Rol[] = ['jugador', 'tesorero', 'admin'];
 
 @Component({
   selector: 'app-miembro-dialogo',
-  imports: [FormRoot, FormField],
+  imports: [FormRoot, FormField, Avatar],
   template: `
-    <h2 id="miembro-dialogo-titulo">{{ miembro.nombre }}{{ esYo ? ' (tú)' : '' }}</h2>
-    <p class="texto-suave estado">
-      {{ miembro.usuario_id ? 'Tiene cuenta' : 'Sin cuenta: aún no ha reclamado su ficha' }}
-      @if (!miembro.activo) {
-        · Desactivado
-      }
-    </p>
+    <div class="hoja-cabecera">
+      <span></span>
+      <h2 id="miembro-dialogo-titulo">Miembro</h2>
+      <button type="button" class="boton-enlace" (click)="cerrar()">Cerrar</button>
+    </div>
+
+    <div class="quien">
+      <app-avatar [nombre]="miembro.nombre" [semilla]="miembro.id" [tamano]="64" />
+      <p class="titulo-2">{{ miembro.nombre }}{{ esYo ? ' (tú)' : '' }}</p>
+      <p class="nota">
+        {{ miembro.usuario_id ? 'Tiene cuenta' : 'Sin cuenta: aún no ha reclamado su ficha' }}
+        @if (!miembro.activo) {
+          · Desactivado
+        }
+      </p>
+    </div>
 
     <form [formRoot]="formulario" class="pila">
       <label for="miembro-nombre">Nombre</label>
@@ -48,58 +58,79 @@ const ROLES: Rol[] = ['jugador', 'tesorero', 'admin'];
           <option [value]="rol">{{ nombreRol[rol] }}</option>
         }
       </select>
-      <p id="miembro-rol-ayuda" class="texto-suave ayuda">
+      <p id="miembro-rol-ayuda" class="pie-grupo">
         @if (miembro.usuario_id) {
-          Tesorero: pone multas, pagos y gastos. Admin: además gestiona el equipo.
+          Tesorero: pone multas y registra pagos y gastos. Admin: además gestiona el equipo.
         } @else {
           Solo se puede dar un rol a alguien con cuenta.
         }
       </p>
 
-      <button type="submit" class="boton boton-principal" [disabled]="formulario().submitting()">
+      <button
+        type="submit"
+        class="boton boton-principal guardar"
+        [disabled]="formulario().submitting()"
+      >
         Guardar cambios
       </button>
     </form>
 
-    <div class="otras-acciones">
-      @if (miembro.activo) {
-        <button type="button" class="boton-enlace" (click)="desactivar()">Desactivar</button>
-      } @else {
-        <button type="button" class="boton-enlace" (click)="reactivar()">Reactivar</button>
-      }
+    <ul class="lista otras">
+      <li>
+        @if (miembro.activo) {
+          <button type="button" class="fila peligro" (click)="desactivar()">Desactivar</button>
+        } @else {
+          <button type="button" class="fila enlace" (click)="reactivar()">Reactivar</button>
+        }
+      </li>
       @if (miembro.usuario_id) {
-        <button type="button" class="boton-enlace" (click)="desvincular()">
-          Desvincular cuenta
-        </button>
+        <li>
+          <button type="button" class="fila peligro" (click)="desvincular()">
+            Desvincular cuenta
+          </button>
+        </li>
       }
-    </div>
+    </ul>
 
     <p class="error" role="alert">{{ error() }}</p>
-
-    <div class="dialogo-acciones">
-      <button type="button" class="boton boton-secundario" (click)="ref.close()">Cerrar</button>
-    </div>
   `,
   styles: `
-    .estado {
-      margin-top: -0.5rem;
+    .quien {
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+      margin: 4px 0 20px;
+      text-align: center;
+
+      app-avatar {
+        margin-bottom: 6px;
+      }
     }
 
-    .ayuda {
-      margin: 0 0 0.75rem;
+    .pie-grupo {
+      margin-top: 2px;
     }
 
-    .otras-acciones {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      margin-top: 1rem;
+    .guardar {
+      margin-top: 12px;
+    }
+
+    .otras {
+      margin-top: 24px;
+    }
+
+    .peligro {
+      color: var(--rojo-texto);
+    }
+
+    .enlace {
+      color: var(--tinte);
     }
   `,
 })
 export class MiembroDialogo {
   private readonly datos = inject<DatosMiembroDialogo>(DIALOG_DATA);
-  protected readonly ref = inject<DialogRef<void>>(DialogRef);
+  private readonly ref = inject<DialogRef<void>>(DialogRef);
   private readonly ajustes = inject(AjustesService);
   private readonly equipos = inject(EquiposService);
   private readonly avisos = inject(AvisosService);
@@ -121,6 +152,10 @@ export class MiembroDialogo {
     },
     { submission: { action: () => this.guardar() } },
   );
+
+  protected cerrar(): void {
+    void cerrarHoja(this.ref);
+  }
 
   private async guardar(): Promise<void> {
     const nombre = this.modelo().nombre.trim();
@@ -169,7 +204,7 @@ export class MiembroDialogo {
       await accion();
       if (this.esYo) await this.equipos.cargar();
       this.avisos.mostrar(aviso);
-      this.ref.close();
+      await cerrarHoja(this.ref);
     } catch (e) {
       this.error.set(mensajeError(e));
     }

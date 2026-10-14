@@ -50,8 +50,7 @@
     @case ('elegir') {
       @if (estado(); as e) {
         @if (e.tipo === 'elegir') {
-          <p class="texto-suave antetitulo">Te unes a</p>
-          <h1>{{ e.info.equipo_nombre }}</h1>
+          <h1>Únete a {{ e.info.equipo_nombre }}</h1>
 
           <form [formRoot]="formulario" class="pila">
             <fieldset aria-describedby="unirse-eleccion-error">
@@ -63,11 +62,12 @@
                 }
               </legend>
 
-              <ul class="lista opciones">
+              <ul class="lista opciones lista--avatares">
                 @for (ficha of e.fichas; track ficha.id) {
                   <li>
                     <label class="opcion">
                       <input type="radio" [value]="ficha.id" [formField]="formulario.eleccion" />
+                      <app-avatar [nombre]="ficha.nombre" [semilla]="ficha.id" [tamano]="32" />
                       {{ ficha.nombre }}
                     </label>
                   </li>

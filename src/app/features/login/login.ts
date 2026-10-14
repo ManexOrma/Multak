@@ -19,6 +19,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
+import { Marca } from '../../shared/marca';
 import { mensajeErrorAuth } from '../../core/auth/mensaje-error-auth';
 import { rutaInterna } from '../../core/auth/ruta-interna';
 
@@ -26,7 +27,7 @@ const SEGUNDOS_ENTRE_ENVIOS = 60;
 
 @Component({
   selector: 'app-login',
-  imports: [FormRoot, FormField, RouterLink],
+  imports: [FormRoot, FormField, RouterLink, Marca],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

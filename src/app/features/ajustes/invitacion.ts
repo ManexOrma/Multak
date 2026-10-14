@@ -4,60 +4,82 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { mensajeError } from '../../core/supabase/mensaje-error';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { DialogosService } from '../../shared/dialogos/dialogos.service';
+import { Icono } from '../../shared/icono';
 import { AjustesService } from './ajustes.service';
 
 @Component({
   selector: 'app-invitacion',
+  imports: [Icono],
   template: `
     <section class="seccion" aria-labelledby="titulo-invitacion">
       <h2 id="titulo-invitacion">Invitar al equipo</h2>
-      <p>
-        Comparte este enlace en el grupo de WhatsApp. Quien entre podrá reclamar su ficha o pedir
-        entrar como nuevo (eso lo aceptas tú).
-      </p>
-
-      <p class="enlace">{{ enlace() }}</p>
-      <p class="texto-suave">
-        Código: <strong class="codigo">{{ ajustes.equipo()?.codigo_invitacion }}</strong>
-      </p>
-
-      <div class="acciones">
-        <a class="boton boton-principal" [href]="enlaceWhatsapp()" target="_blank" rel="noopener">
-          Compartir por WhatsApp
-        </a>
-        <button type="button" class="boton boton-secundario" (click)="copiar()">
-          Copiar enlace
-        </button>
-        @if (puedeCompartir) {
-          <button type="button" class="boton boton-secundario" (click)="compartir()">
-            Más opciones…
+      <div class="pase">
+        <p class="nota">Código de invitación</p>
+        <p class="codigo cifra">{{ ajustes.equipo()?.codigo_invitacion }}</p>
+        <p class="enlace">{{ enlace() }}</p>
+        <div class="acciones">
+          <a class="boton boton-principal" [href]="enlaceWhatsapp()" target="_blank" rel="noopener">
+            <app-icono nombre="compartir" />
+            Compartir por WhatsApp
+          </a>
+          <button type="button" class="boton boton-secundario" (click)="copiar()">
+            <app-icono nombre="copiar" />
+            Copiar enlace
           </button>
-        }
+          @if (puedeCompartir) {
+            <button type="button" class="boton boton-secundario" (click)="compartir()">
+              Más opciones
+            </button>
+          }
+        </div>
       </div>
-
-      <button type="button" class="boton-enlace" (click)="regenerar()">Cambiar el enlace</button>
+      <p class="pie-grupo">
+        Quien entre podrá reclamar su ficha al momento o pedir entrar como nuevo (eso lo aceptas
+        tú).
+      </p>
+      <button
+        type="button"
+        class="boton-enlace boton-enlace--peligro cambiar"
+        (click)="regenerar()"
+      >
+        Cambiar el enlace
+      </button>
       <p class="error" role="alert">{{ error() }}</p>
     </section>
   `,
   styles: `
-    .enlace {
-      margin: 0;
-      padding: 0.75rem;
-      border: 2px solid var(--borde);
+    .pase {
+      padding: 16px;
       border-radius: var(--radio);
-      overflow-wrap: anywhere;
-      font-family: ui-monospace, monospace;
+      background: var(--celda);
     }
 
     .codigo {
-      letter-spacing: 0.15em;
+      margin-top: 2px;
+      font-size: 34px;
+      line-height: 40px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .enlace {
+      margin-top: 2px;
+      font-size: 13px;
+      line-height: 18px;
+      color: var(--texto-2);
+      overflow-wrap: anywhere;
     }
 
     .acciones {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 0.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .cambiar {
+      margin: 4px 16px 0;
+      font-size: 15px;
     }
   `,
 })
@@ -76,7 +98,7 @@ export class Invitacion {
     () => `${this.document.location.origin}/unirse/${this.ajustes.equipo()?.codigo_invitacion}`,
   );
   private readonly mensaje = computed(
-    () => `Únete a ${this.ajustes.equipo()?.nombre} en Multas para ver las multas y el bote:`,
+    () => `Únete a ${this.ajustes.equipo()?.nombre} en Multak para ver las multas y el bote:`,
   );
   protected readonly enlaceWhatsapp = computed(
     () => `https://wa.me/?text=${encodeURIComponent(`${this.mensaje()} ${this.enlace()}`)}`,
@@ -88,7 +110,7 @@ export class Invitacion {
 
   protected async compartir(): Promise<void> {
     try {
-      await this.navegador?.share({ title: 'Multas', text: this.mensaje(), url: this.enlace() });
+      await this.navegador?.share({ title: 'Multak', text: this.mensaje(), url: this.enlace() });
     } catch {
       // Cancelar el menú de compartir no es un error.
     }
@@ -99,7 +121,7 @@ export class Invitacion {
       titulo: '¿Cambiar el enlace?',
       mensaje:
         'El enlace y el código actuales dejarán de funcionar. Quien ya está en el equipo no se ve afectado.',
-      aceptar: 'Cambiar enlace',
+      aceptar: 'Cambiar',
       peligro: true,
     });
     if (!confirmado) return;

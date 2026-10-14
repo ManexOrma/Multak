@@ -1,0 +1,117 @@
+<main class="pagina">
+  @if (saldo(); as s) {
+    <app-cabecera [titulo]="s.nombre ?? ''" [atras]="['/e', equipoId()]" atrasTexto="Inicio">
+      <div class="perfil">
+        <app-avatar [nombre]="s.nombre ?? ''" [semilla]="s.miembro_id" [tamano]="56" />
+        <div>
+          @if ((s.saldo_centimos ?? 0) > 0) {
+            <p class="cifra-grande cifra debe">{{ s.saldo_centimos | euros }}</p>
+            <p class="nota">{{ esYo() ? 'Lo que debes' : 'Lo que debe' }}</p>
+          } @else {
+            <p class="cifra-grande al-dia">Al día</p>
+            <p class="nota">
+              Multas {{ s.total_multas_centimos | euros }} · Pagado
+              {{ s.total_pagado_centimos | euros }}
+            </p>
+          }
+        </div>
+      </div>
+      @if (!s.activo) {
+        <p class="aviso-estado">Desactivado: no se le pueden poner multas.</p>
+      }
+    </app-cabecera>
+
+    @if (equipo.puedeGestionar()) {
+      <div class="acciones">
+        <button type="button" class="boton boton-principal boton-ancho" (click)="registrarPago()">
+          <app-icono nombre="euro" />
+          Registrar pago
+        </button>
+      </div>
+    }
+
+    <fieldset class="segmentado selector">
+      <legend>Qué ver</legend>
+      <label>
+        <input
+          type="radio"
+          name="vista"
+          value="multas"
+          [checked]="vista() === 'multas'"
+          (change)="vista.set('multas')"
+        />
+        Multas ({{ multas().length }})
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="vista"
+          value="pagos"
+          [checked]="vista() === 'pagos'"
+          (change)="vista.set('pagos')"
+        />
+        Pagos
+      </label>
+    </fieldset>
+
+    @if (vista() === 'multas') {
+      @if (multas().length === 0) {
+        <p class="estado-vacio">Sin multas. Expediente limpio.</p>
+      } @else {
+        <ul class="lista">
+          @for (multa of multas(); track multa.id) {
+            <li><app-fila-multa [multa]="multa" [conJugador]="false" /></li>
+          }
+        </ul>
+      }
+    } @else {
+      @if (pagos(); as lista) {
+        @if (lista.length === 0) {
+          <p class="estado-vacio">Aún no hay pagos registrados.</p>
+        } @else {
+          <ul class="lista">
+            @for (pago of lista; track pago.id) {
+              <li>
+                @if (equipo.puedeGestionar() && !pago.anulado) {
+                  <button type="button" class="fila" (click)="anularPago(pago)">
+                    <ng-container *ngTemplateOutlet="filaPago; context: { $implicit: pago }" />
+                  </button>
+                } @else {
+                  <div class="fila">
+                    <ng-container *ngTemplateOutlet="filaPago; context: { $implicit: pago }" />
+                  </div>
+                }
+              </li>
+            }
+          </ul>
+          @if (equipo.puedeGestionar()) {
+            <p class="pie-grupo">Toca un pago para anularlo si se apuntó por error.</p>
+          }
+        }
+      } @else {
+        <p class="nota" role="status">Cargando pagos…</p>
+      }
+    }
+  } @else if (equipo.cargado()) {
+    <app-cabecera titulo="Jugador" [atras]="['/e', equipoId()]" atrasTexto="Inicio" />
+    <p class="estado-vacio">Este jugador no está en el equipo.</p>
+  }
+</main>
+
+<ng-template #filaPago let-pago>
+  <span class="fila-texto" [class.anulado]="pago.anulado">
+    <span>{{ textoMetodo(pago.metodo) }}</span>
+    <span class="fila-detalle">
+      {{ fecha(pago.fecha) }}
+      @if (pago.nota) {
+        · {{ pago.nota }}
+      }
+    </span>
+  </span>
+  @if (pago.anulado) {
+    <span class="etiqueta">Anulado</span>
+  }
+  <span class="fila-valor al-dia" [class.anulado]="pago.anulado"
+    >+{{ pago.importe_centimos | euros }}</span
+  >
+</ng-template>

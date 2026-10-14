@@ -1,6 +1,6 @@
-# Multas (multas-app)
+# Multak (multas-app)
 
-PWA para llevar las multas internas de un equipo: catálogo de multas, saldos de cada jugador y bote común. La app solo lleva la cuenta; nunca mueve dinero.
+Multak es una PWA para llevar las multas internas de un equipo: catálogo de multas, saldos de cada jugador y bote común. La app solo lleva la cuenta; nunca mueve dinero.
 
 La fuente de verdad del proyecto (decisiones, modelo de datos, fases) está en [docs/PROYECTO.md](docs/PROYECTO.md).
 

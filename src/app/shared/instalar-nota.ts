@@ -23,12 +23,20 @@ import { Component } from '@angular/core';
     .nota {
       margin-top: 2rem;
       padding: 1rem;
-      border: 2px solid var(--borde);
       border-radius: var(--radio);
+      background: var(--celda);
+      font-size: 15px;
+      line-height: 20px;
 
       h2 {
-        margin: 0 0 0.5rem;
-        font-size: 1.125rem;
+        margin: 0 0 8px;
+        font-size: 17px;
+        font-weight: 600;
+      }
+
+      p + ul,
+      ul + p {
+        margin-top: 8px;
       }
 
       ul {

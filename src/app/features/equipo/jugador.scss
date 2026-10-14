@@ -1,0 +1,39 @@
+.perfil {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 12px 4px 0;
+}
+
+.cifra-grande {
+  font-family: var(--fuente-cifras);
+  font-variant-numeric: tabular-nums;
+  font-size: 40px;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.aviso-estado {
+  margin: 12px 4px 0;
+  font-size: 15px;
+  color: var(--texto-2);
+}
+
+.acciones {
+  margin-bottom: 20px;
+}
+
+.selector {
+  margin-bottom: 16px;
+}
+
+.anulado {
+  color: var(--texto-2);
+
+  > :first-child,
+  &.fila-valor {
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+  }
+}

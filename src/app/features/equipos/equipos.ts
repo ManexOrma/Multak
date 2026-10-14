@@ -3,20 +3,19 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { NOMBRE_ROL } from '../../core/models/modelos';
 import { mensajeError } from '../../core/supabase/mensaje-error';
+import { Avatar } from '../../shared/avatar';
+import { Cabecera } from '../../shared/cabecera';
+import { Icono } from '../../shared/icono';
 import { CrearEquipo } from './crear-equipo';
 import { EquiposService } from './equipos.service';
 import { UnirseCodigo } from './unirse-codigo';
 
 @Component({
   selector: 'app-equipos',
-  imports: [RouterLink, CrearEquipo, UnirseCodigo],
+  imports: [RouterLink, Cabecera, Avatar, Icono, CrearEquipo, UnirseCodigo],
   template: `
     <main class="pagina">
-      <header class="cabecera">
-        <h1>Mis equipos</h1>
-        <button type="button" class="boton-enlace" (click)="cerrarSesion()">Cerrar sesión</button>
-      </header>
-      <p class="texto-suave">{{ auth.usuario()?.email }}</p>
+      <app-cabecera titulo="Mis equipos" />
 
       @if (error()) {
         <p class="error" role="alert">{{ error() }}</p>
@@ -24,33 +23,47 @@ import { UnirseCodigo } from './unirse-codigo';
       } @else if (equipos.misEquipos(); as lista) {
         @if (lista.length === 0) {
           <p class="estado-vacio">
-            Aún no estás en ningún equipo. Únete con el código que te hayan pasado o crea uno.
+            Aún no estás en ningún equipo. Únete con el código que te hayan pasado o crea el tuyo.
           </p>
         } @else {
-          <ul class="lista">
+          <ul class="lista lista--equipos">
             @for (equipo of lista; track equipo.miembro_id) {
               <li>
                 @if (equipo.activo) {
                   <a class="fila" [routerLink]="['/e', equipo.equipo_id]">
-                    <span>
-                      <strong>{{ equipo.equipo_nombre }}</strong>
-                      <br />
-                      <span class="texto-suave">
-                        {{ equipo.mi_nombre }} · {{ nombreRol[equipo.rol] }}
-                      </span>
+                    <app-avatar
+                      [nombre]="equipo.equipo_nombre"
+                      [semilla]="equipo.equipo_id"
+                      [tamano]="44"
+                    />
+                    <span class="fila-texto">
+                      <span class="titular">{{ equipo.equipo_nombre }}</span>
+                      <span class="fila-detalle"
+                        >{{ equipo.mi_nombre }} · {{ nombreRol[equipo.rol] }}</span
+                      >
                     </span>
-                    <span aria-hidden="true">›</span>
+                    <app-icono class="chevron" nombre="chevron-derecha" [grosor]="2.5" />
                   </a>
                 } @else {
                   <div class="fila">
-                    <span>
-                      <strong>{{ equipo.equipo_nombre }}</strong>
-                      <br />
-                      <span class="texto-suave">{{ equipo.mi_nombre }}</span>
+                    <app-avatar
+                      [nombre]="equipo.equipo_nombre"
+                      [semilla]="equipo.equipo_id"
+                      [tamano]="44"
+                    />
+                    <span class="fila-texto">
+                      <span class="titular texto-suave">{{ equipo.equipo_nombre }}</span>
+                      <span class="fila-detalle">
+                        {{
+                          equipo.pendiente
+                            ? 'Esperando a que un admin te acepte'
+                            : 'Tu ficha está desactivada'
+                        }}
+                      </span>
                     </span>
-                    <span class="etiqueta">
-                      {{ equipo.pendiente ? 'Pendiente de aprobación' : 'Desactivado' }}
-                    </span>
+                    <span class="etiqueta">{{
+                      equipo.pendiente ? 'Pendiente' : 'Desactivado'
+                    }}</span>
                   </div>
                 }
               </li>
@@ -58,7 +71,7 @@ import { UnirseCodigo } from './unirse-codigo';
           </ul>
         }
       } @else {
-        <p role="status">Cargando tus equipos…</p>
+        <p class="nota" role="status">Cargando tus equipos…</p>
       }
 
       <section class="seccion" aria-labelledby="titulo-unirse">
@@ -70,22 +83,34 @@ import { UnirseCodigo } from './unirse-codigo';
         <h2 id="titulo-crear">Crear un equipo</h2>
         <app-crear-equipo />
       </section>
+
+      <footer class="cuenta">
+        <p class="nota">Has entrado como {{ auth.usuario()?.email }}</p>
+        <button type="button" class="boton boton-peligro boton-ancho" (click)="cerrarSesion()">
+          <app-icono nombre="salir" />
+          Cerrar sesión
+        </button>
+        <a class="privacidad" routerLink="/privacidad">Privacidad</a>
+      </footer>
     </main>
   `,
   styles: `
-    .cabecera {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-
-      h1 {
-        margin: 0;
-      }
+    .lista--equipos {
+      --sangria-separador: 72px;
     }
 
-    .texto-suave {
-      margin-top: 0;
+    .cuenta {
+      display: grid;
+      gap: 10px;
+      margin-top: 48px;
+      text-align: center;
+    }
+
+    .privacidad {
+      justify-self: center;
+      padding: 8px;
+      font-size: 13px;
+      color: var(--texto-2);
     }
   `,
 })

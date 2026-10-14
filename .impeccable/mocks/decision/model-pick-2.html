@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--pizarra:#1F2A26;--tiza:#F2F0E8;--amarillo:#F2C14E;--rojo:#E06A4E;--marco:#7A5532}
+  *{box-sizing:border-box;margin:0}
+  body{width:390px;height:844px;overflow:hidden;background:var(--pizarra);color:var(--tiza);font-family:Archivo,sans-serif;position:relative}
+  .t{font-family:Kalam,cursive}
+  header{padding:52px 20px 10px;display:flex;justify-content:space-between;align-items:center}
+  .eq{font-stretch:70%;font-weight:850;font-size:26px;text-transform:uppercase}
+  .ic{width:44px;height:44px;border-radius:12px;border:1.5px solid rgba(242,240,232,.3);display:grid;place-items:center}
+  .resumen{margin:6px 20px 0;display:grid;grid-template-columns:1fr 1fr;border:2px solid rgba(242,240,232,.25);border-radius:14px}
+  .resumen div{padding:14px}
+  .resumen div+div{border-left:2px solid rgba(242,240,232,.25)}
+  .resumen small{font-size:11px;font-weight:800;letter-spacing:.14em;opacity:.7}
+  .resumen b{display:block;font-family:Kalam;font-weight:700;font-size:40px;line-height:1.1}
+  .resumen .r{color:var(--rojo)} .resumen .a{color:var(--amarillo)}
+  h2{padding:24px 20px 6px;font-size:12px;font-weight:800;letter-spacing:.14em;opacity:.75}
+  ul{list-style:none;padding:0;margin:0 20px}
+  li{display:flex;align-items:center;height:56px;border-bottom:1.5px solid rgba(242,240,232,.15);font-size:20px}
+  li .nom{flex:1;font-family:Kalam;font-size:24px}
+  .palotes{font-family:Kalam;font-size:22px;letter-spacing:2px;opacity:.85;margin-right:16px}
+  li .s{font-weight:800;font-variant-numeric:tabular-nums;font-size:17px}
+  .s.r{color:var(--rojo)} .tach{text-decoration:line-through;opacity:.5}
+  .accion{position:absolute;left:20px;right:20px;bottom:96px;height:58px;border-radius:14px;background:var(--amarillo);color:var(--pizarra);display:flex;align-items:center;justify-content:center;font-stretch:80%;font-weight:900;font-size:21px;text-transform:uppercase}
+  nav{position:absolute;left:0;right:0;bottom:0;height:84px;background:#18211E;border-top:1px solid rgba(242,240,232,.15);display:grid;grid-template-columns:repeat(4,1fr);padding:14px 8px 26px;font-size:12px;font-weight:700;text-align:center;opacity:.9}
+  nav .on{color:var(--amarillo)}
+</style>
+</head>
+<body>
+  <header><div class="eq">CD Vestuario</div><div class="ic">⚙</div></header>
+  <div class="resumen">
+    <div><small>LO TUYO · IKER</small><b class="r">2,00 €</b></div>
+    <div><small>BOTE</small><b class="a">8,00 €</b></div>
+  </div>
+  <h2>LA CUENTA</h2>
+  <ul>
+    <li><span class="nom">Mikel</span><span class="palotes">||||</span><span class="s r">10,00 €</span></li>
+    <li><span class="nom">Asier</span><span class="palotes">|</span><span class="s r">3,00 €</span></li>
+    <li><span class="nom">Iker</span><span class="palotes">|</span><span class="s r">2,00 €</span></li>
+    <li><span class="nom">Ane</span><span class="palotes tach">||</span><span class="s">0,00 €</span></li>
+    <li><span class="nom">Unai</span><span class="palotes tach">||</span><span class="s">0,00 €</span></li>
+  </ul>
+  <div class="accion">Poner multa</div>
+  <nav><div class="on">Inicio</div><div>Multas</div><div>Gastos</div><div>Ajustes</div></nav>
+</body>
+</html>

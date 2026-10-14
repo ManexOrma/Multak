@@ -44,11 +44,21 @@ import { EquiposService } from './equipos.service';
         Empezar con un catálogo de multas de ejemplo (lo podrás cambiar)
       </label>
 
-      <button type="submit" class="boton boton-principal" [disabled]="formulario().submitting()">
+      <button
+        type="submit"
+        class="boton boton-principal crear"
+        [disabled]="formulario().submitting()"
+      >
         {{ formulario().submitting() ? 'Creando…' : 'Crear equipo' }}
       </button>
       <p class="error" role="alert">{{ error() }}</p>
     </form>
+  `,
+  styles: `
+    .casilla {
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
   `,
 })
 export class CrearEquipo {
