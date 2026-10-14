@@ -1,4 +1,17 @@
 <div class="shell" [class.con-accion]="conAccion()">
+  <!-- El escudo del club, sin color y casi transparente, al fondo de todas las pantallas. -->
+  <div class="marca-agua" [class.con-foto]="!!foto()" aria-hidden="true">
+    @if (foto(); as url) {
+      <img [src]="url" alt="" decoding="async" />
+    } @else {
+      <app-escudo
+        [color]="equipo.miFicha()?.color"
+        [secundario]="equipo.miFicha()?.color_secundario"
+        [tamano]="320"
+      />
+    }
+  </div>
+
   <nav class="lateral" [attr.aria-label]="t('nav.secciones')">
     <button
       type="button"

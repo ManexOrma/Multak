@@ -1,18 +1,20 @@
-import { Component, computed, inject, input, linkedSignal, model } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, model, signal } from '@angular/core';
 import { I18n } from '../core/i18n/i18n.service';
-import { ClaveColor, COMBINACIONES, ColoresKlub, PALETA } from '../core/tema/klub';
+import { ClaveColor, COMBINACIONES, ColoresKlub } from '../core/tema/klub';
 import { Escudo } from './escudo';
 import { Icono } from './icono';
+import { PaletaColor } from './paleta-color';
 
 const PERSONALIZADO = 'personalizado';
 
 /**
  * Elegir los colores del club: combinaciones hechas (el color con rayas blancas) o
- * «Personalizado», con dos paletas: el color principal y el de las rayas.
+ * «Personalizado»: el color principal y el de las rayas, cada uno con un selector
+ * completo (arrastrar en el cuadro, barra de tono y código hex).
  */
 @Component({
   selector: 'app-selector-color',
-  imports: [Icono, Escudo],
+  imports: [Icono, Escudo, PaletaColor],
   template: `
     <fieldset class="muestras" [attr.aria-describedby]="ayudaId()">
       <legend class="etiqueta-campo">{{ t('color.titulo') }}</legend>
@@ -60,23 +62,27 @@ const PERSONALIZADO = 'personalizado';
         <div class="vista" aria-hidden="true">
           <app-escudo [color]="valor().color" [secundario]="valor().secundario" [tamano]="64" />
         </div>
-        @for (parte of partes; track parte.campo) {
-          <fieldset class="paleta">
-            <legend class="etiqueta-campo">{{ t(parte.clave) }}</legend>
-            @for (c of paleta; track c.clave) {
-              <label class="punto" [style.--c]="c.hex" [title]="nombreColor(c.clave)">
-                <input
-                  type="radio"
-                  [name]="nombre() + '-' + parte.campo"
-                  [checked]="valor()[parte.campo] === c.hex"
-                  [disabled]="desactivado()"
-                  (change)="elegir(parte.campo, c.hex)"
-                />
-                <span class="solo-lector">{{ nombreColor(c.clave) }}</span>
-              </label>
-            }
-          </fieldset>
-        }
+        <!-- Qué color estás cambiando: el principal o el de las rayas. -->
+        <fieldset class="segmentado">
+          <legend>{{ t('color.editando') }}</legend>
+          @for (parte of partes; track parte.campo) {
+            <label>
+              <input
+                type="radio"
+                [name]="nombre() + '-parte'"
+                [checked]="editando() === parte.campo"
+                (change)="editando.set(parte.campo)"
+              />
+              <span class="punto-mini" [style.background]="valor()[parte.campo]"></span>
+              {{ t(parte.clave) }}
+            </label>
+          }
+        </fieldset>
+        <app-paleta-color
+          [id]="nombre()"
+          [valor]="valor()[editando()]"
+          (valorChange)="elegir(editando(), $event)"
+        />
       </div>
     }
   `,
@@ -227,55 +233,26 @@ const PERSONALIZADO = 'personalizado';
       }
     }
 
-    .paleta {
-      display: grid;
-      grid-template-columns: repeat(8, minmax(0, 1fr));
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      border: 0;
-
-      legend {
-        margin-bottom: 8px;
-      }
+    .punto-mini {
+      width: 14px;
+      height: 14px;
+      margin-right: 6px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.2);
     }
 
-    .punto {
-      position: relative;
-      display: block;
-      aspect-ratio: 1;
-      min-width: 30px;
-      margin: 0;
-      border-radius: 50%;
-      background: var(--c);
-      // Filo para que el blanco y los claros se vean sobre la celda.
-      box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
-      cursor: pointer;
-      transition: transform 220ms var(--ease-muelle);
-
-      &:active {
-        transform: scale(0.88);
-      }
-
-      &:has(input:checked) {
-        transform: scale(1.1);
-        box-shadow:
-          inset 0 0 0 1px rgb(0 0 0 / 0.12),
-          0 0 0 3px var(--celda),
-          0 0 0 5px var(--texto);
-      }
-
-      &:has(input:focus-visible) {
-        outline: 3px solid var(--klub-tinta);
-        outline-offset: 4px;
-      }
+    .segmentado label {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   `,
 })
 export class SelectorColor {
   protected readonly t = inject(I18n).t;
   protected readonly combinaciones = COMBINACIONES;
-  protected readonly paleta = PALETA;
+  /** Qué color se está cambiando en «Personalizado». */
+  protected readonly editando = signal<keyof ColoresKlub>('color');
   protected readonly personalizado = PERSONALIZADO;
   protected readonly partes = [
     { campo: 'color', clave: 'color.principal' },

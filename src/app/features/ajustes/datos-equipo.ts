@@ -260,6 +260,11 @@ export class DatosEquipo {
 
   private async guardar(): Promise<void> {
     this.error.set(null);
+    // Si había colores sin guardar, primero ellos (recargar el equipo los borraría).
+    if (this.guardadoPendiente) {
+      clearTimeout(this.guardadoPendiente);
+      await this.guardarColores();
+    }
     try {
       await this.ajustes.renombrarEquipo(this.modelo().nombre.trim());
       await this.equipos.cargar();

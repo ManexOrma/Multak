@@ -297,23 +297,21 @@ Avatares redondos; chips y el botón flotante, en pastilla.
 
 ## Components
 
-### Portada (Inicio)
+### Marca de agua del escudo (todas las pantallas del equipo)
 
-La foto del club a todo lo ancho, por debajo de la barra (que flota transparente hasta que se pliega), con esquinas inferiores de 32px y el nombre del equipo en 38px/800 abajo a la izquierda (`app-cabecera` con `portada`).
+El escudo del club al fondo, fijo y centrado (hasta 420px), en escala de grises y casi transparente (6 %; 10 % con foto). Se ve entre las tarjetas, nunca encima.
 
-- **Con foto:** velo oscuro arriba y abajo para que se lean el nombre (blanco con sombra suave) y el botón del menú. Al entrar, la foto se acerca un poco; al hacer scroll, se queda atrás (paralaje con `animation-timeline: scroll()` donde existe).
-- **Sin foto:** degradado del club con rayas anchas del segundo color a la derecha, que se desvanecen hacia el nombre.
-- **Tablet y PC:** tarjeta de 260px con todas las esquinas redondeadas.
-- **Resolución:** la foto se sube recortada a 1080×1080 (JPEG al 82 %) para que se vea nítida en pantallas 3x.
+- **Con foto:** con `mix-blend-mode: multiply` el fondo blanco de un escudo desaparece y solo queda su contorno. En oscuro se invierte y usa `screen`.
+- **Sin foto:** las rayas del escudo, en gris.
+- **Resolución:** la foto se sube recortada a 1080×1080 (JPEG al 82 %).
 
 ### Pase de temporada (Inicio)
 
-- **Fondo:** degradado del club, brillo radial arriba a la derecha y rayas del segundo color (al 12 %) que se mecen despacio (9s, ida y vuelta).
-- **Ribete:** abajo, una franja maciza de 14px del segundo color, como el bajo de la camiseta, para que los dos colores se vean siempre.
-- **Contenido:**
-  - una pastilla con el estado («Zor duzu / Debes» en rojo, o «No debes nada» en verde) y un punto que late;
+- **Fondo:** la camiseta del club: rayas de 26px de los dos colores, macizas, sin velos ni transparencias, que se mecen despacio (9s, ida y vuelta).
+- **Contenido:** todo el texto va en una pastilla clara encajada, así se lee con cualquier combinación de colores:
+  - el estado («Zor duzu / Debes» en rojo, o «No debes nada» en verde) con un punto que late;
   - la cifra grande (o «Al día»);
-  - la explicación en blanco debajo.
+  - la explicación debajo, en texto secundario.
 - **Movimiento:**
   - entra con un pequeño rebote;
   - se inclina hacia el dedo hasta 8° (directiva `appInclinar`), con un brillo radial que sigue al dedo.
@@ -349,7 +347,7 @@ La foto del club a todo lo ancho, por debajo de la barra (que flota transparente
 
 ### Selector de color
 
-`app-selector-color`: las 8 combinaciones rayadas y una muestra arcoíris «Personalizado» con su nombre debajo, en una rejilla de 3 columnas (5 desde 420px). Es un grupo de radios accesible: la muestra elegida crece, gira un poco y muestra un check con rebote. «Personalizado» abre una tarjeta con la vista previa del escudo y dos paletas de 16 círculos («Color principal» y «Color de las rayas»); el elegido crece con un anillo.
+`app-selector-color`: las 8 combinaciones rayadas y una muestra arcoíris «Personalizado» con su nombre debajo, en una rejilla de 3 columnas (5 desde 420px). Es un grupo de radios accesible: la muestra elegida crece, gira un poco y muestra un check con rebote. «Personalizado» abre una tarjeta con la vista previa del escudo, un control segmentado para elegir qué color cambias (principal o rayas) y `app-paleta-color`: un cuadro de saturación y brillo para arrastrar (también con flechas), una barra de tono y el código hex.
 
 - **En Crear equipo:** se elige el color al crear el equipo.
 - **En Ajustes (solo admin):** el cambio se ve al momento en toda la app y se guarda cuando dejas de tocar colores (0,8 s, con un solo aviso). Si falla, vuelve a los colores guardados.

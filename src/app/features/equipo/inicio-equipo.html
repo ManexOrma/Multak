@@ -1,12 +1,12 @@
 <main class="pagina">
-  <app-cabecera [titulo]="titulo()" [portada]="true" [fotoPortada]="foto()">
-    <app-boton-menu inicio class="solo-movil" />
+  <app-cabecera [titulo]="titulo()">
+    <app-boton-menu junto-titulo class="solo-movil" [tamano]="36" />
   </app-cabecera>
 
   @if (equipo.cargado()) {
     <div class="columnas">
       <div class="columna">
-        <!-- El «pase de temporada»: lo tuyo, en el color del club. -->
+        <!-- El «pase de temporada»: lo tuyo, sobre las rayas de la camiseta del club. -->
         <section class="pase" appInclinar aria-labelledby="lo-mio-titulo">
           <span class="pase-brillo" aria-hidden="true"></span>
           <h2 id="lo-mio-titulo" class="solo-lector">{{ t('inicio.lo-tuyo') }}</h2>
@@ -14,21 +14,21 @@
             <div class="pastilla">
               <span class="estado debe">{{ t('inicio.etiqueta-debes') }}</span>
               <app-cifra class="cifra-grande debe" [centimos]="yo()?.saldo_centimos ?? 0" />
+              <p class="explicacion">
+                {{
+                  t('inicio.debes', {
+                    nombre: equipo.miFicha()?.mi_nombre ?? '',
+                    n: multasPendientes(),
+                  })
+                }}
+              </p>
             </div>
-            <p class="explicacion">
-              {{
-                t('inicio.debes', {
-                  nombre: equipo.miFicha()?.mi_nombre ?? '',
-                  n: multasPendientes(),
-                })
-              }}
-            </p>
           } @else {
             <div class="pastilla">
               <span class="estado al-dia">{{ t('inicio.etiqueta-al-dia') }}</span>
               <p class="cifra-grande al-dia aparece">{{ t('comun.al-dia') }}</p>
+              <p class="explicacion">{{ fraseAlDia }}</p>
             </div>
-            <p class="explicacion">{{ fraseAlDia }}</p>
           }
         </section>
 

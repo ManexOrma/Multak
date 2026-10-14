@@ -1,3 +1,60 @@
+// Marca de agua: el escudo del club al fondo, sin color y casi transparente. Con
+// foto, el modo de fusión hace desaparecer su fondo (blanco en claro; en oscuro se
+// invierte), y solo queda el contorno del escudo.
+.marca-agua {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  width: min(80vw, 420px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  pointer-events: none;
+  opacity: 0.06;
+  filter: grayscale(1);
+  animation: marca-agua-entra 1200ms var(--ease-out) both;
+
+  img,
+  app-escudo {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    box-shadow: none;
+  }
+
+  &.con-foto {
+    opacity: 0.1;
+    mix-blend-mode: multiply;
+  }
+}
+
+:host-context([data-tema='oscuro']) .marca-agua.con-foto {
+  filter: grayscale(1) invert(1);
+  mix-blend-mode: screen;
+}
+
+@media (prefers-color-scheme: dark) {
+  :host-context(html:not([data-tema='claro'])) .marca-agua.con-foto {
+    filter: grayscale(1) invert(1);
+    mix-blend-mode: screen;
+  }
+}
+
+@keyframes marca-agua-entra {
+  from {
+    opacity: 0;
+    scale: 0.94;
+  }
+}
+
+// En pantallas anchas, centrada en el contenido (a la derecha de la barra lateral).
+@media (min-width: 768px) {
+  .marca-agua {
+    left: calc(50% + 120px);
+  }
+}
+
 // Móvil: contenido + botón «Poner multa» flotante + pestañas translúcidas abajo.
 .contenido {
   min-height: 100dvh;

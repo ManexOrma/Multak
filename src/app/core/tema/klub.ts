@@ -100,14 +100,29 @@ const FONDO_OSCURO = '#14100e';
 /** Oscurece (o aclara) hasta tener contraste AA con `fondo`. */
 function legibleSobre(hex: string, fondo: string, hacia: string): string {
   let tinta = hex;
-  for (let paso = 0; paso < 12 && contraste(tinta, fondo) < 4.5; paso++) {
+  for (let paso = 0; paso < 24 && contraste(tinta, fondo) < 4.5; paso++) {
     tinta = mezclar(tinta, hacia, 0.12);
   }
   return tinta;
 }
 
-/** Texto sobre el color: blanco si se lee; si no, tinta oscura. */
-const sobre = (hex: string): string => (contraste(hex, BLANCO) >= 4.5 ? BLANCO : TINTA_OSCURA);
+/** Texto sobre el color: blanco si se lee; si no, tinta oscura (la que más contraste dé). */
+const sobre = (hex: string): string =>
+  contraste(hex, BLANCO) >= 4.5 || contraste(hex, BLANCO) >= contraste(hex, TINTA_OSCURA)
+    ? BLANCO
+    : TINTA_OSCURA;
+
+/**
+ * Color listo para llevar texto encima. Con tonos medios (ni el blanco ni el oscuro
+ * llegan a 4,5:1) se oscurece lo justo, en pasos pequeños, hasta que el blanco se lee.
+ */
+function conTextoLegible(hex: string): string {
+  let color = hex;
+  for (let paso = 0; paso < 30 && contraste(color, sobre(color)) < 4.5; paso++) {
+    color = mezclar(color, '#000000', 0.04);
+  }
+  return color;
+}
 
 export interface TokensKlub {
   klub: string;
@@ -117,11 +132,12 @@ export interface TokensKlub {
 }
 
 /** Tokens para el tema claro y el oscuro (en oscuro el color se apaga un poco). */
-export function tokensKlub(color: string): { claro: TokensKlub; oscuro: TokensKlub } {
+export function tokensKlub(elegido: string): { claro: TokensKlub; oscuro: TokensKlub } {
+  const color = conTextoLegible(elegido);
   // Con texto oscuro encima, el degradado oscurece poco para que siga leyéndose.
   const conTextoOscuro = sobre(color) !== BLANCO;
   const sakon = mezclar(color, '#000000', conTextoOscuro ? 0.08 : 0.22);
-  const klubOscuro = conTextoOscuro ? color : mezclar(color, '#000000', 0.15);
+  const klubOscuro = conTextoLegible(conTextoOscuro ? color : mezclar(color, '#000000', 0.15));
   return {
     claro: {
       klub: color,
