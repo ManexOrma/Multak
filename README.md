@@ -68,12 +68,16 @@ Si cambias `supabase/config.toml` (por ejemplo, la plantilla del correo en `supa
 | `npm run db:test`         | Tests de BD/RLS con pgTAP (`supabase/tests`)                    |
 | `npm run db:types`        | Regenera `src/app/core/models/database.types.ts`                |
 
+Notificaciones en local: `npx supabase functions serve --env-file supabase/functions/.env` (el `.env` lleva las claves VAPID y no se sube). El service worker solo funciona en un build, no con `npm start`: `npx ng build --configuration development --optimization --service-worker=ngsw-config.json` y servir `dist/` (las ventanas de incógnito no admiten push).
+
 Producción (cuando exista el proyecto en la nube):
 
 ```bash
 npx supabase login
 npx supabase link --project-ref htvzktptkyuvfmxofuwd
 npx supabase db push   # aplica las migraciones pendientes
+npx supabase secrets set --env-file supabase/functions/.env   # claves VAPID (solo la primera vez o si cambian)
+npx supabase functions deploy notificar                      # Edge Function de las notificaciones
 ```
 
 ## Estructura

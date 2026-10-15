@@ -123,6 +123,17 @@ export const eu: Diccionario = {
   'menu.equipo-actual': 'Uneko taldea',
   'menu.pendiente': 'Zain',
   'menu.unirse-crear': 'Talde batean sartu edo sortu',
+  'menu.avisos': 'Jakinarazpenak',
+  'menu.avisos-recibir': 'Abisuak gailu honetan',
+  'menu.avisos-ayuda':
+    'Abisatuko dizugu multa bat jartzen dizutenean, ordainketa bat apuntatzen dizutenean eta, admina bazara, norbaitek sartu nahi duenean.',
+  'menu.avisos-instalar':
+    'iPhonen, lehenik gehitu Multak hasierako pantailara (Partekatu → Gehitu hasierako pantailan) eta ireki handik.',
+  'menu.avisos-bloqueado':
+    'Multakentzat blokeatuta dituzu. Aktibatu nabigatzailearen edo mugikorraren ezarpenetan.',
+  'menu.avisos-no-soportado': 'Nabigatzaile honek ez du jakinarazpenik onartzen.',
+  'menu.avisos-activadas': 'Jakinarazpenak aktibatuta. Multa bakoitzaren berri izango duzu.',
+  'menu.avisos-error': 'Ezin izan dira aktibatu. Saiatu berriro.',
   'menu.apariencia': 'Itxura',
   'menu.tema-sistema': 'Sistema',
   'menu.tema-claro': 'Argia',

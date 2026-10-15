@@ -5,4 +5,7 @@ export const environment = {
   supabaseKey: 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH',
   // En local no hay cliente OAuth de Google configurado (ver README).
   loginGoogle: false,
+  // Clave pública VAPID de las notificaciones push (la privada solo está en los secretos de Supabase).
+  vapidPublicKey:
+    'BM2rsDAjqjDRphQmcGnAt80kiaAYOZQ9VUwD2VjHmhtCm6vLti1TO8yScwLNepqqXFTVx5_WfnZfOsSjLscBGGs',
 };

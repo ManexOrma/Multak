@@ -352,6 +352,10 @@ El escudo del club al fondo, fijo y centrado (hasta 420px), en escala de grises 
 - **En Crear equipo:** se elige el color al crear el equipo.
 - **En Ajustes (solo admin):** el cambio se ve al momento en toda la app y se guarda cuando dejas de tocar colores (0,8 s, con un solo aviso). Si falla, vuelve a los colores guardados.
 
+### Interruptor
+
+`.interruptor` con un `input[role=switch]`: fila con el texto a la izquierda y el interruptor de iOS a la derecha (pista de 51×31, bola blanca que se desliza con rebote, verde al activarse). Se usa para las notificaciones del menú lateral; debajo, un pie de grupo explica qué avisa o por qué no se puede (iPhone sin instalar, permiso bloqueado, navegador sin push).
+
 ### Avatar
 
 Monograma en degradado crema (#F3EBE5 → #E8DDD5) con iniciales #4A3B33 en 700; en oscuro, marrón (#3A302B → #2E2622) con #E3D5CC. Con `destacado` va en el degradado del club con iniciales blancas: tú en Saldos y el multado en la tarjeta.

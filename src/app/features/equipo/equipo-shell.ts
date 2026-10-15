@@ -5,6 +5,7 @@ import { filter, map } from 'rxjs';
 import { I18n } from '../../core/i18n/i18n.service';
 import { FotosService } from '../../core/supabase/fotos.service';
 import { TemaService } from '../../core/tema/tema.service';
+import { NotificacionesService } from '../../core/notificaciones/notificaciones.service';
 import { AvisosService } from '../../shared/avisos/avisos.service';
 import { Escudo } from '../../shared/escudo';
 import { Icono, NombreIcono } from '../../shared/icono';
@@ -74,6 +75,8 @@ export class EquipoShell {
       const ficha = this.equipos.misEquipos()?.find((e) => e.equipo_id === id && e.activo) ?? null;
       this.equipo.miFicha.set(ficha);
     });
+    // Si este dispositivo tiene los avisos activados, que la suscripción siga guardada.
+    void inject(NotificacionesService).sincronizar();
     // La app se viste con el color del club mientras estás en el equipo.
     const tema = inject(TemaService);
     effect(() => {

@@ -168,7 +168,7 @@ Invariantes:
    - App shell offline.
    - Configuración del hosting con fallback SPA.
 
-**Fuera de alcance por ahora (no lo hagas):** notificaciones push, tiempo real, pagos dentro de la app, apps nativas o tiendas y estadísticas avanzadas.
+**Fuera de alcance por ahora (no lo hagas):** tiempo real, pagos dentro de la app, apps nativas o tiendas y estadísticas avanzadas.
 
 **Antes de abrirla a otros equipos (más adelante):** política de privacidad, «Borrar mi cuenta» (Edge Function) y una revisión de seguridad de las RLS.
 
@@ -196,4 +196,5 @@ Invariantes:
 - **Tema «Bero klub» y color del club:** suelo crema, sombras cálidas, radios grandes y Figtree autoalojada (sin llamadas a Google). Cada equipo elige dos colores de club (`equipos.color` y `color_secundario`, hex con check en la BD): una de 8 combinaciones hechas o «Personalizado», con un selector completo para cada color. La app calcula el contraste (texto blanco u oscuro sobre el color y tinta legible para enlaces). Lo elige quien crea el equipo y lo cambia el admin en Ajustes. Viste la app del equipo: el «pase de temporada» del Inicio, el escudo rayado (si no hay foto), los enlaces, la pestaña activa y la cinta de la tarjeta amarilla. La deuda va siempre en rojo sobre una pastilla clara. Hay interacción física: el pase y la tarjeta se inclinan hacia el dedo, y hay confeti cuando el equipo o un jugador queda al día. El sistema está en `DESIGN.md`.
 - **Escudo de fondo:** en todas las pantallas del equipo, el escudo (su foto o sus rayas) aparece al fondo en gris y casi transparente, como una marca de agua. Las fotos se suben a 1080×1080.
 - **Colores personalizados:** en «Personalizado» cada color (principal y rayas) se elige con un selector completo: cuadro para arrastrar, barra de tono y código hex.
+- **Notificaciones push (Web Push):** avisan al multado (multa nueva), a quien le apuntan un pago y a los admins (alguien pide entrar). Cada dispositivo se activa o desactiva con un interruptor en el menú lateral; al cerrar sesión se olvida. La suscripción se guarda en `suscripciones_push` (RLS: cada uno las suyas). La app llama a la Edge Function `notificar` justo después de la acción ({ tipo, id }); la función comprueba que quien llama acaba de hacerlo (`creado_por` y menos de 10 minutos), busca a quién avisar y envía con VAPID. Las suscripciones muertas (404/410) se borran. La clave pública VAPID va en `environment*.ts`; la privada solo en los secretos de Supabase. En iPhone solo funcionan con la app instalada en la pantalla de inicio (iOS 16.4+).
 - **Frases con gracia:** con tono de vestuario, para picar; las mismas ideas en euskera y en castellano (`docs/frases-graciosas.md`).

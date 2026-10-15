@@ -5,6 +5,7 @@ import { I18n } from '../../core/i18n/i18n.service';
 import { FichaReclamable, InfoInvitacion, MiEquipo } from '../../core/models/modelos';
 import { exigir } from '../../core/supabase/mensaje-error';
 import { SupabaseService } from '../../core/supabase/supabase.service';
+import { NotificacionesService } from '../../core/notificaciones/notificaciones.service';
 
 const ULTIMO = 'multak.ultimo-equipo';
 
@@ -14,6 +15,7 @@ export class EquiposService {
   private readonly supabase = inject(SupabaseService).client;
   private readonly auth = inject(AuthService);
   private readonly i18n = inject(I18n);
+  private readonly notificaciones = inject(NotificacionesService);
   private readonly cargados = signal<{ usuarioId: string; equipos: MiEquipo[] } | null>(null);
 
   /** undefined mientras no se han cargado los del usuario actual (si cambia de usuario, se descartan). */
@@ -91,12 +93,14 @@ export class EquiposService {
 
   /** Reclama una ficha libre (al momento) o pide entrar como nuevo (queda pendiente). */
   async unirse(codigo: string, union: { miembroId: string } | { miNombre: string }): Promise<void> {
-    exigir(
+    const equipoId = exigir(
       await this.supabase.rpc('unirse_con_codigo', {
         codigo,
         ...('miembroId' in union ? { miembro_id: union.miembroId } : { mi_nombre: union.miNombre }),
       }),
     );
+    // Entrar como nuevo deja una solicitud: se avisa a los admins del equipo.
+    if ('miNombre' in union) this.notificaciones.avisar('solicitud', equipoId);
     await this.cargar();
   }
 }

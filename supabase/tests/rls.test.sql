@@ -4,7 +4,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(63);
+select plan(67);
 
 -- -----------------------------------------------------------------------------
 -- Datos de prueba (como postgres, sin RLS)
@@ -247,6 +247,18 @@ select is((select count(*)::int from storage.objects where bucket_id = 'equipos'
 
 set local request.jwt.claims = '{"sub":"a0000000-0000-4000-a000-000000000004","role":"authenticated"}';
 select is((select count(*)::int from storage.objects where bucket_id = 'equipos'), 0, 'foto: otro equipo no la ve');
+
+-- Suscripciones push: cada uno las suyas.
+select lives_ok($$ insert into suscripciones_push (endpoint, p256dh, auth) values ('https://push.test/x4', 'k', 'a') $$,
+  'push: un usuario guarda su suscripción');
+select throws_ok($$ insert into suscripciones_push (usuario_id, endpoint, p256dh, auth) values ('a0000000-0000-4000-a000-000000000001', 'https://push.test/falsa', 'k', 'a') $$,
+  '42501', null, 'push: no guarda suscripciones a nombre de otro');
+
+set local request.jwt.claims = '{"sub":"a0000000-0000-4000-a000-000000000001","role":"authenticated"}';
+select is((select count(*)::int from suscripciones_push), 0, 'push: no ve las suscripciones de otros');
+delete from suscripciones_push where endpoint = 'https://push.test/x4';
+set local request.jwt.claims = '{"sub":"a0000000-0000-4000-a000-000000000004","role":"authenticated"}';
+select is((select count(*)::int from suscripciones_push), 1, 'push: no borra las suscripciones de otros');
 
 -- -----------------------------------------------------------------------------
 -- Anónimo: nada

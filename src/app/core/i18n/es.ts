@@ -122,6 +122,17 @@ export const es = {
   'menu.equipo-actual': 'Equipo actual',
   'menu.pendiente': 'Pendiente',
   'menu.unirse-crear': 'Unirme o crear un equipo',
+  'menu.avisos': 'Notificaciones',
+  'menu.avisos-recibir': 'Avisos en este móvil',
+  'menu.avisos-ayuda':
+    'Te avisamos cuando te ponen una multa, cuando te apuntan un pago y, si eres admin, cuando alguien pide entrar.',
+  'menu.avisos-instalar':
+    'En iPhone, primero añade Multak a la pantalla de inicio (Compartir → Añadir a pantalla de inicio) y ábrela desde ahí.',
+  'menu.avisos-bloqueado':
+    'Las tienes bloqueadas para Multak. Actívalas en los ajustes del navegador o del móvil.',
+  'menu.avisos-no-soportado': 'Este navegador no permite notificaciones.',
+  'menu.avisos-activadas': 'Notificaciones activadas. Te enterarás de cada multa.',
+  'menu.avisos-error': 'No se han podido activar. Inténtalo otra vez.',
   'menu.apariencia': 'Apariencia',
   'menu.tema-sistema': 'Sistema',
   'menu.tema-claro': 'Claro',

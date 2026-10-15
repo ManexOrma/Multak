@@ -307,6 +307,37 @@ export type Database = {
           },
         ];
       };
+      suscripciones_push: {
+        Row: {
+          auth: string;
+          creado_en: string;
+          endpoint: string;
+          id: string;
+          idioma: string;
+          p256dh: string;
+          usuario_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          auth: string;
+          creado_en?: string;
+          endpoint: string;
+          id?: string;
+          idioma?: string;
+          p256dh: string;
+          usuario_id?: string;
+        };
+        Update: {
+          auth?: string;
+          creado_en?: string;
+          endpoint?: string;
+          id?: string;
+          idioma?: string;
+          p256dh?: string;
+          usuario_id?: string;
+        };
+        Relationships: [];
+      };
       tipos_multa: {
         Row: {
           activo: boolean;

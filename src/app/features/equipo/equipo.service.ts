@@ -3,6 +3,7 @@ import { Tables, TablesInsert } from '../../core/models/database.types';
 import { MetodoPago, MiEquipo } from '../../core/models/modelos';
 import { exigir } from '../../core/supabase/mensaje-error';
 import { SupabaseService } from '../../core/supabase/supabase.service';
+import { NotificacionesService } from '../../core/notificaciones/notificaciones.service';
 
 export type Saldo = Tables<'saldos_miembros'>;
 export type Resumen = Tables<'resumen_equipo'>;
@@ -28,6 +29,7 @@ export type NuevaMulta =
 @Service({ autoProvided: false })
 export class EquipoService {
   private readonly supabase = inject(SupabaseService).client;
+  private readonly notificaciones = inject(NotificacionesService);
   private equipoId = '';
 
   readonly resumen = signal<Resumen | null>(null);
@@ -122,6 +124,7 @@ export class EquipoService {
             nota: multa.nota,
           };
     const creada = exigir(await this.supabase.from('multas').insert(fila).select().single());
+    this.notificaciones.avisar('multa', creada.id);
     await Promise.all([this.cargarCuentas(), this.cargarMultas()]);
     return creada;
   }
@@ -144,16 +147,21 @@ export class EquipoService {
     fecha: string;
     nota: string | null;
   }): Promise<void> {
-    exigir(
-      await this.supabase.from('pagos').insert({
-        equipo_id: this.equipoId,
-        miembro_id: pago.miembroId,
-        importe_centimos: pago.importeCentimos,
-        metodo: pago.metodo,
-        fecha: pago.fecha,
-        nota: pago.nota,
-      }),
+    const creado = exigir(
+      await this.supabase
+        .from('pagos')
+        .insert({
+          equipo_id: this.equipoId,
+          miembro_id: pago.miembroId,
+          importe_centimos: pago.importeCentimos,
+          metodo: pago.metodo,
+          fecha: pago.fecha,
+          nota: pago.nota,
+        })
+        .select('id')
+        .single(),
     );
+    this.notificaciones.avisar('pago', creado.id);
     await Promise.all([this.cargarCuentas(), this.cargarPagos()]);
   }
 

@@ -813,6 +813,62 @@ input[type='checkbox'] {
   padding-top: 0;
 }
 
+// --- Interruptor (iOS) -------------------------------------------------------------------
+// Fila con texto a la izquierda y el interruptor a la derecha (input checkbox role=switch).
+
+.interruptor {
+  margin: 0;
+  font-size: 17px;
+  color: var(--texto);
+  cursor: pointer;
+
+  input[role='switch'] {
+    position: relative;
+    flex-shrink: 0;
+    width: 51px;
+    height: 31px;
+    margin: 0;
+    appearance: none;
+    border-radius: 16px;
+    background: var(--relleno-2);
+    cursor: pointer;
+    transition: background-color 200ms var(--ease-out);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow:
+        0 3px 8px rgb(0 0 0 / 0.15),
+        0 1px 1px rgb(0 0 0 / 0.16);
+      transition: translate 260ms var(--ease-muelle);
+    }
+
+    &:checked {
+      background: var(--verde);
+
+      &::before {
+        translate: 20px 0;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--tinte);
+      outline-offset: 2px;
+    }
+  }
+}
+
 // --- Control segmentado (iOS) ------------------------------------------------------------
 
 .segmentado {

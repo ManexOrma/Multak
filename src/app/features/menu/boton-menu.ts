@@ -17,7 +17,7 @@ import { MenuService } from './menu.service';
   template: `
     <button type="button" [attr.aria-label]="t('menu.abrir')" (click)="abrir()">
       <span class="lineas"><app-icono nombre="menu" [grosor]="2.4" /></span>
-      @if (ficha(); as f) {
+      @if (conEscudo() && ficha(); as f) {
         <app-escudo
           [color]="f.color"
           [secundario]="f.color_secundario"
@@ -83,6 +83,8 @@ export class BotonMenu {
   protected readonly t = inject(I18n).t;
 
   readonly tamano = input(34);
+  /** El escudo al lado de las líneas: solo en el Inicio del equipo. */
+  readonly conEscudo = input(false);
 
   /** Fuera de un equipo (p. ej. «Mis equipos») es solo el icono de menú. */
   protected readonly ficha = computed(() => this.equipo?.miFicha() ?? null);

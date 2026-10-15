@@ -4,6 +4,8 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { I18n, Idioma } from '../../core/i18n/i18n.service';
 import { MiEquipo } from '../../core/models/modelos';
+import { NotificacionesService } from '../../core/notificaciones/notificaciones.service';
+import { AvisosService } from '../../shared/avisos/avisos.service';
 import { FotosService } from '../../core/supabase/fotos.service';
 import { Tema, TemaService } from '../../core/tema/tema.service';
 import { Escudo } from '../../shared/escudo';
@@ -12,7 +14,7 @@ import { Marca } from '../../shared/marca';
 import { EquiposService } from '../equipos/equipos.service';
 import { cerrarMenu } from './cerrar-menu';
 
-/** Menú lateral (se desliza desde la izquierda): equipos, apariencia, idioma y sesión. */
+/** Menú lateral (se desliza desde la izquierda): equipos, avisos, apariencia, idioma y sesión. */
 @Component({
   selector: 'app-menu-lateral',
   imports: [RouterLink, Escudo, Icono, Marca],
@@ -29,6 +31,8 @@ export class MenuLateral {
   protected readonly i18n = inject(I18n);
   protected readonly t = this.i18n.t;
   protected readonly temaService = inject(TemaService);
+  protected readonly notificaciones = inject(NotificacionesService);
+  private readonly avisos = inject(AvisosService);
 
   protected readonly email = this.auth.usuario()?.email ?? '';
   protected readonly equipoActual = this.datos.equipoActual;
@@ -50,6 +54,11 @@ export class MenuLateral {
     if (!this.equipos.misEquipos()) void this.equipos.cargar().catch(() => undefined);
   }
 
+  protected puedeElegirAvisos(): boolean {
+    const estado = this.notificaciones.estado();
+    return estado === 'activadas' || estado === 'desactivadas';
+  }
+
   protected rol(equipo: MiEquipo): string {
     return this.t(`rol.${equipo.rol}`);
   }
@@ -59,7 +68,27 @@ export class MenuLateral {
     await this.router.navigate(Array.isArray(ruta) ? ruta : [ruta]);
   }
 
+  protected async cambiarAvisos(evento: Event): Promise<void> {
+    const interruptor = evento.target as HTMLInputElement;
+    try {
+      if (interruptor.checked) {
+        await this.notificaciones.activar();
+        this.avisos.mostrar(this.t('menu.avisos-activadas'));
+      } else {
+        await this.notificaciones.desactivar();
+      }
+    } catch {
+      // Permiso denegado o sin red: el interruptor vuelve a su estado real.
+      interruptor.checked = this.notificaciones.estado() === 'activadas';
+      if (this.notificaciones.estado() !== 'bloqueado') {
+        this.avisos.mostrar(this.t('menu.avisos-error'));
+      }
+    }
+  }
+
   protected async cerrarSesion(): Promise<void> {
+    // Este dispositivo deja de recibir los avisos de esta cuenta.
+    await this.notificaciones.olvidarDispositivo().catch(() => undefined);
     await cerrarMenu(this.ref);
     await this.auth.cerrarSesion();
     await this.router.navigateByUrl('/login');

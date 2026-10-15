@@ -61,6 +61,39 @@
   </section>
 
   <section class="bloque" style="--i: 2">
+    <h3 id="menu-avisos">{{ t('menu.avisos') }}</h3>
+    <div class="lista">
+      <label class="fila interruptor">
+        <span class="fila-texto">{{ t('menu.avisos-recibir') }}</span>
+        <input
+          type="checkbox"
+          role="switch"
+          aria-describedby="menu-avisos-ayuda"
+          [checked]="notificaciones.estado() === 'activadas'"
+          [disabled]="notificaciones.ocupado() || !puedeElegirAvisos()"
+          (change)="cambiarAvisos($event)"
+        />
+      </label>
+    </div>
+    <p id="menu-avisos-ayuda" class="pie-grupo">
+      @switch (notificaciones.estado()) {
+        @case ('instalar') {
+          {{ t('menu.avisos-instalar') }}
+        }
+        @case ('bloqueado') {
+          {{ t('menu.avisos-bloqueado') }}
+        }
+        @case ('no-soportado') {
+          {{ t('menu.avisos-no-soportado') }}
+        }
+        @default {
+          {{ t('menu.avisos-ayuda') }}
+        }
+      }
+    </p>
+  </section>
+
+  <section class="bloque" style="--i: 3">
     <h3 id="menu-tema">{{ t('menu.apariencia') }}</h3>
     <fieldset class="segmentado" aria-labelledby="menu-tema">
       <legend>{{ t('menu.apariencia') }}</legend>
@@ -79,7 +112,7 @@
     </fieldset>
   </section>
 
-  <section class="bloque" style="--i: 3">
+  <section class="bloque" style="--i: 4">
     <h3 id="menu-idioma">{{ t('menu.idioma') }}</h3>
     <fieldset class="segmentado" aria-labelledby="menu-idioma">
       <legend>{{ t('menu.idioma') }}</legend>
@@ -98,7 +131,7 @@
     </fieldset>
   </section>
 
-  <section class="bloque pie" style="--i: 4">
+  <section class="bloque pie" style="--i: 5">
     <ul class="lista">
       <li>
         <a class="fila" routerLink="/privacidad" (click)="cerrar()">
