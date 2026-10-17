@@ -21,6 +21,7 @@ import { routes } from './app.routes';
 import { I18n } from './core/i18n/i18n.service';
 import { TituloTraducido } from './core/i18n/titulo';
 import { TemaService } from './core/tema/tema.service';
+import { NotificacionesService } from './core/notificaciones/notificaciones.service';
 
 registerLocaleData(localeEs);
 registerLocaleData(localeEu);
@@ -41,8 +42,11 @@ export const appConfig: ApplicationConfig = {
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     provideAppInitializer(() => {
       inject(TemaService);
+      // Al abrir la app (o volver a ella) se da por visto lo nuevo: fuera el puntito.
+      inject(NotificacionesService).vigilarVistos();
     }),
-    provideServiceWorker('ngsw-worker.js', {
+    // sw-multak.js = el service worker de Angular + el puntito en el icono de la app.
+    provideServiceWorker('sw-multak.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),

@@ -120,3 +120,6 @@ insert into public.pagos (equipo_id, miembro_id, importe_centimos, fecha, metodo
 
 insert into public.gastos (equipo_id, concepto, importe_centimos, fecha, nota) values
   ('10000000-0000-4000-a000-000000000001', 'Balones nuevos', 600, current_date - 4, null);
+
+-- Recordatorios: en local, el cron llama a las funciones dentro de Docker.
+update private.ajustes set valor = 'http://kong:8000/functions/v1' where clave = 'url_funciones';

@@ -4,7 +4,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(67);
+select plan(72);
 
 -- -----------------------------------------------------------------------------
 -- Datos de prueba (como postgres, sin RLS)
@@ -260,6 +260,9 @@ delete from suscripciones_push where endpoint = 'https://push.test/x4';
 set local request.jwt.claims = '{"sub":"a0000000-0000-4000-a000-000000000004","role":"authenticated"}';
 select is((select count(*)::int from suscripciones_push), 1, 'push: no borra las suscripciones de otros');
 
+select throws_ok($$ select * from recordatorios_de_hoy('2026-10-26') $$, '42501', null,
+  'recordatorios: un usuario no puede pedir la lista');
+
 -- -----------------------------------------------------------------------------
 -- Anónimo: nada
 -- -----------------------------------------------------------------------------
@@ -271,5 +274,17 @@ select throws_ok($$ select * from miembros_reclamables('TESTAAAA') $$, '42501', 
 select throws_ok($$ select * from info_invitacion('TESTAAAA') $$, '42501', null, 'anon: no consulta invitaciones');
 
 reset role;
+
+-- Recordatorios de deuda (como la Edge Function, que usa service_role).
+insert into multas (equipo_id, miembro_id, concepto, importe_centimos)
+values ('e0000000-0000-4000-a000-000000000001', 'b0000000-0000-4000-a000-000000000003', 'Prueba', 500);
+select ok((select count(*) from recordatorios_de_hoy('2026-10-26') where usuario_id = 'a0000000-0000-4000-a000-000000000003') = 1,
+  'recordatorios: quien debe recibe el de «quedan 5 días»');
+select is((select count(*)::int from recordatorios_de_hoy('2026-10-26')), 0,
+  'recordatorios: no se repite el mismo día');
+select is((select count(*)::int from recordatorios_de_hoy('2026-10-15')), 0,
+  'recordatorios: un día cualquiera no hay');
+select is((select tipo from recordatorios_de_hoy('2026-11-01') limit 1), 'mes-nuevo',
+  'recordatorios: el día 1 toca el de mes nuevo');
 select * from finish();
 rollback;

@@ -94,6 +94,29 @@ export class NotificacionesService {
     }
   }
 
+  /**
+   * El puntito del icono de la app (y las notificaciones en la bandeja) son «lo que no
+   * has visto». Al abrir la app o volver a ella, se da por visto: se quitan los dos.
+   */
+  vigilarVistos(): void {
+    const documento = this.vista?.document;
+    if (!documento) return;
+    const marcar = () => {
+      if (documento.visibilityState === 'visible') void this.marcarVisto();
+    };
+    marcar();
+    documento.addEventListener('visibilitychange', marcar);
+  }
+
+  private async marcarVisto(): Promise<void> {
+    const navegador = this.vista?.navigator;
+    if (!navegador) return;
+    await navegador.clearAppBadge?.().catch(() => undefined);
+    const registro = await navegador.serviceWorker?.getRegistration().catch(() => undefined);
+    const avisos = await registro?.getNotifications().catch(() => []);
+    for (const aviso of avisos ?? []) aviso.close();
+  }
+
   /** Al cerrar sesión: este dispositivo deja de recibir los avisos de esa cuenta. */
   async olvidarDispositivo(): Promise<void> {
     const suscripcion = this.suscripcion();

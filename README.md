@@ -68,7 +68,7 @@ Si cambias `supabase/config.toml` (por ejemplo, la plantilla del correo en `supa
 | `npm run db:test`         | Tests de BD/RLS con pgTAP (`supabase/tests`)                    |
 | `npm run db:types`        | Regenera `src/app/core/models/database.types.ts`                |
 
-Notificaciones en local: `npx supabase functions serve --env-file supabase/functions/.env` (el `.env` lleva las claves VAPID y no se sube). El service worker solo funciona en un build, no con `npm start`: `npx ng build --configuration development --optimization --service-worker=ngsw-config.json` y servir `dist/` (las ventanas de incógnito no admiten push).
+Notificaciones en local: `npx supabase functions serve --env-file supabase/functions/.env` (el `.env` lleva las claves VAPID y no se sube). El service worker solo funciona en un build, no con `npm start`: `npx ng build --configuration development --optimization --service-worker=ngsw-config.json` y servir `dist/` (las ventanas de incógnito no admiten push). Recordatorios en local: `curl -X POST -d '{"hoy":"2026-10-26"}' http://127.0.0.1:54321/functions/v1/recordatorios` (con `RECORDATORIOS_PRUEBAS=1` en el `.env`; en producción no se puede elegir el día).
 
 Producción (cuando exista el proyecto en la nube):
 
@@ -77,7 +77,7 @@ npx supabase login
 npx supabase link --project-ref htvzktptkyuvfmxofuwd
 npx supabase db push   # aplica las migraciones pendientes
 npx supabase secrets set --env-file supabase/functions/.env   # claves VAPID (solo la primera vez o si cambian)
-npx supabase functions deploy notificar                      # Edge Function de las notificaciones
+npx supabase functions deploy notificar recordatorios        # Edge Functions de las notificaciones
 ```
 
 ## Estructura

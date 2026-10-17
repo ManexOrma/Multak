@@ -11,10 +11,9 @@
 // SUPABASE_URL, SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY los pone Supabase.
 
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import webpush from 'npm:web-push@3.6.7';
+import { enviarAUsuarios, euros, type Idioma } from '../_shared/push.ts';
 
 type Tipo = 'multa' | 'pago' | 'solicitud';
-type Idioma = 'eu' | 'es';
 
 interface Aviso {
   usuarios: string[];
@@ -33,23 +32,11 @@ const CORS = {
 // Solo se avisa de lo que se acaba de hacer (evita reenvíos de cosas viejas).
 const RECIENTE_MS = 10 * 60 * 1000;
 
-// A mano: el runtime de las funciones no trae los datos de idioma de eu ni es.
-const euros = (centimos: number) => {
-  const [enteros, decimales] = (centimos / 100).toFixed(2).split('.');
-  return `${enteros.replace(/\B(?=(\d{3})+(?!\d))/g, '.')},${decimales} €`;
-};
-
 const responder = (cuerpo: unknown, estado = 200) =>
   new Response(JSON.stringify(cuerpo), {
     status: estado,
     headers: { ...CORS, 'Content-Type': 'application/json' },
   });
-
-webpush.setVapidDetails(
-  Deno.env.get('VAPID_SUBJECT') ?? 'mailto:multakapp@gmail.com',
-  Deno.env.get('VAPID_PUBLIC_KEY')!,
-  Deno.env.get('VAPID_PRIVATE_KEY')!,
-);
 
 Deno.serve(async (peticion) => {
   if (peticion.method === 'OPTIONS') return new Response('ok', { headers: CORS });
@@ -85,47 +72,12 @@ Deno.serve(async (peticion) => {
 
   // A quien hace la acción no se le avisa de lo que él mismo ha hecho.
   const destinatarios = aviso.usuarios.filter((u) => u !== user.id);
-  if (destinatarios.length === 0) return responder({ enviados: 0 });
-
-  const { data: suscripciones } = await admin
-    .from('suscripciones_push')
-    .select('id, endpoint, p256dh, auth, idioma')
-    .in('usuario_id', destinatarios);
-
-  let enviados = 0;
-  await Promise.all(
-    (suscripciones ?? []).map(async (s) => {
-      const idioma: Idioma = s.idioma === 'es' ? 'es' : 'eu';
-      // Formato que entiende el service worker de Angular (ngsw).
-      const carga = {
-        notification: {
-          title: aviso.titulo[idioma],
-          body: aviso.cuerpo[idioma],
-          icon: '/icons/icon-192x192.png',
-          badge: '/icons/icon-96x96.png',
-          lang: idioma,
-          tag: aviso.etiqueta,
-          data: {
-            onActionClick: { default: { operation: 'navigateLastFocusedOrOpen', url: aviso.url } },
-          },
-        },
-      };
-      try {
-        await webpush.sendNotification(
-          { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
-          JSON.stringify(carga),
-          { TTL: 60 * 60 * 24 },
-        );
-        enviados++;
-      } catch (e) {
-        const estado = (e as { statusCode?: number }).statusCode;
-        if (estado === 404 || estado === 410) {
-          await admin.from('suscripciones_push').delete().eq('id', s.id);
-        } else {
-          console.error('push', estado, (e as Error).message);
-        }
-      }
-    }),
+  const enviados = await enviarAUsuarios(
+    admin,
+    destinatarios,
+    (idioma) => ({ titulo: aviso.titulo[idioma], cuerpo: aviso.cuerpo[idioma] }),
+    aviso.url,
+    aviso.etiqueta,
   );
   return responder({ enviados });
 });

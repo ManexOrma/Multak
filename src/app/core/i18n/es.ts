@@ -106,7 +106,7 @@ export const es = {
     `Te hemos enviado un código a ${p.email}. Si no lo ves, mira en spam.`,
   'login.codigo': 'Código',
   'login.codigo-requerido': 'Escribe el código que te hemos enviado.',
-  'login.codigo-invalido': 'El código tiene 6 cifras.',
+  'login.codigo-invalido': 'Escribe el código entero: son solo cifras (6 u 8).',
   'login.entrar': 'Entrar',
   'login.comprobando': 'Comprobando…',
   'login.reenviar': 'Reenviar código',

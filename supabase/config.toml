@@ -437,3 +437,7 @@ enabled = true
 # La función comprueba ella misma quién llama (auth.getUser), como recomienda Supabase con las claves nuevas.
 [functions.notificar]
 verify_jwt = false
+
+# La llama pg_cron (sin sesión); es inofensiva si se llama de más: solo envía lo que toca hoy, una vez.
+[functions.recordatorios]
+verify_jwt = false

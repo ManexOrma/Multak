@@ -107,7 +107,7 @@ export const eu: Diccionario = {
     `Kode bat bidali dizugu helbide honetara: ${p.email}. Ikusten ez baduzu, begiratu spamean.`,
   'login.codigo': 'Kodea',
   'login.codigo-requerido': 'Idatzi bidali dizugun kodea.',
-  'login.codigo-invalido': 'Kodeak 6 zifra ditu.',
+  'login.codigo-invalido': 'Idatzi kode osoa: zifrak bakarrik dira (6 edo 8).',
   'login.entrar': 'Sartu',
   'login.comprobando': 'Egiaztatzen…',
   'login.reenviar': 'Bidali berriro',

@@ -7,15 +7,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import {
-  email,
-  form,
-  FormField,
-  FormRoot,
-  maxLength,
-  pattern,
-  required,
-} from '@angular/forms/signals';
+import { email, form, FormField, FormRoot, pattern, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
@@ -63,8 +55,8 @@ export class Login {
     this.codigoModelo,
     (campo) => {
       required(campo.codigo, { message: this.t('login.codigo-requerido') });
-      maxLength(campo.codigo, 6, { message: this.t('login.codigo-invalido') });
-      pattern(campo.codigo, /^\d{6}$/, { message: this.t('login.codigo-invalido') });
+      // Supabase manda 6 u 8 cifras según la configuración del proyecto: valen las dos.
+      pattern(campo.codigo, /^\s*\d{6,8}\s*$/, { message: this.t('login.codigo-invalido') });
     },
     { submission: { action: () => this.verificarCodigo() } },
   );
@@ -128,7 +120,7 @@ export class Login {
     this.error.set(null);
     this.aviso.set(null);
     try {
-      await this.auth.verificarCodigo(this.email(), this.codigoModelo().codigo);
+      await this.auth.verificarCodigo(this.email(), this.codigoModelo().codigo.replace(/\s/g, ''));
       await this.router.navigateByUrl(rutaInterna(this.volver()));
     } catch (e) {
       this.error.set(this.i18n.error(e));
